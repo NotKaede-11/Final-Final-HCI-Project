@@ -1,0 +1,671 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>UPHSD Settings</title>
+    <style>
+      :root { --maroon:#7b1113; --maroon-deep:#54090b; --gold:#d8ad47; --bg:#f6efe6; --surface:#fffdfa; --surface-alt:#f9f2e8; --text:#211c1b; --muted:#6c5f59; --line:#e1d1bd; --ok:#21653a; --danger:#a12724; --shadow:0 18px 38px rgba(63,18,14,0.12); --shadow-strong:0 24px 46px rgba(48,8,10,0.18); }
+      *{box-sizing:border-box} html,body{margin:0;min-height:100%;font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif;background:radial-gradient(circle at top left, rgba(216,173,71,.18), transparent 24%),linear-gradient(180deg,#faf3ea 0%,var(--bg) 100%);color:var(--text)}
+      a,button,input,select{font:inherit} button{cursor:pointer}
+      .skip-link{position:absolute;left:10px;top:-40px;background:#000;color:#fff;padding:8px 12px;border-radius:8px;z-index:200}.skip-link:focus{top:10px}:focus-visible{outline:3px solid rgba(216,173,71,.5);outline-offset:2px}
+      .layout{min-height:100vh;display:grid;grid-template-columns:292px minmax(0,1fr)} aside{background:linear-gradient(180deg,rgba(255,255,255,.05),transparent 18%),linear-gradient(180deg,var(--maroon) 0%,var(--maroon-deep) 100%);color:#fff8f0;padding:24px 18px;border-right:1px solid rgba(216,173,71,.35)}
+      .brand{display:flex;gap:14px;align-items:center;padding:16px;margin-bottom:20px;border-radius:22px;background:rgba(255,255,255,.08);border:1px solid rgba(216,173,71,.28)} .crest{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(180deg,#fff5d3 0%,var(--gold) 100%);color:var(--maroon-deep);font-weight:800;border:2px solid rgba(255,248,230,.7)} .brand h1{margin:0;font-size:1.16rem}.brand p{margin:4px 0 0;color:rgba(255,248,240,.88);font-size:.96rem}
+      .nav-list{list-style:none;padding:0;margin:0;display:grid;gap:10px}.nav-link{display:block;text-decoration:none;color:#fff8f0;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:13px 15px;font-weight:700;font-size:1rem;line-height:1.25}.nav-link:hover{background:rgba(255,255,255,.12);border-color:rgba(216,173,71,.45)}.nav-link.active{background:linear-gradient(90deg,rgba(216,173,71,.3),rgba(216,173,71,.1));color:#fffdf8;border-color:rgba(216,173,71,.76);box-shadow:inset 3px 0 0 var(--gold)}
+      .content{min-width:0;display:grid;grid-template-rows:auto 1fr} header{position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 26px;background:linear-gradient(90deg,var(--maroon) 0%,#8d1719 60%,var(--maroon) 100%);color:#fff9f2;border-bottom:1px solid rgba(216,173,71,.34);box-shadow:var(--shadow-strong)} .header-copy h2{margin:0;font-size:1.5rem}.header-copy p{margin:6px 0 0;color:rgba(255,247,236,.88);font-size:.95rem}
+      .header-actions{display:flex;align-items:center;gap:12px;position:relative}.icon-btn,.avatar-btn{position:relative;min-width:46px;min-height:46px;border-radius:14px;border:1px solid rgba(216,173,71,.38);background:rgba(255,255,255,.1);color:#fff9f2;display:inline-flex;align-items:center;justify-content:center}.icon-btn svg{width:20px;height:20px}.avatar-btn{width:46px;height:46px;border-radius:50%;background:linear-gradient(180deg,#f1d68d 0%,var(--gold) 100%);color:var(--maroon-deep);font-weight:800}.badge{position:absolute;top:-6px;right:-6px;min-width:22px;height:22px;padding:0 6px;border-radius:999px;background:var(--gold);color:var(--maroon-deep);display:grid;place-items:center;font-size:.74rem;font-weight:800;border:1px solid #fff1c8}
+      .dropdown,.notif-panel{position:absolute;right:0;top:58px;width:min(360px,calc(100vw - 24px));background:linear-gradient(180deg,var(--surface) 0%,var(--surface-alt) 100%);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);display:none;color:var(--text);z-index:40}.dropdown.open,.notif-panel.open{display:block}.dropdown{width:200px;padding:8px}.dropdown button{width:100%;text-align:left;border:0;background:transparent;border-radius:10px;padding:10px 12px;color:var(--text)}.dropdown button:hover{background:#f4ecdf}
+      .notif-head,.notif-actions{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px}.notif-head{border-bottom:1px solid var(--line)}.notif-head h3{margin:0;font-size:1rem;color:var(--maroon)}.notif-head p{margin:4px 0 0;color:var(--muted);font-size:.85rem}.text-btn{border:0;background:transparent;color:var(--maroon);font-weight:700}.notif-list{list-style:none;margin:0;padding:8px 12px 0;max-height:360px;overflow:auto;display:grid;gap:10px}.notif-item{display:grid;gap:6px;padding:12px;border-radius:14px;border:1px solid var(--line);background:#fffdf9;color:var(--text)}.notif-item.unread{border-color:#dfbf72;background:#fff7e5}.notif-top{display:flex;justify-content:space-between;gap:10px;align-items:start}.notif-tag{display:inline-flex;align-items:center;border-radius:999px;padding:3px 8px;font-size:.72rem;font-weight:800;background:#f2e5c7;color:var(--maroon-deep)}.notif-item p{margin:0;color:var(--text);line-height:1.45}.notif-item time{margin:0;color:var(--muted);font-size:.8rem}.notif-actions{border-top:1px solid var(--line)}.notif-actions button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 10px;font-weight:700;color:var(--text)}
+      main{padding:24px;display:grid;gap:18px;align-content:start}
+      .settings-layout{display:grid;grid-template-columns:240px 1fr;gap:18px}.tab-nav,.panel,.danger-zone,.modal-card{background:linear-gradient(180deg,var(--surface) 0%,var(--surface-alt) 100%);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}
+      .tab-nav{padding:10px;display:grid;gap:8px}.tab-btn{border:0;background:transparent;text-align:left;padding:12px 14px;border-radius:12px;font-weight:700;color:var(--muted)}.tab-btn.active{background:#fff;color:var(--maroon);box-shadow:0 4px 10px rgba(0,0,0,.08)}
+      .panel{padding:18px;display:none;gap:16px}.panel.active{display:grid}.panel h3{margin:0;color:var(--maroon)}.panel p{margin:0;color:var(--muted)}
+      .form-grid,.toggle-grid,.session-list{display:grid;gap:14px}.form-grid{grid-template-columns:1fr 1fr}.field{display:grid;gap:6px}.field input,.field select{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff}.field.full{grid-column:1 / -1}
+      .toggle-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.toggle-card,.session-item,.danger-zone{border:1px solid var(--line);border-radius:14px;background:#fff;padding:14px}
+      .toggle-row{display:flex;justify-content:space-between;align-items:center;gap:12px}.switch{width:50px;height:28px;border-radius:999px;border:1px solid #ccb89f;background:#efe4d6;position:relative}.switch::before{content:"";position:absolute;left:3px;top:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left .2s ease}.switch[aria-checked="true"]{background:#f4df9e;border-color:#d8ad47}.switch[aria-checked="true"]::before{left:25px}
+      .slider-wrap{display:grid;gap:10px;grid-column:1 / -1;border:1px solid var(--line);border-radius:14px;background:#fff;padding:14px}.slider-head{display:flex;justify-content:space-between;gap:12px;align-items:center}.slider-wrap input[type="range"]{width:100%}.font-size-value{font-weight:800;color:var(--maroon)}.font-size-presets{display:flex;gap:8px;flex-wrap:wrap}.font-size-presets button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 12px;font-weight:700;color:var(--text)}.font-size-presets button.active{background:var(--maroon);border-color:var(--maroon);color:#fff}
+      .privacy-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.privacy-card{border:1px solid var(--line);border-radius:14px;background:#fff;padding:15px;display:grid;gap:12px}.privacy-card.full{grid-column:1 / -1}.privacy-card h4{margin:0;color:var(--maroon)}.privacy-card p{margin:0;color:var(--muted);line-height:1.45}.privacy-meta{display:grid;gap:8px}.privacy-meta div{display:flex;justify-content:space-between;gap:12px;border:1px solid #eadfcc;border-radius:10px;background:#fffaf3;padding:10px}.privacy-meta span{color:var(--muted)}.privacy-meta strong{color:var(--text)}.segment-group{display:flex;gap:8px;flex-wrap:wrap}.segment-btn{border:1px solid var(--line);border-radius:999px;background:#fff;padding:8px 12px;font-weight:800;color:var(--muted)}.segment-btn.active{background:var(--maroon);border-color:var(--maroon);color:#fff}.privacy-select{border:1px solid var(--line);border-radius:10px;background:#fff;padding:10px 12px;min-width:210px}.storage-meter{height:12px;border-radius:999px;background:#efe4d6;overflow:hidden;border:1px solid #dcc8ad}.storage-fill{height:100%;width:24%;border-radius:inherit;background:linear-gradient(90deg,var(--gold),var(--maroon))}.policy-details{border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px}.policy-details summary{cursor:pointer;font-weight:800;color:var(--maroon)}.policy-details ul{margin:10px 0 0;padding-left:20px;color:var(--muted);line-height:1.55}.status-line{font-weight:700;color:var(--maroon)}
+      .action-row{display:flex;gap:10px;flex-wrap:wrap}.btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 12px;font-weight:700}.btn.primary{background:var(--maroon);border-color:var(--maroon);color:#fff}.btn.danger{background:#8f1f1d;border-color:#8f1f1d;color:#fff}
+      .danger-zone{border-color:#d79d9a;background:#fff6f5}.danger-zone h3{margin-top:0;color:var(--danger)}.setting-note{margin:6px 0 0;color:var(--muted);line-height:1.45}.danger-actions{display:grid;gap:12px;margin-top:14px}.danger-action{display:flex;justify-content:space-between;align-items:center;gap:14px;border:1px solid #e3b5af;border-radius:14px;background:#fff;padding:14px}.danger-action strong{display:block;color:var(--maroon)}.danger-action p{margin:6px 0 0;color:var(--muted);line-height:1.45}html[data-contrast="high"] body{background:#fff;color:#111}html[data-contrast="high"] .panel,html[data-contrast="high"] .toggle-card,html[data-contrast="high"] .session-item,html[data-contrast="high"] .danger-zone{background:#fff;border-color:#111}body.no-motion *,body.no-motion *::before,body.no-motion *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}body.dyslexia-font{font-family:Lexend,"Atkinson Hyperlegible","Trebuchet MS",Arial,sans-serif}body.focus-mode aside{display:none}body.focus-mode .layout{grid-template-columns:1fr}body.focus-mode header .header-copy p{display:none}
+      @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+      .toast-wrap{position:fixed;right:14px;bottom:14px;display:grid;gap:10px;z-index:120}.toast{min-width:240px;max-width:320px;padding:12px 14px;border-radius:14px;color:#fff;box-shadow:var(--shadow)}.toast.success{background:#1f6a3b}.toast.error{background:#8f1f1d}
+      .modal{position:fixed;inset:0;background:rgba(21,13,13,.45);display:none;place-items:center;padding:20px;z-index:130}.modal.open{display:grid}.modal-card{width:min(420px,100%);padding:20px}.modal-card h3{margin-top:0;color:var(--maroon)}.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:16px}
+      @media (max-width: 920px){.layout{grid-template-columns:1fr}aside{border-right:0;border-bottom:1px solid rgba(216,173,71,.35)}.nav-list{grid-template-columns:repeat(3,minmax(0,1fr))}.settings-layout{grid-template-columns:1fr}}
+      @media (max-width: 760px){header{padding:18px 16px;flex-direction:column;align-items:stretch}.header-actions{justify-content:flex-end}main{padding:16px}.form-grid,.toggle-grid,.privacy-grid,.nav-list{grid-template-columns:1fr}.privacy-card.full{grid-column:auto}}
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#mainContent">Skip to main content</a>
+    <div class="layout">
+      <aside aria-label="Faculty navigation">
+        <div class="brand"><div class="crest" aria-hidden="true">UP</div><div><h1>UPHSD CCS</h1><p>Faculty Portal</p></div></div>
+        <nav><ul class="nav-list">
+          <li><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+          <li><a class="nav-link" href="students.html">Students</a></li>
+          <li><a class="nav-link" href="classes.html">Classes</a></li>
+          <li><a class="nav-link" href="calendar.html">Calendar</a></li>
+        </ul></nav>
+      </aside>
+      <div class="content">
+        <header>
+          <div class="header-copy"><h2>Settings</h2><p>Faculty preferences, account controls, notifications, and session management.</p></div>
+          <div class="header-actions">
+            <button class="icon-btn" id="notifButton" aria-label="Open notifications" aria-expanded="false" aria-controls="notifPanel">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5"></path><path d="M9 17a3 3 0 0 0 6 0"></path></svg>
+              <span class="badge" id="notifBadge">0</span>
+            </button>
+            <section class="notif-panel" id="notifPanel" aria-label="Faculty notifications">
+              <div class="notif-head"><div><h3>Notifications</h3><p>Project-connected mock updates</p></div><button class="text-btn" type="button" id="markAllRead">Mark all read</button></div>
+              <ul class="notif-list" id="notifList"></ul>
+              <div class="notif-actions"><button type="button" id="seedNotifBtn">Reset feed</button><button type="button" id="closeNotifBtn">Close</button></div>
+            </section>
+            <button class="avatar-btn" id="avatarButton" aria-haspopup="true" aria-expanded="false" aria-controls="profileMenu">F</button>
+            <div class="dropdown" id="profileMenu" role="menu" aria-label="Profile options">
+              <button role="menuitem" type="button" id="profileAction">Profile</button>
+              <button role="menuitem" type="button" id="settingsAction">Settings</button>
+              <button role="menuitem" type="button" id="logoutAction">Logout</button>
+            </div>
+          </div>
+        </header>
+
+        <main id="mainContent" tabindex="-1">
+          <div class="settings-layout">
+            <nav class="tab-nav" aria-label="Settings sections">
+              <button class="tab-btn active" type="button" data-tab="account">Account Settings</button>
+              <button class="tab-btn" type="button" data-tab="notifications">Notification Preferences</button>
+              <button class="tab-btn" type="button" data-tab="display">Display & Accessibility</button>
+              <button class="tab-btn" type="button" data-tab="privacy">Privacy & Data</button>
+              <button class="tab-btn" type="button" data-tab="sessions">Session Management</button>
+              <button class="tab-btn" type="button" data-tab="danger">Danger Zone</button>
+            </nav>
+
+            <section class="panel active" id="account">
+              <h3>Account Settings</h3>
+              <p>Update faculty account credentials and identity settings.</p>
+              <div class="form-grid">
+                <label class="field full">Email<input value="sterling.rivera@uphsd.edu.ph" readonly /></label>
+                <label class="field">Current Password<input id="currentPassword" type="password" /></label>
+                <label class="field">New Password<input id="newPassword" type="password" /></label>
+                <label class="field">Confirm Password<input id="confirmPassword" type="password" /></label>
+                <div class="toggle-card">
+                  <div class="toggle-row">
+                    <div><strong>Two-Factor Authentication</strong><p style="margin:6px 0 0;color:var(--muted)">Require extra verification on login.</p></div>
+                    <button class="switch" type="button" aria-checked="true"></button>
+                  </div>
+                </div>
+              </div>
+              <div class="action-row"><button class="btn primary" type="button" id="savePasswordBtn">Update Password</button></div>
+            </section>
+
+            <section class="panel" id="notifications">
+              <h3>Notification Preferences</h3>
+              <p>Choose which faculty alerts should reach email, SMS, and in-app channels.</p>
+              <div class="toggle-grid" id="notifToggleGrid"></div>
+            </section>
+
+            <section class="panel" id="display">
+              <h3>Display & Accessibility</h3>
+              <div class="form-grid">
+                <div class="slider-wrap">
+                  <div class="slider-head">
+                    <strong>Portal Font Size</strong>
+                    <span class="font-size-value" id="fontSizeValue">16px</span>
+                  </div>
+                  <input id="fontSizeRange" type="range" min="14" max="22" value="16" aria-label="Portal font size in pixels" />
+                  <div class="font-size-presets" aria-label="Font size presets">
+                    <button type="button" data-font-size="16">Default</button>
+                    <button type="button" data-font-size="18">Large</button>
+                    <button type="button" data-font-size="20">Extra Large</button>
+                  </div>
+                  <p class="setting-note">Applies across faculty pages after reload or navigation.</p>
+                </div>
+                <div class="toggle-card"><div class="toggle-row"><div><strong>High Contrast Mode</strong><p class="setting-note">Improves readability in bright rooms and supports low-vision use.</p></div><button class="switch accessibility-switch" type="button" data-accessibility-key="facultyHighContrast" aria-checked="false"></button></div></div>
+                <div class="toggle-card"><div class="toggle-row"><div><strong>Reduced Motion</strong><p class="setting-note">Disables slide, fade, and toggle animations for vestibular comfort.</p></div><button class="switch accessibility-switch" type="button" data-accessibility-key="facultyReducedMotion" aria-checked="false"></button></div></div>
+                <div class="toggle-card"><div class="toggle-row"><div><strong>Colorblind-Safe Grade Indicators</strong><p class="setting-note">Adds icons and safer hues so status is not color-only.</p></div><button class="switch accessibility-switch" type="button" data-accessibility-key="facultyColorblindIndicators" aria-checked="false"></button></div></div>
+                <div class="toggle-card"><div class="toggle-row"><div><strong>Input vs. Computed Field Highlights</strong><p class="setting-note">Marks direct input fields and auto-computed grade fields differently.</p></div><button class="switch accessibility-switch" type="button" data-accessibility-key="facultyFieldHighlight" aria-checked="false"></button></div></div>
+                <div class="toggle-card"><div class="toggle-row"><div><strong>Dyslexia-Friendly Font</strong><p class="setting-note">Uses a more spaced, legible font stack for long grade sheets.</p></div><button class="switch accessibility-switch" type="button" data-accessibility-key="facultyDyslexiaFont" aria-checked="false"></button></div></div>
+                <div class="toggle-card"><div class="toggle-row"><div><strong>Table Focus Mode</strong><p class="setting-note">Collapses sidebar/header extras to maximize grade-entry width.</p></div><button class="switch accessibility-switch" type="button" data-accessibility-key="facultyTableFocusMode" aria-checked="false"></button></div></div>
+              </div>
+            </section>
+
+            <section class="panel" id="privacy">
+              <h3>Privacy & Data</h3>
+              <p>Manage faculty account records, draft continuity, export transparency, and local device data.</p>
+              <div class="privacy-grid">
+                <!-- HCI: Error Prevention via auto-save -->
+                <article class="privacy-card">
+                  <div class="toggle-row">
+                    <div>
+                      <h4>Auto-Save Drafts</h4>
+                      <p>Periodically saves mock grade-entry drafts to local storage.</p>
+                    </div>
+                    <button class="switch" type="button" id="autoSaveToggle" role="switch" aria-checked="false" aria-label="Toggle auto-save drafts"></button>
+                  </div>
+                  <p class="status-line" id="autoSaveStatus" aria-live="polite">Last saved: Not enabled</p>
+                </article>
+
+                <article class="privacy-card">
+                  <h4>Export Faculty Data</h4>
+                  <p>Select a format and academic scope for a mock local export.</p>
+                  <div class="segment-group" role="group" aria-label="Export format">
+                    <button class="segment-btn active" type="button" data-export-format="json" aria-pressed="true">JSON</button>
+                    <button class="segment-btn" type="button" data-export-format="csv" aria-pressed="false">CSV</button>
+                    <button class="segment-btn" type="button" data-export-format="pdf" aria-pressed="false">PDF-Mock</button>
+                  </div>
+                  <select class="privacy-select" id="exportScope" aria-label="Export scope">
+                    <option value="current">Current Semester</option>
+                    <option value="all">All Semesters</option>
+                  </select>
+                  <div class="action-row"><button class="btn primary" type="button" id="mockExportBtn">Download Mock Export</button></div>
+                </article>
+
+                <article class="privacy-card">
+                  <h4>Session & Device Activity</h4>
+                  <p>Current browser session visibility for security awareness.</p>
+                  <div class="privacy-meta">
+                    <div><span>Device</span><strong>Desktop (Chrome)</strong></div>
+                    <div><span>Last Active</span><strong id="lastActiveText">Today, 10:32 AM</strong></div>
+                    <div><span>Active Session</span><strong id="activeSessionText">1</strong></div>
+                  </div>
+                  <div class="action-row"><button class="btn danger" type="button" id="clearSessionsBtn">Clear All Sessions</button></div>
+                </article>
+
+                <!-- HCI: Visibility of system status via storage health -->
+                <article class="privacy-card">
+                  <h4>Local Storage Health</h4>
+                  <p>Prototype cache estimate for local browser data.</p>
+                  <div class="storage-meter" aria-hidden="true"><div class="storage-fill" id="storageFill"></div></div>
+                  <p class="status-line" id="storageHealthText" aria-live="polite">1.2 MB / 5 MB used</p>
+                  <div class="action-row"><button class="btn" type="button" id="optimizeCacheBtn">Optimize Cache</button></div>
+                </article>
+
+                <article class="privacy-card">
+                  <div class="toggle-row">
+                    <div>
+                      <h4>Privacy Consent</h4>
+                      <p>Allow anonymous usage analytics for prototype evaluation.</p>
+                    </div>
+                    <button class="switch" type="button" id="analyticsToggle" role="switch" aria-checked="false" aria-label="Allow anonymous usage analytics"></button>
+                  </div>
+                  <p class="status-line" id="analyticsStatus" aria-live="polite">Anonymous analytics disabled.</p>
+                </article>
+
+                <article class="privacy-card">
+                  <h4>Data Retention Policy</h4>
+                  <details class="policy-details">
+                    <summary>View academic audit retention periods</summary>
+                    <ul>
+                      <li>Drafts: retained for 30 days to support faculty recovery.</li>
+                      <li>Submitted Grades: retained for 1 academic year for audit readiness.</li>
+                      <li>Activity Logs: retained for 90 days for accountability review.</li>
+                    </ul>
+                  </details>
+                </article>
+              </div>
+            </section>
+
+            <section class="panel" id="sessions">
+              <h3>Session Management</h3>
+              <p>Mock list of active faculty devices and sessions.</p>
+              <div class="session-list">
+                <article class="session-item"><strong>Windows Desktop - Molino Campus</strong><p style="margin:6px 0 0;color:var(--muted)">Current session • Chrome • Last active now</p></article>
+                <article class="session-item"><strong>Android Phone</strong><p style="margin:6px 0 0;color:var(--muted)">In-app access • Last active 2 hours ago</p></article>
+                <article class="session-item"><strong>Office Laptop</strong><p style="margin:6px 0 0;color:var(--muted)">Faculty portal • Last active yesterday</p></article>
+              </div>
+              <div class="action-row"><button class="btn danger" type="button" id="logoutAllBtn">Logout All</button></div>
+            </section>
+
+            <section class="panel" id="danger">
+              <div class="danger-zone">
+                <h3>Danger Zone</h3>
+                <p>Use these actions carefully. They trigger confirmation modals in this prototype.</p>
+                <div class="danger-actions">
+                  <article class="danger-action"><div><strong>Clear Draft Grades</strong><p>Resets mock grade inputs and marks the current draft as cleared.</p></div><button class="btn danger" type="button" id="clearDraftGradesBtn">Clear Draft Grades</button></article>
+                  <article class="danger-action"><div><strong>Reset Transmutation Table to Default</strong><p>Restores the institutional grading-scale reference used by the grade sheet.</p></div><button class="btn danger" type="button" id="resetTransmutationBtn">Reset Table</button></article>
+                  <article class="danger-action"><div><strong>Delete Local Session Data</strong><p>Clears role, theme, preferences, and local prototype cache.</p></div><button class="btn danger" type="button" id="deleteSessionDataBtn">Delete Session Data</button></article>
+                  <article class="danger-action"><div><strong>Lock Grade Sheet</strong><p>Simulates final submission and disables grade inputs.</p></div><button class="btn danger" type="button" id="lockGradeSheetBtn">Lock Grade Sheet</button></article>
+                  <article class="danger-action"><div><strong>Export Preferences</strong><p>Downloads a mock JSON file of the current display and accessibility settings.</p></div><button class="btn" type="button" id="exportPrefsBtn">Export Preferences</button></article>
+                </div>
+              </div>
+            </section>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <section class="modal" id="confirmModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+      <div class="modal-card">
+        <h3 id="confirmTitle">Confirm Action</h3>
+        <p id="confirmMessage">Are you sure?</p>
+        <div class="modal-actions">
+          <button class="btn" type="button" id="cancelConfirm">Cancel</button>
+          <button class="btn danger" type="button" id="confirmDanger">Confirm</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="toast-wrap" id="toastWrap" aria-live="polite" aria-atomic="true"></div>
+
+    <script>
+      (function () {
+        var DEFAULT_NOTIFICATIONS = [
+          { id: "gs-review", tag: "Calendar", text: "Calendar items for BSCS-2B quizzes and deadlines need final review.", time: "5 minutes ago", unread: true },
+          { id: "attendance-alert", tag: "Attendance", text: "Three students in BSCS-2A have reached 3 absences.", time: "22 minutes ago", unread: true },
+          { id: "submission", tag: "Submissions", text: "New project proposal uploaded in HCI 402 section BSCS-2A.", time: "1 hour ago", unread: true },
+          { id: "class-summary", tag: "Classes", text: "Card and list views are synced for HCI 402 and Data Structures classes.", time: "Today", unread: false },
+          { id: "deadline", tag: "Deadline", text: "Midterm grade submission closes on May 02, 2026.", time: "Today", unread: false }
+        ];
+        var NOTIF_SETTINGS = [
+          "Grade Submissions / Email",
+          "Grade Submissions / SMS",
+          "Attendance Alerts / In-App",
+          "Attendance Alerts / Email",
+          "Deadline Reminders / In-App",
+          "Deadline Reminders / SMS",
+          "System Updates / Email",
+          "System Updates / In-App"
+        ];
+        var toastWrap = document.getElementById("toastWrap");
+        var avatarButton = document.getElementById("avatarButton");
+        var profileMenu = document.getElementById("profileMenu");
+        var profileAction = document.getElementById("profileAction");
+        var settingsAction = document.getElementById("settingsAction");
+        var logoutAction = document.getElementById("logoutAction");
+        var notifButton = document.getElementById("notifButton");
+        var notifBadge = document.getElementById("notifBadge");
+        var notifPanel = document.getElementById("notifPanel");
+        var notifList = document.getElementById("notifList");
+        var markAllRead = document.getElementById("markAllRead");
+        var closeNotifBtn = document.getElementById("closeNotifBtn");
+        var seedNotifBtn = document.getElementById("seedNotifBtn");
+        var tabButtons = Array.prototype.slice.call(document.querySelectorAll(".tab-btn"));
+        var panels = Array.prototype.slice.call(document.querySelectorAll(".panel"));
+        var notifToggleGrid = document.getElementById("notifToggleGrid");
+        var savePasswordBtn = document.getElementById("savePasswordBtn");
+        var currentPassword = document.getElementById("currentPassword");
+        var newPassword = document.getElementById("newPassword");
+        var confirmPassword = document.getElementById("confirmPassword");
+        var fontSizeRange = document.getElementById("fontSizeRange");
+        var fontSizeValue = document.getElementById("fontSizeValue");
+        var fontSizePresets = Array.prototype.slice.call(document.querySelectorAll("[data-font-size]"));
+        var accessibilityToggles = Array.prototype.slice.call(document.querySelectorAll("[data-accessibility-key]"));
+        var autoSaveToggle = document.getElementById("autoSaveToggle");
+        var autoSaveStatus = document.getElementById("autoSaveStatus");
+        var exportFormatButtons = Array.prototype.slice.call(document.querySelectorAll("[data-export-format]"));
+        var exportScope = document.getElementById("exportScope");
+        var mockExportBtn = document.getElementById("mockExportBtn");
+        var lastActiveText = document.getElementById("lastActiveText");
+        var activeSessionText = document.getElementById("activeSessionText");
+        var clearSessionsBtn = document.getElementById("clearSessionsBtn");
+        var storageFill = document.getElementById("storageFill");
+        var storageHealthText = document.getElementById("storageHealthText");
+        var optimizeCacheBtn = document.getElementById("optimizeCacheBtn");
+        var analyticsToggle = document.getElementById("analyticsToggle");
+        var analyticsStatus = document.getElementById("analyticsStatus");
+        var logoutAllBtn = document.getElementById("logoutAllBtn");
+        var clearDraftGradesBtn = document.getElementById("clearDraftGradesBtn");
+        var resetTransmutationBtn = document.getElementById("resetTransmutationBtn");
+        var deleteSessionDataBtn = document.getElementById("deleteSessionDataBtn");
+        var lockGradeSheetBtn = document.getElementById("lockGradeSheetBtn");
+        var exportPrefsBtn = document.getElementById("exportPrefsBtn");
+        var confirmModal = document.getElementById("confirmModal");
+        var confirmMessage = document.getElementById("confirmMessage");
+        var cancelConfirm = document.getElementById("cancelConfirm");
+        var confirmDanger = document.getElementById("confirmDanger");
+        var pendingDangerAction = null;
+        var selectedExportFormat = localStorage.getItem("facultyExportFormat") || "json";
+        var autoSaveTimer = null;
+
+        function guardFacultyRole() {
+          var role = localStorage.getItem("userRole");
+          if (!role) { window.location.href = "index.html"; return false; }
+          if (role !== "faculty") { window.location.href = role === "sysadmin" ? "admin.html" : "index.html"; return false; }
+          return true;
+        }
+        if (!guardFacultyRole()) { return; }
+        function showToast(type, message) {
+          var toast = document.createElement("div");
+          toast.className = "toast " + type;
+          toast.textContent = message;
+          toastWrap.appendChild(toast);
+          window.setTimeout(function () { toast.remove(); }, 2600);
+        }
+        function getNotifications() {
+          var raw = localStorage.getItem("facultyNotifications");
+          var stored = [];
+          try {
+            stored = raw ? JSON.parse(raw) : [];
+          } catch (error) {}
+          var merged = mergeNotifications(stored);
+          saveNotifications(merged);
+          return merged;
+        }
+        function saveNotifications(items) { localStorage.setItem("facultyNotifications", JSON.stringify(items)); }
+        function mergeNotifications(items) {
+          var stored = Array.isArray(items) ? items : [];
+          var defaults = DEFAULT_NOTIFICATIONS.map(function (item) {
+            var match = stored.filter(function (storedItem) { return storedItem && storedItem.id === item.id; })[0];
+            return {
+              id: item.id,
+              tag: match && match.tag ? match.tag : item.tag,
+              text: match && match.text ? match.text : item.text,
+              time: match && match.time ? match.time : item.time,
+              unread: match ? Boolean(match.unread) : Boolean(item.unread)
+            };
+          });
+          var extra = stored.filter(function (item) {
+            return item && item.id && item.text && DEFAULT_NOTIFICATIONS.every(function (defaultItem) { return defaultItem.id !== item.id; });
+          }).map(function (item) {
+            return {
+              id: item.id,
+              tag: item.tag || "Update",
+              text: item.text,
+              time: item.time || "Recently",
+              unread: Boolean(item.unread)
+            };
+          });
+          return extra.concat(defaults);
+        }
+        function syncBadge(items) { var unread = items.filter(function (item) { return item.unread; }).length; notifBadge.textContent = String(unread); localStorage.setItem("notifCount", String(unread)); }
+        function renderNotifications() {
+          var items = getNotifications();
+          notifList.innerHTML = "";
+          items.forEach(function (item) {
+            var li = document.createElement("li");
+            li.className = "notif-item" + (item.unread ? " unread" : "");
+            li.innerHTML = '<div class="notif-top"><span class="notif-tag">' + item.tag + "</span>" + (item.unread ? '<button class="text-btn" type="button" data-read="' + item.id + '">Mark read</button>' : "") + "</div><p>" + item.text + "</p><time>" + item.time + "</time>";
+            notifList.appendChild(li);
+          });
+          syncBadge(items);
+        }
+        function addNotification(tag, text) {
+          var items = getNotifications();
+          items.unshift({ id: "n-" + Date.now(), tag: tag, text: text, time: "Just now", unread: true });
+          saveNotifications(items); renderNotifications();
+        }
+        function settingEnabled(key) { return localStorage.getItem(key) === "true"; }
+        function getFacultyFontSize() {
+          var size = parseInt(localStorage.getItem("facultyFontSize"), 10);
+          return size >= 14 && size <= 22 ? size : 16;
+        }
+        function applyFacultyFontSize(size) {
+          var nextSize = parseInt(size, 10);
+          if (!(nextSize >= 14 && nextSize <= 22)) { nextSize = 16; }
+          localStorage.setItem("facultyFontSize", String(nextSize));
+          document.documentElement.style.fontSize = nextSize + "px";
+          fontSizeRange.value = String(nextSize);
+          fontSizeValue.textContent = nextSize + "px";
+          fontSizePresets.forEach(function (button) {
+            button.classList.toggle("active", button.getAttribute("data-font-size") === String(nextSize));
+          });
+        }
+        function setAccessibilityToggle(toggle) {
+          toggle.setAttribute("aria-checked", String(settingEnabled(toggle.getAttribute("data-accessibility-key"))));
+        }
+        function applyAccessibilityPreferences() {
+          if (settingEnabled("facultyHighContrast")) {
+            document.documentElement.setAttribute("data-contrast", "high");
+          } else {
+            document.documentElement.removeAttribute("data-contrast");
+          }
+          document.body.classList.toggle("no-motion", settingEnabled("facultyReducedMotion"));
+          document.body.classList.toggle("colorblind-safe", settingEnabled("facultyColorblindIndicators"));
+          document.body.classList.toggle("field-highlight", settingEnabled("facultyFieldHighlight"));
+          document.body.classList.toggle("dyslexia-font", settingEnabled("facultyDyslexiaFont"));
+          document.body.classList.toggle("focus-mode", settingEnabled("facultyTableFocusMode"));
+          accessibilityToggles.forEach(setAccessibilityToggle);
+        }
+        function exportPreferences() {
+          var payload = {
+            exportedAt: new Date().toISOString(),
+            highContrast: settingEnabled("facultyHighContrast"),
+            reducedMotion: settingEnabled("facultyReducedMotion"),
+            colorblindSafeGradeIndicators: settingEnabled("facultyColorblindIndicators"),
+            inputComputedFieldHighlights: settingEnabled("facultyFieldHighlight"),
+            dyslexiaFriendlyFont: settingEnabled("facultyDyslexiaFont"),
+            tableFocusMode: settingEnabled("facultyTableFocusMode"),
+            fontSize: getFacultyFontSize()
+          };
+          var blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+          var link = document.createElement("a");
+          var objectUrl = URL.createObjectURL(blob);
+          link.href = objectUrl;
+          link.download = "faculty-preferences.json";
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+          window.setTimeout(function () { URL.revokeObjectURL(objectUrl); }, 1000);
+        }
+        function setSwitchState(toggle, enabled) {
+          toggle.setAttribute("aria-checked", String(Boolean(enabled)));
+        }
+        function formatSavedTime(value) {
+          if (!value) { return "Last saved: Not yet saved"; }
+          return "Last saved: " + new Date(value).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+        }
+        function updateExportButtons() {
+          exportFormatButtons.forEach(function (button) {
+            var active = button.getAttribute("data-export-format") === selectedExportFormat;
+            button.classList.toggle("active", active);
+            button.setAttribute("aria-pressed", String(active));
+          });
+          localStorage.setItem("facultyExportFormat", selectedExportFormat);
+          localStorage.setItem("facultyExportScope", exportScope.value);
+        }
+        function saveDraftSnapshot() {
+          var now = new Date().toISOString();
+          localStorage.setItem("facultyDraftSnapshot", JSON.stringify({ savedAt: now, source: "settings-auto-save", values: "mock grade inputs" }));
+          localStorage.setItem("facultyLastDraftAutoSave", now);
+          autoSaveStatus.textContent = formatSavedTime(now);
+        }
+        function stopAutoSave() {
+          if (autoSaveTimer) { window.clearInterval(autoSaveTimer); }
+          autoSaveTimer = null;
+        }
+        function startAutoSave() {
+          stopAutoSave();
+          saveDraftSnapshot();
+          autoSaveTimer = window.setInterval(saveDraftSnapshot, 60000);
+        }
+        function applyAutoSavePreference() {
+          var enabled = settingEnabled("facultyAutoSaveDrafts");
+          setSwitchState(autoSaveToggle, enabled);
+          if (enabled) {
+            autoSaveStatus.textContent = formatSavedTime(localStorage.getItem("facultyLastDraftAutoSave"));
+            startAutoSave();
+          } else {
+            stopAutoSave();
+            autoSaveStatus.textContent = "Last saved: Auto-save disabled";
+          }
+        }
+        function estimateLocalStorageUsage() {
+          var bytes = 0;
+          Object.keys(localStorage).forEach(function (key) {
+            bytes += key.length + String(localStorage.getItem(key)).length;
+          });
+          return Math.max(1.2, bytes / 1024 / 1024);
+        }
+        function refreshStorageHealth() {
+          var used = estimateLocalStorageUsage();
+          var percent = Math.min(100, Math.round((used / 5) * 100));
+          storageFill.style.width = percent + "%";
+          storageHealthText.textContent = used.toFixed(1) + " MB / 5 MB used";
+        }
+        function optimizeMockCache() {
+          localStorage.removeItem("facultyExpiredMockEntry");
+          localStorage.setItem("facultyCacheOptimizedAt", new Date().toISOString());
+          refreshStorageHealth();
+        }
+        function generateExportPayload() {
+          return {
+            exportedAt: new Date().toISOString(),
+            format: selectedExportFormat,
+            scope: exportScope.value === "all" ? "All Semesters" : "Current Semester",
+            faculty: localStorage.getItem("userName") || "Faculty",
+            autoSaveDrafts: settingEnabled("facultyAutoSaveDrafts"),
+            analyticsConsent: settingEnabled("facultyAnalyticsConsent"),
+            lastDraftAutoSave: localStorage.getItem("facultyLastDraftAutoSave") || "Not saved"
+          };
+        }
+        function downloadMockExport() {
+          var payload = generateExportPayload();
+          var content = "";
+          var type = "text/plain";
+          var extension = selectedExportFormat;
+          if (selectedExportFormat === "json") {
+            content = JSON.stringify(payload, null, 2);
+            type = "application/json";
+          } else if (selectedExportFormat === "csv") {
+            content = "Field,Value\n" + Object.keys(payload).map(function (key) { return key + "," + JSON.stringify(String(payload[key])); }).join("\n");
+            type = "text/csv";
+          } else {
+            content = "UPHSD Faculty Data Export (Mock PDF)\n\n" + Object.keys(payload).map(function (key) { return key + ": " + payload[key]; }).join("\n");
+            extension = "txt";
+          }
+          var blob = new Blob([content], { type: type });
+          var link = document.createElement("a");
+          var url = URL.createObjectURL(blob);
+          link.href = url;
+          link.download = "faculty-data-" + payload.format + "-" + payload.scope.toLowerCase().replace(/\s+/g, "-") + "." + extension;
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+          window.setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+        }
+        function updateAnalyticsPreference() {
+          var enabled = settingEnabled("facultyAnalyticsConsent");
+          setSwitchState(analyticsToggle, enabled);
+          analyticsStatus.textContent = enabled ? "Anonymous analytics enabled." : "Anonymous analytics disabled.";
+        }
+        function initPrivacyData() {
+          exportScope.value = localStorage.getItem("facultyExportScope") || "current";
+          updateExportButtons();
+          lastActiveText.textContent = "Today, " + new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+          activeSessionText.textContent = localStorage.getItem("facultyMockSessionsCleared") === "true" ? "0" : "1";
+          applyAutoSavePreference();
+          updateAnalyticsPreference();
+          refreshStorageHealth();
+        }
+        function closeMenu() { profileMenu.classList.remove("open"); avatarButton.setAttribute("aria-expanded", "false"); }
+        function closeNotifications() { notifPanel.classList.remove("open"); notifButton.setAttribute("aria-expanded", "false"); }
+        function openConfirm(message, action) { pendingDangerAction = action; confirmMessage.textContent = message; confirmModal.classList.add("open"); confirmModal.setAttribute("aria-hidden", "false"); confirmDanger.focus(); }
+        function closeConfirm() { confirmModal.classList.remove("open"); confirmModal.setAttribute("aria-hidden", "true"); pendingDangerAction = null; }
+        function activateTab(id) {
+          tabButtons.forEach(function (button) { button.classList.toggle("active", button.getAttribute("data-tab") === id); });
+          panels.forEach(function (panel) { panel.classList.toggle("active", panel.id === id); panel.style.display = panel.id === id ? "grid" : "none"; });
+        }
+
+        avatarButton.textContent = (localStorage.getItem("userName") || "Faculty").charAt(0).toUpperCase();
+        applyFacultyFontSize(getFacultyFontSize());
+        applyAccessibilityPreferences();
+        renderNotifications();
+        activateTab("account");
+        initPrivacyData();
+
+        NOTIF_SETTINGS.forEach(function (label, index) {
+          var card = document.createElement("article");
+          card.className = "toggle-card";
+          card.innerHTML = '<div class="toggle-row"><div><strong>' + label + '</strong><p style="margin:6px 0 0;color:var(--muted)">Mock delivery toggle</p></div><button class="switch" type="button" aria-checked="' + (index % 2 === 0 ? "true" : "false") + '"></button></div>';
+          notifToggleGrid.appendChild(card);
+        });
+
+        tabButtons.forEach(function (button) {
+          button.addEventListener("click", function () { activateTab(button.getAttribute("data-tab")); });
+        });
+
+        document.querySelectorAll(".switch").forEach(function (toggle) {
+          toggle.addEventListener("click", function () {
+            if (toggle.hasAttribute("data-accessibility-key")) { return; }
+            if (toggle.id === "autoSaveToggle" || toggle.id === "analyticsToggle") { return; }
+            var next = toggle.getAttribute("aria-checked") !== "true";
+            toggle.setAttribute("aria-checked", String(next));
+            addNotification("Settings", "A faculty setting toggle was updated.");
+            showToast("success", "Preference updated.");
+          });
+        });
+
+        accessibilityToggles.forEach(function (toggle) {
+          toggle.addEventListener("click", function () {
+            var key = toggle.getAttribute("data-accessibility-key");
+            var next = !settingEnabled(key);
+            localStorage.setItem(key, String(next));
+            applyAccessibilityPreferences();
+            addNotification("Accessibility", toggle.closest(".toggle-card").querySelector("strong").textContent + " was " + (next ? "enabled." : "disabled."));
+            showToast("success", "Accessibility preference updated.");
+          });
+        });
+
+        savePasswordBtn.addEventListener("click", function () {
+          if (!currentPassword.value || !newPassword.value || !confirmPassword.value) { showToast("error", "Complete all password fields."); return; }
+          if (newPassword.value.length < 8) { showToast("error", "New password must be at least 8 characters."); return; }
+          if (newPassword.value !== confirmPassword.value) { showToast("error", "New password and confirmation do not match."); return; }
+          addNotification("Settings", "Faculty password was updated in the mock settings page.");
+          showToast("success", "Password updated.");
+          currentPassword.value = ""; newPassword.value = ""; confirmPassword.value = "";
+        });
+
+        fontSizeRange.addEventListener("input", function () {
+          applyFacultyFontSize(fontSizeRange.value);
+        });
+        fontSizeRange.addEventListener("change", function () {
+          addNotification("Accessibility", "Portal font size was changed to " + fontSizeRange.value + "px.");
+          showToast("success", "Font size saved.");
+        });
+        fontSizePresets.forEach(function (button) {
+          button.addEventListener("click", function () {
+            applyFacultyFontSize(button.getAttribute("data-font-size"));
+            addNotification("Accessibility", "Portal font size was changed to " + fontSizeRange.value + "px.");
+            showToast("success", "Font size saved.");
+          });
+        });
+        autoSaveToggle.addEventListener("click", function () {
+          var next = !settingEnabled("facultyAutoSaveDrafts");
+          localStorage.setItem("facultyAutoSaveDrafts", String(next));
+          applyAutoSavePreference();
+          addNotification("Privacy", "Auto-save drafts was " + (next ? "enabled." : "disabled."));
+          showToast("success", next ? "Auto-save enabled." : "Auto-save disabled.");
+        });
+        exportFormatButtons.forEach(function (button) {
+          button.addEventListener("click", function () {
+            selectedExportFormat = button.getAttribute("data-export-format");
+            updateExportButtons();
+          });
+        });
+        exportScope.addEventListener("change", updateExportButtons);
+        mockExportBtn.addEventListener("click", function () { downloadMockExport(); addNotification("Privacy", "Faculty data export was downloaded."); showToast("success", "Mock export downloaded."); });
+        clearSessionsBtn.addEventListener("click", function () { openConfirm("Clear all active sessions and return to login?", function () { localStorage.removeItem("userRole"); localStorage.removeItem("userName"); localStorage.removeItem("notifCount"); localStorage.removeItem("isUnlocked"); localStorage.setItem("facultyMockSessionsCleared", "true"); window.location.href = "index.html"; }); });
+        optimizeCacheBtn.addEventListener("click", function () { openConfirm("Optimize local cache and remove expired mock entries?", function () { optimizeMockCache(); addNotification("Privacy", "Expired local mock cache entries were optimized."); showToast("success", "Cache optimized."); }); });
+        analyticsToggle.addEventListener("click", function () {
+          var next = !settingEnabled("facultyAnalyticsConsent");
+          localStorage.setItem("facultyAnalyticsConsent", String(next));
+          updateAnalyticsPreference();
+          addNotification("Privacy", "Anonymous usage analytics was " + (next ? "allowed." : "disabled."));
+          showToast("success", next ? "Analytics consent saved." : "Analytics disabled.");
+        });
+        logoutAllBtn.addEventListener("click", function () { openConfirm("Logout all active faculty sessions?", function () { addNotification("Security", "All active faculty sessions were logged out."); showToast("success", "All sessions logged out."); }); });
+        clearDraftGradesBtn.addEventListener("click", function () { openConfirm("Clear draft grade values on the grade sheet?", function () { localStorage.setItem("facultyDraftGradesCleared", "true"); localStorage.removeItem("facultyGradeSheetLocked"); addNotification("Grades", "Draft grade values were cleared from Settings."); showToast("success", "Draft grades cleared."); }); });
+        resetTransmutationBtn.addEventListener("click", function () { openConfirm("Reset the transmutation reference table to default values?", function () { localStorage.setItem("facultyTransmutationResetAt", new Date().toISOString()); addNotification("Grades", "Transmutation table was reset to default values."); showToast("success", "Transmutation table reset."); }); });
+        deleteSessionDataBtn.addEventListener("click", function () { openConfirm("Delete local session data and return to login?", function () { localStorage.clear(); window.location.href = "index.html"; }); });
+        lockGradeSheetBtn.addEventListener("click", function () { openConfirm("Lock the grade sheet and simulate final submission?", function () { localStorage.setItem("facultyGradeSheetLocked", "true"); addNotification("Grades", "Grade sheet was locked and marked as submitted."); showToast("success", "Grade sheet locked."); }); });
+        exportPrefsBtn.addEventListener("click", function () { exportPreferences(); addNotification("Privacy", "Faculty accessibility preferences were exported."); showToast("success", "Preferences exported."); });
+        cancelConfirm.addEventListener("click", closeConfirm);
+        confirmDanger.addEventListener("click", function () { if (pendingDangerAction) { pendingDangerAction(); } closeConfirm(); });
+        confirmModal.addEventListener("click", function (event) { if (event.target === confirmModal) { closeConfirm(); } });
+
+        avatarButton.addEventListener("click", function (event) { event.stopPropagation(); if (profileMenu.classList.contains("open")) { closeMenu(); } else { closeNotifications(); profileMenu.classList.add("open"); avatarButton.setAttribute("aria-expanded", "true"); } });
+        notifButton.addEventListener("click", function (event) { event.stopPropagation(); if (notifPanel.classList.contains("open")) { closeNotifications(); } else { closeMenu(); renderNotifications(); notifPanel.classList.add("open"); notifButton.setAttribute("aria-expanded", "true"); } });
+        markAllRead.addEventListener("click", function (event) { event.stopPropagation(); var items = getNotifications().map(function (item) { item.unread = false; return item; }); saveNotifications(items); renderNotifications(); showToast("success", "Notifications marked as read."); });
+        closeNotifBtn.addEventListener("click", function (event) { event.stopPropagation(); closeNotifications(); });
+        seedNotifBtn.addEventListener("click", function (event) { event.stopPropagation(); saveNotifications(DEFAULT_NOTIFICATIONS.slice()); renderNotifications(); showToast("success", "Notification feed reset."); });
+        profileMenu.addEventListener("click", function (event) { event.stopPropagation(); });
+        notifPanel.addEventListener("click", function (event) { event.stopPropagation(); });
+        notifList.addEventListener("click", function (event) { event.stopPropagation(); var id = event.target.getAttribute("data-read"); if (!id) { return; } var items = getNotifications().map(function (item) { if (item.id === id) { item.unread = false; } return item; }); saveNotifications(items); renderNotifications(); });
+        profileAction.addEventListener("click", function () { window.location.href = "profile.html"; });
+        settingsAction.addEventListener("click", closeMenu);
+        logoutAction.addEventListener("click", function () { localStorage.removeItem("userRole"); localStorage.removeItem("userName"); localStorage.removeItem("notifCount"); localStorage.removeItem("isUnlocked"); window.location.href = "index.html"; });
+        document.addEventListener("click", function (event) { if (!profileMenu.contains(event.target) && !avatarButton.contains(event.target)) { closeMenu(); } if (!notifPanel.contains(event.target) && !notifButton.contains(event.target)) { closeNotifications(); } });
+        document.addEventListener("keydown", function (event) { if (event.key === "Escape") { closeMenu(); closeNotifications(); if (confirmModal.classList.contains("open")) { closeConfirm(); } } });
+      })();
+    </script>
+  </body>
+</html>

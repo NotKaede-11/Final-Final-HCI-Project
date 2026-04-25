@@ -1,0 +1,657 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>UPHSD SysAdmin Console</title>
+    <style>
+      :root {
+        --primary: #800000;
+        --accent: #ffb800;
+        --bg-light: #f5f6f8;
+        --surface: #ffffff;
+        --text-main: #1e242b;
+        --text-muted: #627080;
+        --border: #d4dbe4;
+        --ok: #1d7a42;
+        --warn: #b54708;
+        --danger: #b42318;
+        --radius-sm: 8px;
+        --radius-md: 12px;
+        --shadow-sm: 0 8px 20px rgba(14, 18, 24, 0.08);
+        --shadow-lg: 0 16px 30px rgba(14, 18, 24, 0.12);
+        --focus-ring: 0 0 0 3px rgba(128, 0, 0, 0.2);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        background: var(--bg-light);
+        color: var(--text-main);
+      }
+
+      .skip-link {
+        position: absolute;
+        left: 8px;
+        top: -44px;
+        background: #000;
+        color: #fff;
+        padding: 8px 12px;
+        border-radius: 6px;
+        z-index: 1000;
+      }
+
+      .skip-link:focus {
+        top: 8px;
+      }
+
+      :focus-visible {
+        outline: none;
+        box-shadow: var(--focus-ring);
+      }
+
+      .layout {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 260px 1fr;
+      }
+
+      aside {
+        background: #fff;
+        border-right: 1px solid var(--border);
+        padding: 24px 16px;
+      }
+
+      .brand {
+        margin-bottom: 22px;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 14px;
+      }
+
+      .brand h1 {
+        margin: 0;
+        font-size: 1.03rem;
+      }
+
+      .brand p {
+        margin: 4px 0 0;
+        color: var(--text-muted);
+        font-size: 0.88rem;
+      }
+
+      .nav-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 8px;
+      }
+
+      .nav-btn {
+        width: 100%;
+        text-align: left;
+        border: 1px solid #dfe5ed;
+        background: #f9fbfc;
+        border-radius: 10px;
+        padding: 10px 12px;
+        font: inherit;
+        font-weight: 600;
+        cursor: pointer;
+        color: #33404f;
+      }
+
+      .nav-btn.active {
+        border-color: #cfa4a4;
+        background: #fff4f4;
+        color: var(--primary);
+      }
+
+      .content {
+        display: grid;
+        grid-template-rows: auto 1fr;
+        min-width: 0;
+      }
+
+      header {
+        border-bottom: 1px solid var(--border);
+        background: #fff;
+        padding: 12px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .banner {
+        border: 1px solid #f0d9a7;
+        background: #fff9ec;
+        color: #5e4300;
+        border-radius: 10px;
+        padding: 10px 12px;
+        font-weight: 700;
+        font-size: 0.9rem;
+      }
+
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .chip {
+        border-radius: 999px;
+        border: 1px solid #d6e6dd;
+        background: #edf8f0;
+        color: #1e6a39;
+        padding: 4px 10px;
+        font-size: 0.8rem;
+        font-weight: 700;
+      }
+
+      .logout {
+        border: 1px solid var(--primary);
+        background: var(--primary);
+        color: #fff;
+        border-radius: 8px;
+        padding: 8px 12px;
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      main {
+        padding: 24px;
+        display: grid;
+        gap: 14px;
+        align-content: start;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .card {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-sm);
+        padding: 14px;
+      }
+
+      .card h2 {
+        margin: 0 0 4px;
+        font-size: 0.95rem;
+      }
+
+      .metric {
+        font-size: 1.22rem;
+        font-weight: 800;
+      }
+
+      .metric.ok {
+        color: var(--ok);
+      }
+
+      .metric.warn {
+        color: var(--warn);
+      }
+
+      .metric.danger {
+        color: var(--danger);
+      }
+
+      .terminal {
+        background: #111827;
+        border-radius: 10px;
+        color: #c9e1ff;
+        border: 1px solid #1f2d45;
+        box-shadow: var(--shadow-lg);
+        padding: 12px;
+        overflow: auto;
+        font-family: Consolas, "Courier New", monospace;
+        font-size: 0.85rem;
+        line-height: 1.45;
+        min-height: 260px;
+      }
+
+      .toggles {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .toggle-item {
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: #fff;
+        padding: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .switch {
+        width: 44px;
+        height: 24px;
+        border-radius: 999px;
+        border: 1px solid #cad3df;
+        background: #e7ebf0;
+        position: relative;
+        cursor: not-allowed;
+      }
+
+      .switch::before {
+        content: "";
+        position: absolute;
+        left: 2px;
+        top: 2px;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #fff;
+        border: 1px solid #c6cfdb;
+      }
+
+      .switch[aria-checked="true"] {
+        background: #fcefbf;
+        border-color: #e8cb72;
+      }
+
+      .switch[aria-checked="true"]::before {
+        left: 22px;
+      }
+
+      .toast-wrap {
+        position: fixed;
+        right: 12px;
+        bottom: 12px;
+        display: grid;
+        gap: 8px;
+        z-index: 90;
+      }
+
+      .toast {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-left: 4px solid var(--danger);
+        border-radius: 8px;
+        padding: 10px 12px;
+        box-shadow: var(--shadow-sm);
+        font-size: 0.9rem;
+        min-width: 230px;
+      }
+
+      @media (max-width: 980px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+
+        aside {
+          border-right: 0;
+          border-bottom: 1px solid var(--border);
+        }
+
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        .toggles {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 640px) {
+        header,
+        main {
+          padding: 14px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          transition-duration: 0.001ms !important;
+        }
+      }
+      body.perpetual-shell {
+        background:
+          radial-gradient(circle at top left, rgba(214, 170, 67, 0.18), transparent 24%),
+          linear-gradient(180deg, #f7efe5 0%, #f3e9de 100%);
+      }
+
+      body.perpetual-shell aside {
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 18%),
+          linear-gradient(180deg, #7b1113 0%, #58090b 100%);
+        border-right: 1px solid rgba(214, 170, 67, 0.35);
+        color: #fff8ef;
+      }
+
+      body.perpetual-shell .brand {
+        padding: 14px 14px 18px;
+        margin-bottom: 20px;
+        border-bottom: 1px solid rgba(214, 170, 67, 0.28);
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.09),
+          rgba(255, 255, 255, 0.02)
+        );
+        border-radius: 18px;
+      }
+
+      body.perpetual-shell .brand h1,
+      body.perpetual-shell header,
+      body.perpetual-shell .banner,
+      body.perpetual-shell #adminChip {
+        color: #fff8ef;
+      }
+
+      body.perpetual-shell .brand p {
+        color: rgba(255, 248, 239, 0.74);
+      }
+
+      body.perpetual-shell .nav-btn {
+        border-radius: 14px;
+        border: 1px solid transparent;
+        background: rgba(255, 255, 255, 0.04);
+        color: #fff4ea;
+      }
+
+      body.perpetual-shell .nav-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(214, 170, 67, 0.42);
+        color: #fffef9;
+      }
+
+      body.perpetual-shell .nav-btn.active {
+        background: linear-gradient(
+          90deg,
+          rgba(214, 170, 67, 0.28),
+          rgba(214, 170, 67, 0.1)
+        );
+        border-color: rgba(214, 170, 67, 0.72);
+        color: #fff9ef;
+        box-shadow: inset 3px 0 0 #d6aa43;
+      }
+
+      body.perpetual-shell .content {
+        background:
+          radial-gradient(circle at top right, rgba(214, 170, 67, 0.14), transparent 22%),
+          linear-gradient(180deg, rgba(255, 252, 247, 0.7) 0%, rgba(244, 235, 225, 0.7) 100%);
+      }
+
+      body.perpetual-shell header {
+        background: linear-gradient(90deg, #7b1113 0%, #931719 58%, #7e1114 100%);
+        border-bottom: 1px solid rgba(214, 170, 67, 0.42);
+        box-shadow: 0 22px 48px rgba(53, 7, 9, 0.18);
+      }
+
+      body.perpetual-shell .banner,
+      body.perpetual-shell .card,
+      body.perpetual-shell .toggle-item,
+      body.perpetual-shell .toast {
+        background: linear-gradient(180deg, #fffdfa 0%, #fbf6ef 100%);
+        border-color: #e0d0bc;
+        box-shadow: 0 18px 38px rgba(58, 18, 13, 0.12);
+      }
+
+      body.perpetual-shell .card h2,
+      body.perpetual-shell .metric {
+        color: #7b1113;
+      }
+
+      body.perpetual-shell .terminal {
+        background: linear-gradient(180deg, #3f0d11 0%, #1d0a10 100%);
+        border-color: rgba(214, 170, 67, 0.24);
+        color: #f9efdd;
+      }
+
+      body.perpetual-shell .chip {
+        border-color: rgba(214, 170, 67, 0.38);
+        background: rgba(255, 255, 255, 0.08);
+        color: #fff8ef;
+      }
+
+      body.perpetual-shell .logout {
+        background: linear-gradient(180deg, #7b1113 0%, #58090b 100%);
+        border-color: rgba(214, 170, 67, 0.38);
+        color: #fff8ef;
+      }
+
+      @media (max-width: 980px) {
+        body.perpetual-shell aside {
+          border-right: 0;
+          border-bottom: 1px solid rgba(214, 170, 67, 0.28);
+        }
+      }
+    </style>
+  </head>
+  <body class="perpetual-shell admin-shell">
+    <a class="skip-link" href="#mainContent">Skip to main content</a>
+
+    <div class="layout">
+      <aside aria-label="SysAdmin modules">
+        <div class="brand">
+          <h1>UPHSD SysAdmin</h1>
+          <p>Technical Operations Console</p>
+        </div>
+
+        <nav>
+          <ul class="nav-list">
+            <li>
+              <button
+                class="nav-btn active"
+                type="button"
+                data-module="System Logs"
+              >
+                System Logs
+              </button>
+            </li>
+            <li>
+              <button class="nav-btn" type="button" data-module="User Roles">
+                User Roles
+              </button>
+            </li>
+            <li>
+              <button
+                class="nav-btn"
+                type="button"
+                data-module="Database Backup"
+              >
+                Database Backup
+              </button>
+            </li>
+            <li>
+              <button class="nav-btn" type="button" data-module="API Status">
+                API Status
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+
+      <div class="content">
+        <header>
+          <div class="banner">
+            Technical Dashboard - Admin modules disabled for Phase 1
+          </div>
+          <div class="header-right">
+            <span class="chip" id="adminChip">SysAdmin Online</span>
+            <button class="logout" id="logoutBtn" type="button">Logout</button>
+          </div>
+        </header>
+
+        <main id="mainContent" tabindex="-1">
+          <section class="grid" aria-label="Uptime indicators">
+            <article class="card">
+              <h2>Server Uptime</h2>
+              <p class="metric ok">99.98%</p>
+            </article>
+            <article class="card">
+              <h2>Failed Jobs</h2>
+              <p class="metric warn">2 / 180</p>
+            </article>
+            <article class="card">
+              <h2>Unauthorized Attempts</h2>
+              <p class="metric danger">5</p>
+            </article>
+          </section>
+
+          <section class="card" aria-labelledby="terminalTitle">
+            <h2 id="terminalTitle">Mock Terminal Logs</h2>
+            <pre class="terminal" id="logPanel">
+[08:12:02] boot sequence initialized
+[08:12:04] api status check: partial availability
+[08:12:07] user role sync: pending due to maintenance window
+[08:12:11] backup service: standby mode enabled
+[08:12:15] alert: phase 1 modules are UI-locked
+
+-- UPDATE PLACEHOLDER: connect log stream source when backend is ready --</pre
+            >
+          </section>
+
+          <section class="toggles" aria-label="Disabled admin controls">
+            <article class="toggle-item">
+              <div>
+                <strong>Auto Backup</strong>
+                <p>Temporarily disabled for prototype.</p>
+              </div>
+              <button
+                class="switch"
+                type="button"
+                aria-checked="false"
+                aria-label="Auto backup toggle disabled"
+              ></button>
+            </article>
+
+            <article class="toggle-item">
+              <div>
+                <strong>Role Provisioning</strong>
+                <p>Temporarily disabled for prototype.</p>
+              </div>
+              <button
+                class="switch"
+                type="button"
+                aria-checked="true"
+                aria-label="Role provisioning toggle disabled"
+              ></button>
+            </article>
+
+            <article class="toggle-item">
+              <div>
+                <strong>Incident Webhook</strong>
+                <p>Temporarily disabled for prototype.</p>
+              </div>
+              <button
+                class="switch"
+                type="button"
+                aria-checked="false"
+                aria-label="Incident webhook toggle disabled"
+              ></button>
+            </article>
+
+            <article class="toggle-item">
+              <div>
+                <strong>API Write Access</strong>
+                <p>Temporarily disabled for prototype.</p>
+              </div>
+              <button
+                class="switch"
+                type="button"
+                aria-checked="false"
+                aria-label="API write access toggle disabled"
+              ></button>
+            </article>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <div
+      class="toast-wrap"
+      id="toastWrap"
+      aria-live="polite"
+      aria-atomic="true"
+    ></div>
+
+    <script>
+      (function () {
+        var toastWrap = document.getElementById("toastWrap");
+        var logoutBtn = document.getElementById("logoutBtn");
+        var logPanel = document.getElementById("logPanel");
+
+        function guardAdminRole() {
+          var role = localStorage.getItem("userRole");
+          if (!role) {
+            window.location.href = "index.html";
+            return false;
+          }
+          if (role !== "sysadmin") {
+            if (role === "faculty") {
+              window.location.href = "dashboard.html";
+            } else {
+              window.location.href = "index.html";
+            }
+            return false;
+          }
+          return true;
+        }
+
+        if (!guardAdminRole()) {
+          return;
+        }
+
+        function showToast(message) {
+          var toast = document.createElement("div");
+          toast.className = "toast";
+          toast.textContent = message;
+          toastWrap.appendChild(toast);
+          window.setTimeout(function () {
+            toast.remove();
+          }, 2400);
+        }
+
+        document.querySelectorAll(".nav-btn").forEach(function (button) {
+          button.addEventListener("click", function () {
+            document.querySelectorAll(".nav-btn").forEach(function (node) {
+              node.classList.remove("active");
+            });
+            button.classList.add("active");
+            var module = button.getAttribute("data-module");
+            showToast(module + " is disabled for Phase 1.");
+            logPanel.textContent +=
+              "\n[" +
+              new Date().toLocaleTimeString() +
+              "] module request blocked: " +
+              module;
+          });
+        });
+
+        document.querySelectorAll(".switch").forEach(function (toggle) {
+          toggle.addEventListener("click", function () {
+            showToast("Toggle blocked: backend controls are disabled.");
+          });
+        });
+
+        logoutBtn.addEventListener("click", function () {
+          localStorage.removeItem("userRole");
+          localStorage.removeItem("userName");
+          localStorage.removeItem("notifCount");
+          localStorage.removeItem("isUnlocked");
+          window.location.href = "index.html";
+        });
+      })();
+    </script>
+  </body>
+</html>

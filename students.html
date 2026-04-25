@@ -1,0 +1,1041 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>UPHSD Students</title>
+    <style>
+      :root {
+        --maroon: #7b1113;
+        --primary: #800000;
+        --maroon-deep: #54090b;
+        --gold: #d8ad47;
+        --accent: #ffb800;
+        --bg: #f6efe6;
+        --bg-light: #f8f9fa;
+        --surface: #fffdfa;
+        --surface-alt: #f9f2e8;
+        --text: #211c1b;
+        --muted: #6c5f59;
+        --line: #e1d1bd;
+        --ok: #21653a;
+        --danger: #a12724;
+        --shadow: 0 18px 38px rgba(63, 18, 14, 0.12);
+        --shadow-strong: 0 24px 46px rgba(48, 8, 10, 0.18);
+      }
+
+      * { box-sizing: border-box; }
+      html, body {
+        margin: 0;
+        min-height: 100%;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background:
+          radial-gradient(circle at top left, rgba(216, 173, 71, 0.18), transparent 24%),
+          linear-gradient(180deg, #faf3ea 0%, var(--bg) 100%);
+        color: var(--text);
+      }
+      a, button, input, select { font: inherit; }
+      button { cursor: pointer; }
+      .skip-link {
+        position: absolute; left: 10px; top: -40px; background: #000; color: #fff;
+        padding: 8px 12px; border-radius: 8px; z-index: 200;
+      }
+      .skip-link:focus { top: 10px; }
+      :focus-visible { outline: 3px solid rgba(216, 173, 71, 0.5); outline-offset: 2px; }
+      .visually-hidden {
+        position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+        overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+      }
+      .layout { min-height: 100vh; display: grid; grid-template-columns: 292px minmax(0, 1fr); }
+      aside {
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 18%),
+          linear-gradient(180deg, var(--maroon) 0%, var(--maroon-deep) 100%);
+        color: #fff8f0; padding: 24px 18px; border-right: 1px solid rgba(216, 173, 71, 0.35);
+      }
+      .brand {
+        display: flex; gap: 14px; align-items: center; padding: 16px; margin-bottom: 20px;
+        border-radius: 22px; background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(216, 173, 71, 0.28);
+      }
+      .crest {
+        width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center;
+        background: linear-gradient(180deg, #fff5d3 0%, var(--gold) 100%);
+        color: var(--maroon-deep); font-weight: 800; border: 2px solid rgba(255, 248, 230, 0.7);
+      }
+      .brand h1 { margin: 0; font-size: 1.16rem; }
+      .brand p { margin: 4px 0 0; color: rgba(255, 248, 240, 0.88); font-size: 0.96rem; }
+      .nav-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+      .nav-link {
+        display: block; text-decoration: none; color: #fff8f0; background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 13px 15px; font-weight: 700; font-size: 1rem; line-height: 1.25;
+      }
+      .nav-link:hover { background: rgba(255, 255, 255, 0.12); border-color: rgba(216, 173, 71, 0.45); }
+      .nav-link.active {
+        background: linear-gradient(90deg, rgba(216, 173, 71, 0.3), rgba(216, 173, 71, 0.1));
+        color: #fffdf8; border-color: rgba(216, 173, 71, 0.76); box-shadow: inset 3px 0 0 var(--gold);
+      }
+      .content { min-width: 0; display: grid; grid-template-rows: auto 1fr; }
+      header {
+        position: sticky; top: 0; z-index: 50; display: flex; justify-content: space-between;
+        align-items: center; gap: 16px; padding: 20px 26px;
+        background: linear-gradient(90deg, var(--maroon) 0%, #8d1719 60%, var(--maroon) 100%);
+        color: #fff9f2; border-bottom: 1px solid rgba(216, 173, 71, 0.34); box-shadow: var(--shadow-strong);
+      }
+      .header-copy h2 { margin: 0; font-size: 1.5rem; }
+      .header-copy p { margin: 6px 0 0; color: rgba(255, 247, 236, 0.88); font-size: 0.95rem; }
+      .header-actions { display: flex; align-items: center; gap: 12px; position: relative; }
+      .icon-btn, .avatar-btn {
+        position: relative; min-width: 46px; min-height: 46px; border-radius: 14px;
+        border: 1px solid rgba(216, 173, 71, 0.38); background: rgba(255, 255, 255, 0.1);
+        color: #fff9f2; display: inline-flex; align-items: center; justify-content: center;
+      }
+      .icon-btn svg { width: 20px; height: 20px; }
+      .avatar-btn {
+        width: 46px; height: 46px; border-radius: 50%;
+        background: linear-gradient(180deg, #f1d68d 0%, var(--gold) 100%);
+        color: var(--maroon-deep); font-weight: 800;
+      }
+      .badge {
+        position: absolute; top: -6px; right: -6px; min-width: 22px; height: 22px; padding: 0 6px;
+        border-radius: 999px; background: var(--gold); color: var(--maroon-deep); display: grid;
+        place-items: center; font-size: 0.74rem; font-weight: 800; border: 1px solid #fff1c8;
+      }
+      .dropdown, .notif-panel {
+        position: absolute; right: 0; top: 58px; width: min(360px, calc(100vw - 24px));
+        background: linear-gradient(180deg, var(--surface) 0%, var(--surface-alt) 100%);
+        border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); display: none; color: var(--text);
+      }
+      .dropdown.open, .notif-panel.open { display: block; }
+      .dropdown { width: 200px; padding: 8px; }
+      .dropdown button {
+        width: 100%; text-align: left; border: 0; background: transparent; border-radius: 10px; padding: 10px 12px; color: var(--text);
+      }
+      .dropdown button:hover { background: #f4ecdf; }
+      .notif-head, .notif-actions {
+        display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 16px;
+      }
+      .notif-head { border-bottom: 1px solid var(--line); }
+      .notif-head h3 { margin: 0; font-size: 1rem; color: var(--maroon); }
+      .notif-head p { margin: 4px 0 0; color: var(--muted); font-size: 0.85rem; }
+      .text-btn { border: 0; background: transparent; color: var(--maroon); font-weight: 700; }
+      .notif-list {
+        list-style: none; margin: 0; padding: 8px 12px 0; max-height: 360px; overflow: auto; display: grid; gap: 10px;
+      }
+      .notif-item {
+        display: grid; gap: 6px; padding: 12px; border-radius: 14px; border: 1px solid var(--line); background: #fffdf9; color: var(--text);
+      }
+      .notif-item.unread { border-color: #dfbf72; background: #fff7e5; }
+      .notif-top { display: flex; justify-content: space-between; gap: 10px; align-items: start; }
+      .notif-tag {
+        display: inline-flex; align-items: center; border-radius: 999px; padding: 3px 8px;
+        font-size: 0.72rem; font-weight: 800; background: #f2e5c7; color: var(--maroon-deep);
+      }
+      .notif-item p { margin: 0; color: var(--text); line-height: 1.45; }
+      .notif-item time { margin: 0; }
+      .notif-item time { color: var(--muted); font-size: 0.8rem; }
+      .notif-actions { border-top: 1px solid var(--line); }
+      .notif-actions button {
+        border: 1px solid var(--line); background: #fff; border-radius: 10px; padding: 8px 10px; font-weight: 700; color: var(--text);
+      }
+      main { padding: 24px; display: grid; gap: 18px; align-content: start; }
+      .panel, .toolbar, .kanban-board, .modal-card {
+        background: linear-gradient(180deg, var(--surface) 0%, var(--surface-alt) 100%);
+        border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow);
+      }
+      .toolbar { padding: 18px; display: grid; gap: 14px; }
+      .toolbar-row {
+        display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;
+      }
+      .toolbar-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+      .toolbar h3, .panel h3 { margin: 0; color: var(--maroon); }
+      .toolbar p, .panel p { margin: 0; color: var(--muted); }
+      .tools { display: flex; gap: 10px; flex-wrap: wrap; }
+      .tools input, .tools select {
+        border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; background: #fff; min-width: 220px;
+      }
+      .view-toggle {
+        display: inline-flex; gap: 6px; padding: 6px; border-radius: 999px; background: #efe4d6; border: 1px solid var(--line);
+      }
+      .view-toggle button {
+        border: 0; background: transparent; padding: 9px 14px; border-radius: 999px; font-weight: 700; color: var(--muted);
+      }
+      .view-toggle button.active { background: #fff; color: var(--maroon); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); }
+      .panel { padding: 18px; }
+      .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 16px; background: #fff; }
+      table { width: 100%; border-collapse: collapse; min-width: 760px; }
+      th, td { padding: 13px 15px; text-align: left; border-bottom: 1px solid #eee2d2; font-size: 1rem; line-height: 1.45; }
+      th { background: #f7efe3; color: var(--maroon); }
+      tbody tr[data-student-id], .student-card[data-student-id] { cursor: pointer; }
+      tbody tr[data-student-id]:hover, .student-card[data-student-id]:hover { background: #fff7e8; }
+      tbody tr[data-student-id]:focus-visible, .student-card[data-student-id]:focus-visible { outline: 3px solid rgba(216, 173, 71, 0.55); outline-offset: -3px; }
+      .status-chip {
+        display: inline-flex; align-items: center; border-radius: 999px; padding: 5px 11px; font-size: 0.85rem;
+        font-weight: 800; border: 1px solid #b8d5b1; background: #edf6ea; color: var(--ok);
+      }
+      .status-chip.inactive { border-color: #e2b1a6; background: #fff0eb; color: var(--danger); }
+      .kanban-board {
+        padding: 18px; display: none; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px;
+      }
+      .kanban-board.active { display: grid; }
+      .quizzes-view { display: none; }
+      .quizzes-view.active { display: block; }
+      .quiz-placeholder-grid {
+        display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 14px;
+      }
+      .quiz-card {
+        border: 1px solid var(--line); border-radius: 14px; background: #fffdf9; padding: 15px;
+      }
+      .quiz-card h4 { margin: 0 0 7px; color: var(--maroon); font-size: 1rem; }
+      .quiz-card p { margin: 0; color: var(--muted); font-size: 0.96rem; line-height: 1.45; }
+      .quiz-empty {
+        margin-top: 14px; border: 1px dashed #ccb79a; border-radius: 14px; background: #fffaf0; padding: 14px;
+        color: var(--muted); line-height: 1.5;
+      }
+      .student-card {
+        border: 1px solid var(--line); border-radius: 14px; background: #fffdf9; padding: 14px;
+      }
+      .student-card strong { display: block; margin-bottom: 6px; font-size: 1.05rem; line-height: 1.35; }
+      .student-card p { margin: 0 0 10px; color: var(--muted); font-size: 0.96rem; line-height: 1.45; }
+      .student-card-meta {
+        display: grid; gap: 8px; margin-top: 10px;
+      }
+      .student-card-meta span {
+        color: var(--muted); font-size: 0.96rem; line-height: 1.45;
+      }
+      .chip {
+        display: inline-flex; align-items: center; border-radius: 999px; padding: 5px 11px; font-size: 0.85rem;
+        font-weight: 800; border: 1px solid #e0c47c; background: #f7edd0; color: var(--maroon-deep);
+      }
+      .chip.ok {
+        border-color: #b8d5b1; background: #edf6ea; color: #1f6a3b;
+      }
+      .chip.alert {
+        border-color: #e2b1a6; background: #fff0eb; color: #8f1f1d;
+      }
+      .chip.warn {
+        border-color: #e3c98a; background: #fff7dc; color: #9a6212;
+      }
+      .chip.info {
+        border-color: #b4caeb; background: #edf4ff; color: #275b9a;
+      }
+      .toast-wrap { position: fixed; right: 14px; bottom: 14px; display: grid; gap: 10px; z-index: 120; }
+      .toast {
+        min-width: 240px; max-width: 320px; padding: 12px 14px; border-radius: 14px; color: #fff; box-shadow: var(--shadow);
+      }
+      .toast.success { background: #1f6a3b; }
+      .toast.error { background: #8f1f1d; }
+      .toast.warning { background: #8a4f00; }
+      .modal {
+        position: fixed; inset: 0; background: rgba(21, 13, 13, 0.45); display: none; place-items: center; padding: 20px; z-index: 130;
+      }
+      .modal.open { display: grid; }
+      .modal-card { width: min(420px, 100%); background: var(--surface); padding: 20px; }
+      .modal-card.detail-card { width: min(560px, 100%); }
+      .modal-card.form-card { width: min(620px, 100%); max-height: calc(100vh - 48px); overflow: auto; border-radius: 8px; }
+      .modal-card h3 { margin-top: 0; color: var(--maroon); }
+      .add-btn { border: 1px solid var(--primary); background: var(--primary); color: #fff; border-radius: 8px; padding: 10px 13px; font-weight: 800; transition: transform 0.16s ease, box-shadow 0.16s ease; }
+      .add-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 18px rgba(128, 0, 0, 0.18); }
+      .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+      .field { display: grid; gap: 6px; }
+      .field label { color: var(--maroon); font-weight: 800; }
+      .field input, .field select { border: 1px solid var(--line); border-radius: 8px; background: #fff; padding: 10px 12px; }
+      .field .preview-value {
+        border: 1px solid var(--line); border-radius: 8px; background: #fffaf0; padding: 10px 12px; min-height: 42px;
+        color: var(--text); font-weight: 700; display: flex; align-items: center;
+      }
+      .field-error { min-height: 1.1em; color: var(--danger); font-size: 0.82rem; }
+      .btn.accent { background: var(--accent); border-color: var(--accent); color: #2b1f05; }
+      .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+      .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+      .detail-item { border: 1px solid var(--line); border-radius: 12px; background: #fff; padding: 12px; }
+      .detail-item span { display: block; color: var(--muted); font-size: 0.82rem; margin-bottom: 5px; }
+      .detail-item strong { color: var(--text); }
+      .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; }
+      .btn { border: 1px solid var(--line); background: #fff; border-radius: 10px; padding: 10px 12px; font-weight: 700; }
+      .btn.primary { background: var(--maroon); border-color: var(--maroon); color: #fff; }
+      @media (max-width: 920px) {
+        .layout { grid-template-columns: 1fr; }
+        aside { border-right: 0; border-bottom: 1px solid rgba(216, 173, 71, 0.35); }
+        .nav-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      }
+      @media (max-width: 760px) {
+        header { padding: 18px 16px; flex-direction: column; align-items: stretch; }
+        .header-actions { justify-content: flex-end; }
+        main { padding: 16px; }
+        .form-grid, .kanban-board, .quiz-placeholder-grid, .nav-list { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#mainContent">Skip to main content</a>
+    <div class="layout">
+      <aside aria-label="Faculty navigation">
+        <div class="brand">
+          <div class="crest" aria-hidden="true">UP</div>
+          <div>
+            <h1>UPHSD CCS</h1>
+            <p>Faculty Portal</p>
+          </div>
+        </div>
+        <nav>
+          <ul class="nav-list">
+            <li><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+            <li><a class="nav-link active" href="students.html" aria-current="page">Students</a></li>
+            <li><a class="nav-link" href="classes.html">Classes</a></li>
+            <li><a class="nav-link" href="calendar.html">Calendar</a></li>
+          </ul>
+        </nav>
+      </aside>
+
+      <div class="content">
+        <header>
+          <div class="header-copy">
+            <h2>Students</h2>
+            <p>Switch between list, card, and quiz placeholder views for faster roster scanning.</p>
+          </div>
+          <div class="header-actions">
+            <button class="icon-btn" id="notifButton" aria-label="Open notifications" aria-expanded="false" aria-controls="notifPanel">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5"></path>
+                <path d="M9 17a3 3 0 0 0 6 0"></path>
+              </svg>
+              <span class="badge" id="notifBadge">0</span>
+            </button>
+            <section class="notif-panel" id="notifPanel" aria-label="Faculty notifications">
+              <div class="notif-head">
+                <div><h3>Notifications</h3><p>Project-connected mock updates</p></div>
+                <button class="text-btn" type="button" id="markAllRead">Mark all read</button>
+              </div>
+              <ul class="notif-list" id="notifList"></ul>
+              <div class="notif-actions">
+                <button type="button" id="seedNotifBtn">Reset feed</button>
+                <button type="button" id="closeNotifBtn">Close</button>
+              </div>
+            </section>
+            <button class="avatar-btn" id="avatarButton" aria-haspopup="true" aria-expanded="false" aria-controls="profileMenu">F</button>
+            <div class="dropdown" id="profileMenu" role="menu" aria-label="Profile options">
+              <button role="menuitem" type="button" id="profileAction">Profile</button>
+              <button role="menuitem" type="button" id="settingsAction">Settings</button>
+              <button role="menuitem" type="button" id="logoutAction">Logout</button>
+            </div>
+          </div>
+        </header>
+
+        <main id="mainContent" tabindex="-1">
+          <section class="toolbar">
+            <div class="toolbar-row">
+              <div>
+                <h3>Student Roster</h3>
+                <p>Current enrolled learners across active handled sections.</p>
+              </div>
+              <div class="toolbar-actions">
+                <button class="add-btn" type="button" id="addStudentBtn">+ Add Student</button>
+                <div class="view-toggle" role="tablist" aria-label="Student views">
+                  <button type="button" class="active" id="listViewBtn" aria-pressed="true">List View</button>
+                  <button type="button" id="kanbanViewBtn" aria-pressed="false">Card View</button>
+                  <button type="button" id="quizzesViewBtn" aria-pressed="false">Quizzes</button>
+                </div>
+              </div>
+            </div>
+            <div class="tools">
+              <label class="visually-hidden" for="searchInput">Search students</label>
+              <input id="searchInput" type="search" placeholder="Search by name, ID, or section" />
+              <select id="sectionFilter" aria-label="Filter by section">
+                <option value="all">All Sections</option>
+                <option value="BSCS-2A">BSCS-2A</option>
+                <option value="BSCS-2B">BSCS-2B</option>
+                <option value="BSIT-2A">BSIT-2A</option>
+              </select>
+            </div>
+          </section>
+
+          <section class="panel" id="listView">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>ID</th>
+                    <th>Section</th>
+                    <th>Enrolled Class</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="studentBody"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="kanban-board" id="kanbanView" aria-label="Student card grid view"></section>
+
+          <section class="panel quizzes-view" id="quizzesView" aria-label="Student quizzes placeholder view">
+            <h3>Quizzes</h3>
+            <p>Placeholder workspace for student quiz requirements and assessment tracking.</p>
+            <div class="quiz-placeholder-grid">
+              <article class="quiz-card">
+                <h4>Quiz Planner</h4>
+                <p>Reserved area for quiz titles, coverage, due dates, and section assignment details.</p>
+              </article>
+              <article class="quiz-card">
+                <h4>Upcoming Draft</h4>
+                <p>Mock slot for the next HCI 402 quiz once actual requirements are provided.</p>
+              </article>
+              <article class="quiz-card">
+                <h4>Student Results</h4>
+                <p>Future summary space for score status, completion counts, and review notes.</p>
+              </article>
+            </div>
+            <div class="quiz-empty">No quiz management content has been finalized yet. This tab is ready for the actual quiz requirements later.</div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <section class="modal" id="logoutModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="logoutTitle">
+      <div class="modal-card">
+        <h3 id="logoutTitle">Confirm Logout</h3>
+        <p>Are you sure you want to logout from the grading system?</p>
+        <div class="modal-actions">
+          <button class="btn" type="button" id="cancelLogout">Cancel</button>
+          <button class="btn primary" type="button" id="confirmLogout">Confirm</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="modal" id="studentDetailModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="studentDetailTitle">
+      <div class="modal-card detail-card">
+        <h3 id="studentDetailTitle">Student Details</h3>
+        <p id="studentDetailSummary">Current roster information.</p>
+        <div class="detail-grid" id="studentDetailBody"></div>
+        <div class="modal-actions">
+          <button class="btn primary" type="button" id="closeStudentDetail">Close</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="modal" id="addStudentModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="addStudentTitle">
+      <div class="modal-card form-card">
+        <h3 id="addStudentTitle">Add Student</h3>
+        <p>Enter the same roster fields used by the current mock student data.</p>
+        <!-- HCI: Error Prevention - Duplicate ID check -->
+        <form id="addStudentForm" novalidate>
+          <div class="form-grid">
+            <div class="field">
+              <label for="studentNameInput">Name</label>
+              <input id="studentNameInput" name="name" type="text" placeholder="e.g., Ana Reyes" aria-label="Student name" required />
+              <div class="field-error" id="studentNameError" role="alert"></div>
+            </div>
+            <div class="field">
+              <label for="studentIdInput">Student ID</label>
+              <input id="studentIdInput" name="id" type="text" placeholder="e.g., 2026-FAC-256" aria-label="Student ID" required />
+              <div class="field-error" id="studentIdError" role="alert"></div>
+            </div>
+            <div class="field">
+              <label for="studentSectionInput">Section</label>
+              <select id="studentSectionInput" name="section" aria-label="Student section" required>
+                <option value="">Select section</option>
+                <option value="BSCS-2A">BSCS-2A</option>
+                <option value="BSCS-2B">BSCS-2B</option>
+                <option value="BSIT-2A">BSIT-2A</option>
+              </select>
+              <div class="field-error" id="studentSectionError" role="alert"></div>
+            </div>
+            <div class="field">
+              <label for="studentStatusInput">Status</label>
+              <select id="studentStatusInput" name="status" aria-label="Student status" required>
+                <option value="">Select status</option>
+                <option value="Active">Active</option>
+                <option value="At Risk">At Risk</option>
+              </select>
+              <div class="field-error" id="studentStatusError" role="alert"></div>
+            </div>
+            <div class="field">
+              <label for="studentClassPreview">Enrolled Class</label>
+              <div class="preview-value" id="studentClassPreview" aria-live="polite">Select a section to preview class assignment.</div>
+            </div>
+          </div>
+          <div class="modal-actions">
+            <button class="btn" type="button" id="cancelAddStudent">Cancel</button>
+            <button class="btn accent" type="submit" id="saveStudentBtn" disabled>Save Student</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <div class="toast-wrap" id="toastWrap" aria-live="polite" aria-atomic="true"></div>
+
+    <script>
+      (function () {
+        var DEFAULT_STUDENTS = [
+          { name: "Miguel Santos", id: "2026-FAC-244", section: "BSCS-2A", status: "Active" },
+          { name: "Angela Rivera", id: "2026-FAC-251", section: "BSCS-2A", status: "Active" },
+          { name: "Paolo Dela Cruz", id: "2026-FAC-252", section: "BSCS-2B", status: "At Risk" },
+          { name: "Lia Ramos", id: "2026-FAC-253", section: "BSCS-2B", status: "Active" },
+          { name: "John Gabriel Torres", id: "2026-FAC-254", section: "BSIT-2A", status: "At Risk" },
+          { name: "Marie Anne Flores", id: "2026-FAC-255", section: "BSIT-2A", status: "Active" }
+        ];
+        var DEFAULT_CLASSES = [
+          { subject: "HCI 402", section: "BSCS-2A", schedule: "Mon/Wed 9:00-10:30 AM", room: "Comp Lab 2", students: 42 },
+          { subject: "HCI 402", section: "BSCS-2B", schedule: "Tue/Fri 10:00-11:30 AM", room: "Room 405", students: 38 },
+          { subject: "Data Structures", section: "BSIT-2A", schedule: "Thu/Sat 1:00-2:30 PM", room: "Comp Lab 1", students: 35 }
+        ];
+        var STUDENTS = [];
+        var DEFAULT_NOTIFICATIONS = [
+          { id: "gs-review", tag: "Calendar", text: "Calendar items for BSCS-2B quizzes and deadlines need final review.", time: "5 minutes ago", unread: true },
+          { id: "attendance-alert", tag: "Attendance", text: "Three students in BSCS-2A have reached 3 absences.", time: "22 minutes ago", unread: true },
+          { id: "submission", tag: "Submissions", text: "New project proposal uploaded in HCI 402 section BSCS-2A.", time: "1 hour ago", unread: true },
+          { id: "class-summary", tag: "Classes", text: "Card and list views are synced for HCI 402 and Data Structures classes.", time: "Today", unread: false },
+          { id: "deadline", tag: "Deadline", text: "Midterm grade submission closes on May 02, 2026.", time: "Today", unread: false }
+        ];
+
+        var toastWrap = document.getElementById("toastWrap");
+        var studentBody = document.getElementById("studentBody");
+        var kanbanView = document.getElementById("kanbanView");
+        var listView = document.getElementById("listView");
+        var quizzesView = document.getElementById("quizzesView");
+        var addStudentBtn = document.getElementById("addStudentBtn");
+        var searchInput = document.getElementById("searchInput");
+        var sectionFilter = document.getElementById("sectionFilter");
+        var listViewBtn = document.getElementById("listViewBtn");
+        var kanbanViewBtn = document.getElementById("kanbanViewBtn");
+        var quizzesViewBtn = document.getElementById("quizzesViewBtn");
+        var avatarButton = document.getElementById("avatarButton");
+        var profileMenu = document.getElementById("profileMenu");
+        var profileAction = document.getElementById("profileAction");
+        var settingsAction = document.getElementById("settingsAction");
+        var logoutAction = document.getElementById("logoutAction");
+        var logoutModal = document.getElementById("logoutModal");
+        var cancelLogout = document.getElementById("cancelLogout");
+        var confirmLogout = document.getElementById("confirmLogout");
+        var studentDetailModal = document.getElementById("studentDetailModal");
+        var studentDetailTitle = document.getElementById("studentDetailTitle");
+        var studentDetailSummary = document.getElementById("studentDetailSummary");
+        var studentDetailBody = document.getElementById("studentDetailBody");
+        var closeStudentDetail = document.getElementById("closeStudentDetail");
+        var addStudentModal = document.getElementById("addStudentModal");
+        var addStudentForm = document.getElementById("addStudentForm");
+        var cancelAddStudent = document.getElementById("cancelAddStudent");
+        var saveStudentBtn = document.getElementById("saveStudentBtn");
+        var studentNameInput = document.getElementById("studentNameInput");
+        var studentIdInput = document.getElementById("studentIdInput");
+        var studentSectionInput = document.getElementById("studentSectionInput");
+        var studentStatusInput = document.getElementById("studentStatusInput");
+        var studentClassPreview = document.getElementById("studentClassPreview");
+        var studentNameError = document.getElementById("studentNameError");
+        var studentIdError = document.getElementById("studentIdError");
+        var studentSectionError = document.getElementById("studentSectionError");
+        var studentStatusError = document.getElementById("studentStatusError");
+        var notifButton = document.getElementById("notifButton");
+        var notifBadge = document.getElementById("notifBadge");
+        var notifPanel = document.getElementById("notifPanel");
+        var notifList = document.getElementById("notifList");
+        var markAllRead = document.getElementById("markAllRead");
+        var closeNotifBtn = document.getElementById("closeNotifBtn");
+        var seedNotifBtn = document.getElementById("seedNotifBtn");
+        var activeModal = null;
+        var lastFocusedElement = null;
+        var addedStudents = [];
+
+        function guardFacultyRole() {
+          var role = localStorage.getItem("userRole");
+          if (!role) {
+            window.location.href = "index.html";
+            return false;
+          }
+          if (role !== "faculty") {
+            window.location.href = role === "sysadmin" ? "admin.html" : "index.html";
+            return false;
+          }
+          return true;
+        }
+        function applyFacultyFontSize() {
+          var size = parseInt(localStorage.getItem("facultyFontSize"), 10);
+          document.documentElement.style.fontSize = size >= 14 && size <= 22 ? size + "px" : "16px";
+        }
+        if (!guardFacultyRole()) { return; }
+        applyFacultyFontSize();
+
+        function showToast(type, message) {
+          var toast = document.createElement("div");
+          toast.className = "toast " + type;
+          toast.textContent = message;
+          toastWrap.appendChild(toast);
+          window.setTimeout(function () { toast.remove(); }, 2600);
+        }
+        function getStoredClasses() {
+          try {
+            var parsed = JSON.parse(localStorage.getItem("mockClasses") || "[]");
+            return Array.isArray(parsed) ? parsed.filter(function (item) {
+              return item && item.subject && item.section;
+            }).map(function (item) {
+              return {
+                subject: item.subject,
+                section: item.section,
+                schedule: item.schedule || "",
+                room: item.room || "",
+                students: Number(item.students) || 0
+              };
+            }) : [];
+          } catch (error) {
+            return [];
+          }
+        }
+        function getClassCatalog() {
+          return DEFAULT_CLASSES.concat(getStoredClasses());
+        }
+        function getEnrolledClassLabel(section) {
+          if (!section) { return "Unassigned Class"; }
+          var match = getClassCatalog().filter(function (classItem) { return classItem.section === section; })[0];
+          return match ? match.subject : "Unassigned Class";
+        }
+        function enrichStudent(student, fromStorage) {
+          return {
+            name: student.name,
+            id: student.id,
+            section: student.section,
+            status: student.status,
+            enrolledClass: getEnrolledClassLabel(student.section),
+            fromStorage: Boolean(fromStorage)
+          };
+        }
+        function getStoredStudents() {
+          try {
+            var parsed = JSON.parse(localStorage.getItem("mockStudents") || "[]");
+            return Array.isArray(parsed) ? parsed.filter(function (student) {
+              return student && student.name && student.id && student.section && student.status;
+            }).map(function (student) {
+              return {
+                name: student.name,
+                id: student.id,
+                section: student.section,
+                status: student.status
+              };
+            }) : [];
+          } catch (error) {
+            return [];
+          }
+        }
+        function saveStoredStudents() {
+          localStorage.setItem("mockStudents", JSON.stringify(addedStudents));
+        }
+        function refreshStudentData() {
+          // LEADER UPDATE: Replace mock array with real data when available
+          addedStudents = getStoredStudents();
+          STUDENTS = DEFAULT_STUDENTS.map(function (student) {
+            return enrichStudent(student, false);
+          }).concat(addedStudents.map(function (student) {
+            return enrichStudent(student, true);
+          }));
+        }
+        function getFocusableElements(container) {
+          return Array.prototype.slice.call(container.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')).filter(function (element) {
+            return !element.disabled && element.offsetParent !== null;
+          });
+        }
+        function openModal(modal, focusTarget) {
+          lastFocusedElement = document.activeElement;
+          activeModal = modal;
+          modal.classList.add("open");
+          modal.setAttribute("aria-hidden", "false");
+          window.setTimeout(function () { (focusTarget || getFocusableElements(modal)[0] || modal).focus(); }, 0);
+        }
+        function closeModal(modal) {
+          modal.classList.remove("open");
+          modal.setAttribute("aria-hidden", "true");
+          activeModal = null;
+          if (lastFocusedElement && typeof lastFocusedElement.focus === "function") { lastFocusedElement.focus(); }
+        }
+        function trapFocus(event) {
+          if (!activeModal || event.key !== "Tab") { return; }
+          var focusable = getFocusableElements(activeModal);
+          if (!focusable.length) { return; }
+          var first = focusable[0];
+          var last = focusable[focusable.length - 1];
+          if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+          } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
+          }
+        }
+        function getNotifications() {
+          var raw = localStorage.getItem("facultyNotifications");
+          var stored = [];
+          try {
+            stored = raw ? JSON.parse(raw) : [];
+          } catch (error) {}
+          var merged = mergeNotifications(stored);
+          saveNotifications(merged);
+          return merged;
+        }
+        function saveNotifications(items) { localStorage.setItem("facultyNotifications", JSON.stringify(items)); }
+        function mergeNotifications(items) {
+          var stored = Array.isArray(items) ? items : [];
+          var defaults = DEFAULT_NOTIFICATIONS.map(function (item) {
+            var match = stored.filter(function (storedItem) { return storedItem && storedItem.id === item.id; })[0];
+            return {
+              id: item.id,
+              tag: match && match.tag ? match.tag : item.tag,
+              text: match && match.text ? match.text : item.text,
+              time: match && match.time ? match.time : item.time,
+              unread: match ? Boolean(match.unread) : Boolean(item.unread)
+            };
+          });
+          var extra = stored.filter(function (item) {
+            return item && item.id && item.text && DEFAULT_NOTIFICATIONS.every(function (defaultItem) { return defaultItem.id !== item.id; });
+          }).map(function (item) {
+            return {
+              id: item.id,
+              tag: item.tag || "Update",
+              text: item.text,
+              time: item.time || "Recently",
+              unread: Boolean(item.unread)
+            };
+          });
+          return extra.concat(defaults);
+        }
+        function syncBadge(items) {
+          var unread = items.filter(function (item) { return item.unread; }).length;
+          notifBadge.textContent = String(unread);
+          localStorage.setItem("notifCount", String(unread));
+        }
+        function renderNotifications() {
+          var items = getNotifications();
+          notifList.innerHTML = "";
+          items.forEach(function (item) {
+            var li = document.createElement("li");
+            li.className = "notif-item" + (item.unread ? " unread" : "");
+            li.innerHTML =
+              '<div class="notif-top"><span class="notif-tag">' + item.tag + "</span>" +
+              (item.unread ? '<button class="text-btn" type="button" data-read="' + item.id + '">Mark read</button>' : "") +
+              "</div><p>" + item.text + "</p><time>" + item.time + "</time>";
+            notifList.appendChild(li);
+          });
+          syncBadge(items);
+        }
+        function addNotification(tag, text) {
+          var items = getNotifications();
+          items.unshift({ id: "n-" + Date.now(), tag: tag, text: text, time: "Just now", unread: true });
+          saveNotifications(items);
+          renderNotifications();
+        }
+        function closeMenu() {
+          profileMenu.classList.remove("open");
+          avatarButton.setAttribute("aria-expanded", "false");
+        }
+        function closeNotifications() {
+          notifPanel.classList.remove("open");
+          notifButton.setAttribute("aria-expanded", "false");
+        }
+        function openLogoutModal() {
+          logoutModal.classList.add("open");
+          logoutModal.setAttribute("aria-hidden", "false");
+          confirmLogout.focus();
+        }
+        function closeLogoutModal() {
+          logoutModal.classList.remove("open");
+          logoutModal.setAttribute("aria-hidden", "true");
+          avatarButton.focus();
+        }
+        function findStudent(id) {
+          return STUDENTS.filter(function (student) { return student.id === id; })[0];
+        }
+        function openStudentDetail(student) {
+          if (!student) { return; }
+          studentDetailTitle.textContent = student.name;
+          studentDetailSummary.textContent = student.id + " • " + student.section + " • " + student.enrolledClass;
+          studentDetailBody.innerHTML =
+            '<div class="detail-item"><span>Student ID</span><strong>' + student.id + "</strong></div>" +
+            '<div class="detail-item"><span>Section</span><strong>' + student.section + "</strong></div>" +
+            '<div class="detail-item"><span>Enrolled Class</span><strong>' + student.enrolledClass + "</strong></div>" +
+            '<div class="detail-item"><span>Status</span><strong>' + student.status + "</strong></div>" +
+            '<div class="detail-item"><span>Roster Source</span><strong>' + (student.fromStorage ? "Added locally" : "Default mock data") + "</strong></div>";
+          openModal(studentDetailModal, closeStudentDetail);
+        }
+        function closeStudentDetailModal() {
+          closeModal(studentDetailModal);
+        }
+        function getStudentFormData() {
+          return {
+            name: studentNameInput.value.trim(),
+            id: studentIdInput.value.trim(),
+            section: studentSectionInput.value,
+            status: studentStatusInput.value
+          };
+        }
+        function setStudentError(input, errorElement, message) {
+          errorElement.textContent = message;
+          input.setAttribute("aria-invalid", message ? "true" : "false");
+        }
+        function clearStudentErrors() {
+          setStudentError(studentNameInput, studentNameError, "");
+          setStudentError(studentIdInput, studentIdError, "");
+          setStudentError(studentSectionInput, studentSectionError, "");
+          setStudentError(studentStatusInput, studentStatusError, "");
+        }
+        function validateStudentForm(showErrors) {
+          var student = getStudentFormData();
+          var valid = true;
+          if (showErrors) { clearStudentErrors(); }
+          if (!student.name) { valid = false; if (showErrors) { setStudentError(studentNameInput, studentNameError, "Name is required."); } }
+          if (!student.id) { valid = false; if (showErrors) { setStudentError(studentIdInput, studentIdError, "Student ID is required."); } }
+          if (!student.section) { valid = false; if (showErrors) { setStudentError(studentSectionInput, studentSectionError, "Section is required."); } }
+          if (!student.status) { valid = false; if (showErrors) { setStudentError(studentStatusInput, studentStatusError, "Status is required."); } }
+          saveStudentBtn.disabled = !valid;
+          return valid;
+        }
+        function hasDuplicateStudentId(id) {
+          var normalized = id.toLowerCase();
+          return STUDENTS.some(function (student) { return student.id.toLowerCase() === normalized; });
+        }
+        function updateStudentClassPreview() {
+          var section = studentSectionInput.value;
+          studentClassPreview.textContent = section ? getEnrolledClassLabel(section) : "Select a section to preview class assignment.";
+        }
+        function resetStudentForm() {
+          addStudentForm.reset();
+          clearStudentErrors();
+          updateStudentClassPreview();
+          saveStudentBtn.disabled = true;
+        }
+        function openAddStudentModal() {
+          resetStudentForm();
+          openModal(addStudentModal, studentNameInput);
+        }
+        function closeAddStudentModal() {
+          resetStudentForm();
+          closeModal(addStudentModal);
+        }
+        function getFilteredStudents() {
+          var search = searchInput.value.trim().toLowerCase();
+          var section = sectionFilter.value;
+          return STUDENTS.filter(function (student) {
+            var matchesSearch =
+              !search ||
+              student.name.toLowerCase().indexOf(search) >= 0 ||
+              student.id.toLowerCase().indexOf(search) >= 0 ||
+              student.section.toLowerCase().indexOf(search) >= 0 ||
+              student.enrolledClass.toLowerCase().indexOf(search) >= 0;
+            var matchesSection = section === "all" || student.section === section;
+            return matchesSearch && matchesSection;
+          });
+        }
+        function renderList() {
+          studentBody.innerHTML = "";
+          getFilteredStudents().forEach(function (student) {
+            var row = document.createElement("tr");
+            row.setAttribute("tabindex", "0");
+            row.setAttribute("role", "button");
+            row.setAttribute("data-student-id", student.id);
+            row.setAttribute("aria-label", "Open details for " + student.name);
+            row.innerHTML =
+              "<td>" + student.name + "</td>" +
+              "<td>" + student.id + "</td>" +
+              "<td>" + student.section + "</td>" +
+              '<td><span class="chip info">' + student.enrolledClass + "</span></td>" +
+              '<td><span class="status-chip' + (student.status === "At Risk" ? " inactive" : "") + '">' + student.status + "</span></td>";
+            studentBody.appendChild(row);
+          });
+        }
+        function renderKanban() {
+          var filtered = getFilteredStudents();
+          kanbanView.innerHTML = "";
+          if (!filtered.length) {
+            var empty = document.createElement("p");
+            empty.textContent = "No matching students.";
+            empty.style.color = "var(--muted)";
+            empty.style.margin = "0";
+            kanbanView.appendChild(empty);
+            return;
+          }
+          filtered.forEach(function (student) {
+            var card = document.createElement("article");
+            card.className = "student-card";
+            card.setAttribute("tabindex", "0");
+            card.setAttribute("role", "button");
+            card.setAttribute("data-student-id", student.id);
+            card.setAttribute("aria-label", "Open details for " + student.name);
+            card.innerHTML =
+              "<strong>" + student.name + "</strong>" +
+              "<p>" + student.id + " • " + student.section + "</p>" +
+              '<div class="student-card-meta">' +
+              '<span>Enrolled Class: <strong style="color:inherit;">' + student.enrolledClass + "</strong></span>" +
+              '<span>Status: <strong style="color:inherit;">' + student.status + "</strong></span>" +
+              "</div>" +
+              '<div style="margin-top:12px;"><span class="chip info">' + student.enrolledClass + "</span></div>";
+            kanbanView.appendChild(card);
+          });
+        }
+        function applyView(view) {
+          if (view !== "kanban" && view !== "quizzes") {
+            view = "list";
+          }
+          localStorage.setItem("studentViewMode", view);
+          if (view === "kanban") {
+            listView.style.display = "none";
+            kanbanView.classList.add("active");
+            quizzesView.classList.remove("active");
+            listViewBtn.classList.remove("active");
+            kanbanViewBtn.classList.add("active");
+            quizzesViewBtn.classList.remove("active");
+            listViewBtn.setAttribute("aria-pressed", "false");
+            kanbanViewBtn.setAttribute("aria-pressed", "true");
+            quizzesViewBtn.setAttribute("aria-pressed", "false");
+          } else if (view === "quizzes") {
+            listView.style.display = "none";
+            kanbanView.classList.remove("active");
+            quizzesView.classList.add("active");
+            listViewBtn.classList.remove("active");
+            kanbanViewBtn.classList.remove("active");
+            quizzesViewBtn.classList.add("active");
+            listViewBtn.setAttribute("aria-pressed", "false");
+            kanbanViewBtn.setAttribute("aria-pressed", "false");
+            quizzesViewBtn.setAttribute("aria-pressed", "true");
+          } else {
+            listView.style.display = "block";
+            kanbanView.classList.remove("active");
+            quizzesView.classList.remove("active");
+            listViewBtn.classList.add("active");
+            kanbanViewBtn.classList.remove("active");
+            quizzesViewBtn.classList.remove("active");
+            listViewBtn.setAttribute("aria-pressed", "true");
+            kanbanViewBtn.setAttribute("aria-pressed", "false");
+            quizzesViewBtn.setAttribute("aria-pressed", "false");
+          }
+        }
+
+        avatarButton.textContent = (localStorage.getItem("userName") || "Faculty").charAt(0).toUpperCase();
+        refreshStudentData();
+        renderNotifications();
+        renderList();
+        renderKanban();
+        applyView(window.location.hash === "#quizzes" ? "quizzes" : (localStorage.getItem("studentViewMode") || "list"));
+
+        addStudentBtn.addEventListener("click", openAddStudentModal);
+        [studentNameInput, studentIdInput, studentSectionInput, studentStatusInput].forEach(function (input) {
+          input.addEventListener("input", function () { validateStudentForm(false); });
+          input.addEventListener("change", function () { validateStudentForm(false); });
+          input.addEventListener("blur", function () { validateStudentForm(true); });
+        });
+        studentSectionInput.addEventListener("change", updateStudentClassPreview);
+        addStudentForm.addEventListener("submit", function (event) {
+          event.preventDefault();
+          if (!validateStudentForm(true)) { return; }
+          var student = getStudentFormData();
+          if (hasDuplicateStudentId(student.id)) {
+            setStudentError(studentIdInput, studentIdError, "Student ID already exists.");
+            showToast("warning", "Duplicate Student ID.");
+            studentIdInput.focus();
+            return;
+          }
+          addedStudents.push(student);
+          saveStoredStudents();
+          refreshStudentData();
+          renderList();
+          renderKanban();
+          closeAddStudentModal();
+          showToast("success", "Student added successfully");
+        });
+        cancelAddStudent.addEventListener("click", closeAddStudentModal);
+        addStudentModal.addEventListener("click", function (event) { if (event.target === addStudentModal) { closeAddStudentModal(); } });
+        searchInput.addEventListener("input", function () { renderList(); renderKanban(); });
+        sectionFilter.addEventListener("change", function () { renderList(); renderKanban(); });
+        studentBody.addEventListener("click", function (event) {
+          var row = event.target.closest("[data-student-id]");
+          if (row) { openStudentDetail(findStudent(row.getAttribute("data-student-id"))); }
+        });
+        studentBody.addEventListener("keydown", function (event) {
+          if (event.key !== "Enter" && event.key !== " ") { return; }
+          var row = event.target.closest("[data-student-id]");
+          if (row) { event.preventDefault(); openStudentDetail(findStudent(row.getAttribute("data-student-id"))); }
+        });
+        kanbanView.addEventListener("click", function (event) {
+          var card = event.target.closest("[data-student-id]");
+          if (card) { openStudentDetail(findStudent(card.getAttribute("data-student-id"))); }
+        });
+        kanbanView.addEventListener("keydown", function (event) {
+          if (event.key !== "Enter" && event.key !== " ") { return; }
+          var card = event.target.closest("[data-student-id]");
+          if (card) { event.preventDefault(); openStudentDetail(findStudent(card.getAttribute("data-student-id"))); }
+        });
+        function clearStudentHash() {
+          if (window.location.hash) {
+            history.replaceState(null, "", window.location.pathname + window.location.search);
+          }
+        }
+        listViewBtn.addEventListener("click", function () {
+          clearStudentHash();
+          applyView("list");
+        });
+        kanbanViewBtn.addEventListener("click", function () {
+          clearStudentHash();
+          applyView("kanban");
+          addNotification("Students", "Student roster switched to kanban view.");
+        });
+        quizzesViewBtn.addEventListener("click", function () {
+          applyView("quizzes");
+          window.location.hash = "quizzes";
+          addNotification("Students", "Quizzes placeholder opened from the student roster.");
+        });
+        avatarButton.addEventListener("click", function (event) {
+          event.stopPropagation();
+          if (profileMenu.classList.contains("open")) { closeMenu(); } else { closeNotifications(); profileMenu.classList.add("open"); avatarButton.setAttribute("aria-expanded", "true"); }
+        });
+        notifButton.addEventListener("click", function (event) {
+          event.stopPropagation();
+          if (notifPanel.classList.contains("open")) { closeNotifications(); } else { closeMenu(); renderNotifications(); notifPanel.classList.add("open"); notifButton.setAttribute("aria-expanded", "true"); }
+        });
+        markAllRead.addEventListener("click", function (event) {
+          event.stopPropagation();
+          var items = getNotifications().map(function (item) { item.unread = false; return item; });
+          saveNotifications(items); renderNotifications(); showToast("success", "Notifications marked as read.");
+        });
+        closeNotifBtn.addEventListener("click", function (event) {
+          event.stopPropagation();
+          closeNotifications();
+        });
+        seedNotifBtn.addEventListener("click", function (event) {
+          event.stopPropagation();
+          saveNotifications(DEFAULT_NOTIFICATIONS.slice()); renderNotifications(); showToast("success", "Notification feed reset.");
+        });
+        profileMenu.addEventListener("click", function (event) { event.stopPropagation(); });
+        notifPanel.addEventListener("click", function (event) { event.stopPropagation(); });
+        notifList.addEventListener("click", function (event) {
+          event.stopPropagation();
+          var id = event.target.getAttribute("data-read");
+          if (!id) { return; }
+          var items = getNotifications().map(function (item) { if (item.id === id) { item.unread = false; } return item; });
+          saveNotifications(items); renderNotifications();
+        });
+        profileAction.addEventListener("click", function () { window.location.href = "profile.html"; });
+        settingsAction.addEventListener("click", function () { window.location.href = "settings.html"; });
+        logoutAction.addEventListener("click", function () { closeMenu(); openLogoutModal(); });
+        cancelLogout.addEventListener("click", closeLogoutModal);
+        logoutModal.addEventListener("click", function (event) { if (event.target === logoutModal) { closeLogoutModal(); } });
+        closeStudentDetail.addEventListener("click", closeStudentDetailModal);
+        studentDetailModal.addEventListener("click", function (event) { if (event.target === studentDetailModal) { closeStudentDetailModal(); } });
+        confirmLogout.addEventListener("click", function () {
+          localStorage.removeItem("userRole"); localStorage.removeItem("userName");
+          localStorage.removeItem("notifCount"); localStorage.removeItem("isUnlocked");
+          window.location.href = "index.html";
+        });
+        document.addEventListener("click", function (event) {
+          if (!profileMenu.contains(event.target) && !avatarButton.contains(event.target)) { closeMenu(); }
+          if (!notifPanel.contains(event.target) && !notifButton.contains(event.target)) { closeNotifications(); }
+        });
+        document.addEventListener("keydown", function (event) {
+          if (event.key === "Escape") {
+            closeMenu(); closeNotifications();
+            if (logoutModal.classList.contains("open")) { closeLogoutModal(); }
+            if (studentDetailModal.classList.contains("open")) { closeStudentDetailModal(); }
+            if (addStudentModal.classList.contains("open")) { closeAddStudentModal(); }
+          } else {
+            trapFocus(event);
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>

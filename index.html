@@ -1,0 +1,1178 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>UPHSD Grading System Login</title>
+    <style>
+      :root {
+        --primary: #800000;
+        --accent: #ffb800;
+        --bg-light: #f8f9fa;
+        --text-main: #1f2428;
+        --muted: #68707a;
+        --border: #d7dce2;
+        --surface: #ffffff;
+        --success: #1d7a42;
+        --danger: #b42318;
+        --radius-sm: 8px;
+        --radius-md: 12px;
+        --shadow: 0 14px 32px rgba(20, 20, 20, 0.08);
+        --space-1: 8px;
+        --space-2: 16px;
+        --space-3: 24px;
+        --focus-ring: 0 0 0 3px rgba(128, 0, 0, 0.2);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        color: var(--text-main);
+        background:
+          radial-gradient(
+            980px 520px at -8% -12%,
+            rgba(128, 0, 0, 0.2),
+            transparent 52%
+          ),
+          radial-gradient(
+            840px 420px at 110% 110%,
+            rgba(255, 184, 0, 0.2),
+            transparent 55%
+          ),
+          linear-gradient(160deg, #fffdf9 0%, var(--bg-light) 100%);
+      }
+
+      a {
+        color: var(--primary);
+        text-underline-offset: 3px;
+      }
+
+      .skip-link {
+        position: absolute;
+        left: 8px;
+        top: -44px;
+        background: #000;
+        color: #fff;
+        padding: 8px 12px;
+        border-radius: 6px;
+        z-index: 999;
+      }
+
+      .skip-link:focus {
+        top: 8px;
+      }
+
+      .page {
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: var(--space-3) var(--space-2);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .page::before {
+        content: "";
+        position: absolute;
+        left: -120px;
+        top: -120px;
+        width: 320px;
+        height: 320px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(128, 0, 0, 0.18) 0%,
+          rgba(128, 0, 0, 0.04) 60%,
+          transparent 72%
+        );
+        pointer-events: none;
+      }
+
+      .card {
+        width: min(440px, 100%);
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow);
+        padding: var(--space-3);
+        position: relative;
+        z-index: 1;
+      }
+
+      .card::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        height: 6px;
+        border-radius: var(--radius-md) var(--radius-md) 0 0;
+        background: linear-gradient(90deg, var(--primary), var(--accent));
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+
+      .mark {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: conic-gradient(from 210deg, #fff1c9, #ffda85, #fff1c9);
+        border: 2px solid #ffd873;
+        color: #5a4000;
+        font-weight: 700;
+        display: grid;
+        place-items: center;
+      }
+
+      .institution-banner {
+        margin: 0 0 16px;
+        border: 1px solid #efd9a4;
+        border-radius: 10px;
+        background: linear-gradient(90deg, #fff7e6, #fffbf2);
+        padding: 10px 12px;
+        font-size: 0.86rem;
+        color: #5a4304;
+      }
+
+      .institution-banner strong {
+        color: var(--primary);
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 1.2rem;
+        line-height: 1.25;
+      }
+
+      .subtitle {
+        margin: 4px 0 0;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .role-group {
+        margin-bottom: var(--space-2);
+      }
+
+      .role-label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+        font-size: 0.92rem;
+      }
+
+      .role-toggle {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        background: #f4f4f6;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 6px;
+      }
+
+      .role-btn {
+        appearance: none;
+        border: 1px solid transparent;
+        border-radius: 999px;
+        padding: 10px 12px;
+        background: transparent;
+        cursor: pointer;
+        font-weight: 600;
+        color: #555d67;
+      }
+
+      .role-btn[aria-pressed="true"] {
+        background: #ffffff;
+        border-color: #e1b64d;
+        color: #4d3500;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      }
+
+      .field {
+        margin-bottom: 14px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 0.92rem;
+        font-weight: 600;
+      }
+
+      input {
+        width: 100%;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 11px 12px;
+        font: inherit;
+        background: #fff;
+      }
+
+      input[aria-invalid="true"] {
+        border-color: #cf222e;
+        background: #fff7f7;
+      }
+
+      .actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-top: 18px;
+      }
+
+      .link-btn {
+        border: 0;
+        background: transparent;
+        color: var(--primary);
+        font: inherit;
+        padding: 0;
+        cursor: pointer;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+
+      .primary-btn {
+        min-width: 132px;
+        border: 1px solid var(--primary);
+        border-radius: var(--radius-sm);
+        background: var(--primary);
+        color: #fff;
+        padding: 11px 16px;
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+        transition:
+          transform 160ms ease,
+          box-shadow 160ms ease;
+      }
+
+      .primary-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 18px rgba(128, 0, 0, 0.2);
+      }
+
+      .primary-btn[disabled] {
+        opacity: 0.65;
+        cursor: wait;
+      }
+
+      :focus-visible {
+        outline: none;
+        box-shadow: var(--focus-ring);
+      }
+
+      .field-error {
+        min-height: 1.1em;
+        margin-top: 6px;
+        color: var(--danger);
+        font-size: 0.84rem;
+      }
+
+      .sr-status {
+        min-height: 1.1em;
+        font-size: 0.9rem;
+        margin-top: 8px;
+        color: var(--muted);
+      }
+
+      .demo-creds {
+        margin-top: 12px;
+        border: 1px dashed #d2b57b;
+        border-radius: 10px;
+        background: #fffbf2;
+        padding: 10px 12px;
+        font-size: 0.84rem;
+        color: #5e4b15;
+      }
+
+      .demo-creds summary {
+        cursor: pointer;
+        font-weight: 700;
+        color: var(--primary);
+      }
+
+      .demo-creds ul {
+        margin: 8px 0 0;
+        padding-left: 18px;
+      }
+
+      .toast-wrap {
+        position: fixed;
+        right: 12px;
+        bottom: 12px;
+        display: grid;
+        gap: 8px;
+        z-index: 80;
+      }
+
+      .toast {
+        min-width: 240px;
+        max-width: 320px;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--border);
+        background: #fff;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+        padding: 11px 12px;
+        font-size: 0.9rem;
+        animation: toast-in 180ms ease;
+      }
+
+      .toast.success {
+        border-left: 4px solid var(--success);
+      }
+
+      .toast.error {
+        border-left: 4px solid var(--danger);
+      }
+
+      .modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(16, 24, 40, 0.45);
+        display: none;
+        place-items: center;
+        padding: 20px;
+        z-index: 90;
+      }
+
+      .modal.open {
+        display: grid;
+      }
+
+      .modal-card {
+        width: min(440px, 100%);
+        background: #fff;
+        border-radius: var(--radius-md);
+        border: 1px solid var(--border);
+        padding: 20px;
+        box-shadow: var(--shadow);
+      }
+
+      .modal-card h2 {
+        margin-top: 0;
+        margin-bottom: 8px;
+        font-size: 1.06rem;
+      }
+
+      .modal-actions {
+        margin-top: 16px;
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      .modal-actions button {
+        border: 1px solid var(--primary);
+        background: var(--primary);
+        color: #fff;
+        border-radius: var(--radius-sm);
+        padding: 9px 12px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      @keyframes toast-in {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 520px) {
+        .card {
+          padding: 20px 16px;
+        }
+
+        .actions {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .primary-btn {
+          width: 100%;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.001ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.001ms !important;
+        }
+      }
+      body.perpetual-auth {
+        background:
+          radial-gradient(circle at top left, rgba(214, 170, 67, 0.22), transparent 24%),
+          radial-gradient(circle at bottom right, rgba(123, 17, 19, 0.2), transparent 26%),
+          linear-gradient(160deg, #faf4ec 0%, #f2e8dd 100%);
+      }
+
+      body.perpetual-auth .page::before {
+        background: radial-gradient(
+          circle,
+          rgba(123, 17, 19, 0.2) 0%,
+          rgba(123, 17, 19, 0.04) 60%,
+          transparent 72%
+        );
+      }
+
+      body.perpetual-auth .card,
+      body.perpetual-auth .modal-card {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 253, 249, 0.98),
+          rgba(249, 241, 231, 0.96)
+        );
+        border-color: rgba(224, 208, 188, 0.95);
+        box-shadow: 0 18px 38px rgba(58, 18, 13, 0.12);
+      }
+
+      body.perpetual-auth .card::before {
+        background: linear-gradient(90deg, #7b1113, #d6aa43);
+      }
+
+      body.perpetual-auth .mark {
+        border-color: #d6aa43;
+        background: linear-gradient(180deg, #fff6d7 0%, #e4b84f 100%);
+        color: #58090b;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+      }
+
+      body.perpetual-auth a,
+      body.perpetual-auth .link-btn,
+      body.perpetual-auth .demo-creds summary {
+        color: #7b1113;
+      }
+
+      body.perpetual-auth .institution-banner {
+        border-color: #e7c87f;
+        background: linear-gradient(90deg, #fff5dc, #fffaf0);
+        color: #654a11;
+      }
+
+      body.perpetual-auth .institution-banner strong {
+        color: #7b1113;
+      }
+
+      body.perpetual-auth .role-toggle {
+        background: #efe6db;
+        border-color: #dfceba;
+      }
+
+      body.perpetual-auth .role-btn[aria-pressed="true"] {
+        border-color: #ddb459;
+        color: #58090b;
+        background: #fffbf5;
+      }
+
+      body.perpetual-auth .primary-btn,
+      body.perpetual-auth .modal-actions button {
+        background: linear-gradient(180deg, #7b1113 0%, #58090b 100%);
+        border-color: #58090b;
+      }
+
+      body.perpetual-auth .demo-creds {
+        border-color: #d4b16a;
+        background: #fffaf0;
+        color: #614b16;
+      }
+
+      body.perpetual-auth {
+        background: #f6f2ea;
+      }
+
+      body.perpetual-auth .page {
+        padding: 32px 16px;
+      }
+
+      body.perpetual-auth .page::before,
+      body.perpetual-auth .card::before {
+        display: none;
+      }
+
+      body.perpetual-auth .card {
+        width: min(430px, 100%);
+        padding: 0 34px 32px;
+        border: 1px solid #eadfce;
+        border-radius: 10px;
+        background: #fff;
+        box-shadow: 0 18px 42px rgba(66, 38, 24, 0.14);
+      }
+
+      .login-tabs {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        margin: 0 -34px 26px;
+        border-bottom: 1px solid #e7dccb;
+      }
+
+      .role-btn {
+        border: 0;
+        border-radius: 0;
+        padding: 18px 12px 14px;
+        background: transparent;
+        color: #493b37;
+        font-weight: 800;
+        letter-spacing: 0.01em;
+        position: relative;
+      }
+
+      .role-btn[aria-pressed="true"] {
+        background: transparent;
+        border-color: transparent;
+        box-shadow: none;
+        color: #800000;
+      }
+
+      .role-btn[aria-pressed="true"]::after {
+        content: "";
+        position: absolute;
+        left: 28px;
+        right: 28px;
+        bottom: -1px;
+        height: 5px;
+        border-radius: 999px 999px 0 0;
+        background: #ffb800;
+      }
+
+      .login-heading {
+        margin: 4px 0 18px;
+        text-align: center;
+        font-family: "Times New Roman", Times, Georgia, serif;
+        font-size: clamp(1.75rem, 6vw, 2.35rem);
+        letter-spacing: 0.04em;
+        color: #800000;
+      }
+
+      .auth-subtabs {
+        display: flex;
+        justify-content: center;
+        gap: 32px;
+        margin-bottom: 24px;
+      }
+
+      .auth-subtab {
+        border: 0;
+        background: transparent;
+        padding: 0 0 7px;
+        color: #4b403c;
+        font-weight: 700;
+        position: relative;
+      }
+
+      .auth-subtab.active {
+        color: #800000;
+      }
+
+      .auth-subtab.active::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 3px;
+        border-radius: 999px;
+        background: #ffb800;
+      }
+
+      body.perpetual-auth label {
+        color: #800000;
+        font-size: 0.76rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        font-weight: 800;
+      }
+
+      body.perpetual-auth input {
+        border-color: #d8d0c4;
+        border-radius: 4px;
+        padding: 13px 14px;
+      }
+
+      .password-shell {
+        position: relative;
+      }
+
+      .password-shell input {
+        padding-right: 46px;
+      }
+
+      .password-toggle {
+        position: absolute;
+        right: 6px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 36px;
+        height: 36px;
+        border: 0;
+        border-radius: 4px;
+        background: transparent;
+        color: #800000;
+        display: grid;
+        place-items: center;
+      }
+
+      .password-toggle svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .forgot-row {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: -4px;
+        margin-bottom: 18px;
+      }
+
+      body.perpetual-auth .link-btn {
+        color: #800000;
+        font-size: 0.88rem;
+        font-style: italic;
+        text-decoration: none;
+      }
+
+      .actions {
+        justify-content: flex-start;
+        margin-top: 0;
+      }
+
+      body.perpetual-auth .primary-btn {
+        min-width: 132px;
+        border: 1px solid #ffb800;
+        border-radius: 4px;
+        background: #ffb800;
+        color: #241b08;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        box-shadow: none;
+      }
+
+      body.perpetual-auth .primary-btn:hover {
+        box-shadow: 0 8px 16px rgba(255, 184, 0, 0.24);
+      }
+
+      .sr-status.warning {
+        color: #8a4f00;
+        font-weight: 700;
+      }
+
+      .brand, .institution-banner, .role-label {
+        display: none;
+      }
+
+      .role-group {
+        margin: 0;
+      }
+
+      .role-toggle {
+        display: contents;
+      }
+
+      body.perpetual-auth .role-toggle {
+        background: transparent;
+        border: 0;
+        padding: 0;
+      }
+
+      @media (max-width: 520px) {
+        body.perpetual-auth .card {
+          padding: 0 20px 24px;
+        }
+
+        .login-tabs {
+          margin-inline: -20px;
+        }
+
+        .actions {
+          align-items: flex-start;
+        }
+      }
+
+      body.perpetual-auth {
+        background:
+          radial-gradient(circle at top left, rgba(214, 170, 67, 0.22), transparent 24%),
+          radial-gradient(circle at bottom right, rgba(123, 17, 19, 0.2), transparent 26%),
+          linear-gradient(160deg, #faf4ec 0%, #f2e8dd 100%);
+      }
+
+      body.perpetual-auth .page {
+        padding: var(--space-3) var(--space-2);
+      }
+
+      body.perpetual-auth .page::before,
+      body.perpetual-auth .card::before {
+        display: block;
+      }
+
+      body.perpetual-auth .card {
+        width: min(440px, 100%);
+        padding: var(--space-3);
+        border-radius: var(--radius-md);
+        background: linear-gradient(
+          180deg,
+          rgba(255, 253, 249, 0.98),
+          rgba(249, 241, 231, 0.96)
+        );
+        border-color: rgba(224, 208, 188, 0.95);
+        box-shadow: 0 18px 38px rgba(58, 18, 13, 0.12);
+      }
+
+      body.perpetual-auth .card::before {
+        background: linear-gradient(90deg, #7b1113, #d6aa43);
+      }
+
+      .brand {
+        display: flex;
+      }
+
+      .institution-banner {
+        display: block;
+      }
+
+      .role-label {
+        display: block;
+      }
+
+      .role-group {
+        margin-bottom: var(--space-2);
+      }
+
+      .role-toggle {
+        display: grid;
+      }
+
+      body.perpetual-auth .role-toggle {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        background: #efe6db;
+        border: 1px solid #dfceba;
+        border-radius: 999px;
+        padding: 6px;
+      }
+
+      body.perpetual-auth .role-btn {
+        border: 1px solid transparent;
+        border-radius: 999px;
+        padding: 10px 12px;
+        background: transparent;
+        color: #555d67;
+        box-shadow: none;
+        letter-spacing: 0;
+      }
+
+      body.perpetual-auth .role-btn::after {
+        display: none;
+      }
+
+      body.perpetual-auth .role-btn[aria-pressed="true"] {
+        border-color: #ddb459;
+        color: #58090b;
+        background: #fffbf5;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      }
+
+      body.perpetual-auth label {
+        color: var(--text-main);
+        font-size: 0.92rem;
+        text-transform: none;
+        letter-spacing: 0;
+        font-weight: 600;
+      }
+
+      body.perpetual-auth input {
+        border-color: var(--border);
+        border-radius: var(--radius-sm);
+        padding: 11px 12px;
+      }
+
+      .password-shell input {
+        padding-right: 46px;
+      }
+
+      body.perpetual-auth .primary-btn {
+        min-width: 132px;
+        border: 1px solid #58090b;
+        border-radius: var(--radius-sm);
+        background: linear-gradient(180deg, #7b1113 0%, #58090b 100%);
+        color: #fff;
+        text-transform: none;
+        letter-spacing: 0;
+      }
+    </style>
+  </head>
+  <body class="perpetual-auth">
+    <a class="skip-link" href="#mainContent">Skip to login form</a>
+
+    <main class="page" id="mainContent">
+      <section class="card" aria-labelledby="loginTitle">
+        <div class="brand">
+          <div class="mark" aria-hidden="true">UP</div>
+          <div>
+            <h1 id="loginTitle">Grading System Login</h1>
+            <p class="subtitle">
+              University of Perpetual Help System DALTA - Molino Campus
+            </p>
+            <!-- UPDATE PLACEHOLDER: Replace with official campus subtitle or logo mark -->
+          </div>
+        </div>
+
+        <p class="institution-banner">
+          <strong>Perpetual Institutional Access</strong><br />
+          Molino Campus • College of Computer Studies
+        </p>
+
+        <form id="loginForm" novalidate>
+          <div class="role-group" role="group" aria-labelledby="roleLabel">
+            <span class="role-label" id="roleLabel">Role</span>
+            <div class="role-toggle" role="radiogroup" aria-label="Select role">
+              <button
+                class="role-btn"
+                type="button"
+                id="roleFaculty"
+                role="radio"
+                aria-checked="true"
+                aria-pressed="true"
+              >
+                Faculty
+              </button>
+              <button
+                class="role-btn"
+                type="button"
+                id="roleAdmin"
+                role="radio"
+                aria-checked="false"
+                aria-pressed="false"
+              >
+                SysAdmin
+              </button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="username">Username</label>
+            <input
+              id="username"
+              name="username"
+              type="text"
+              autocomplete="username"
+              aria-required="true"
+              aria-invalid="false"
+              required
+            />
+            <div class="field-error" id="usernameError" role="alert"></div>
+          </div>
+
+          <div class="field">
+            <label for="password">Password</label>
+            <div class="password-shell">
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autocomplete="current-password"
+                aria-required="true"
+                aria-invalid="false"
+                required
+              />
+              <button class="password-toggle" type="button" id="passwordToggle" aria-label="Show password" aria-pressed="false">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
+            </div>
+            <div class="field-error" id="passwordError" role="alert"></div>
+          </div>
+
+          <div class="forgot-row">
+            <button type="button" class="link-btn" id="forgotPasswordLink">
+              Forgot Password?
+            </button>
+          </div>
+
+          <div class="actions">
+            <button type="submit" class="primary-btn" id="loginButton">
+              Login
+            </button>
+          </div>
+
+          <p class="sr-status" id="formStatus" role="status" aria-live="polite">
+            Enter your account credentials.
+          </p>
+
+          <details class="demo-creds">
+            <summary>Demo Credentials</summary>
+            <ul>
+              <li>
+                Faculty: username <strong>faculty</strong> / password
+                <strong>Faculty@123</strong>
+              </li>
+              <li>
+                SysAdmin: username <strong>sysadmin</strong> / password
+                <strong>Admin@123</strong>
+              </li>
+            </ul>
+          </details>
+        </form>
+      </section>
+    </main>
+
+    <section
+      class="modal"
+      id="forgotModal"
+      aria-hidden="true"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="forgotTitle"
+    >
+      <div class="modal-card">
+        <h2 id="forgotTitle">Forgot Password</h2>
+        <p>
+          This prototype does not include backend recovery. Please contact
+          campus IT support for account reset.
+        </p>
+        <!-- UPDATE PLACEHOLDER: Replace with official password recovery workflow -->
+        <div class="modal-actions">
+          <button type="button" id="closeForgotModal">Understood</button>
+        </div>
+      </div>
+    </section>
+
+    <div
+      class="toast-wrap"
+      id="toastWrap"
+      aria-live="polite"
+      aria-atomic="true"
+    ></div>
+
+    <script>
+      (function () {
+        var state = {
+          role: "faculty",
+        };
+
+        var roleFaculty = document.getElementById("roleFaculty");
+        var roleAdmin = document.getElementById("roleAdmin");
+        var loginForm = document.getElementById("loginForm");
+        var loginButton = document.getElementById("loginButton");
+        var username = document.getElementById("username");
+        var password = document.getElementById("password");
+        var passwordToggle = document.getElementById("passwordToggle");
+        var usernameError = document.getElementById("usernameError");
+        var passwordError = document.getElementById("passwordError");
+        var formStatus = document.getElementById("formStatus");
+        var toastWrap = document.getElementById("toastWrap");
+        var forgotLink = document.getElementById("forgotPasswordLink");
+        var forgotModal = document.getElementById("forgotModal");
+        var closeForgotModal = document.getElementById("closeForgotModal");
+        var DEMO_CREDENTIALS = {
+          faculty: {
+            username: "faculty",
+            password: "Faculty@123",
+          },
+          sysadmin: {
+            username: "sysadmin",
+            password: "Admin@123",
+          },
+        };
+
+        function showToast(type, message) {
+          var toast = document.createElement("div");
+          toast.className = "toast " + type;
+          toast.textContent = message;
+          toastWrap.appendChild(toast);
+          window.setTimeout(function () {
+            toast.remove();
+          }, 2600);
+        }
+
+        function setRole(nextRole) {
+          state.role = nextRole;
+          var isFaculty = nextRole === "faculty";
+          roleFaculty.setAttribute(
+            "aria-checked",
+            isFaculty ? "true" : "false",
+          );
+          roleFaculty.setAttribute(
+            "aria-pressed",
+            isFaculty ? "true" : "false",
+          );
+          roleAdmin.setAttribute("aria-checked", isFaculty ? "false" : "true");
+          roleAdmin.setAttribute("aria-pressed", isFaculty ? "false" : "true");
+          formStatus.classList.remove("warning");
+          formStatus.textContent = isFaculty
+            ? "Faculty role selected."
+            : "SysAdmin role selected.";
+        }
+
+        function validate() {
+          var isValid = true;
+          usernameError.textContent = "";
+          passwordError.textContent = "";
+          username.setAttribute("aria-invalid", "false");
+          password.setAttribute("aria-invalid", "false");
+
+          if (!username.value.trim()) {
+            usernameError.textContent = "Username is required.";
+            username.setAttribute("aria-invalid", "true");
+            isValid = false;
+          }
+
+          if (!password.value.trim()) {
+            passwordError.textContent = "Password is required.";
+            password.setAttribute("aria-invalid", "true");
+            isValid = false;
+          }
+
+          if (!isValid) {
+            formStatus.textContent = "Please complete required fields.";
+            showToast(
+              "error",
+              "Validation error: Complete all required fields.",
+            );
+          }
+
+          return isValid;
+        }
+
+        function authenticate(role, enteredUsername, enteredPassword) {
+          var account = DEMO_CREDENTIALS[role];
+          if (!account) {
+            return false;
+          }
+          return (
+            enteredUsername.toLowerCase() === account.username &&
+            enteredPassword === account.password
+          );
+        }
+
+        function matchingOtherRole(enteredUsername, enteredPassword) {
+          var otherRole = state.role === "faculty" ? "sysadmin" : "faculty";
+          return authenticate(otherRole, enteredUsername, enteredPassword) ? otherRole : "";
+        }
+
+        function openForgotModal() {
+          forgotModal.classList.add("open");
+          forgotModal.setAttribute("aria-hidden", "false");
+          closeForgotModal.focus();
+        }
+
+        function closeModal() {
+          forgotModal.classList.remove("open");
+          forgotModal.setAttribute("aria-hidden", "true");
+          forgotLink.focus();
+        }
+
+        roleFaculty.addEventListener("click", function () {
+          setRole("faculty");
+        });
+
+        roleAdmin.addEventListener("click", function () {
+          setRole("sysadmin");
+        });
+
+        passwordToggle.addEventListener("click", function () {
+          var showing = password.type === "text";
+          password.type = showing ? "password" : "text";
+          passwordToggle.setAttribute("aria-pressed", String(!showing));
+          passwordToggle.setAttribute("aria-label", showing ? "Show password" : "Hide password");
+        });
+
+        forgotLink.addEventListener("click", openForgotModal);
+        closeForgotModal.addEventListener("click", closeModal);
+        forgotModal.addEventListener("click", function (event) {
+          if (event.target === forgotModal) {
+            closeModal();
+          }
+        });
+
+        document.addEventListener("keydown", function (event) {
+          if (
+            event.key === "Escape" &&
+            forgotModal.classList.contains("open")
+          ) {
+            closeModal();
+          }
+        });
+
+        loginForm.addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          if (!validate()) {
+            return;
+          }
+
+          loginButton.disabled = true;
+          loginButton.textContent = "Signing in...";
+          formStatus.textContent = "Authenticating user.";
+
+          window.setTimeout(function () {
+            var enteredUsername = username.value.trim();
+            var enteredPassword = password.value;
+            var isAuthenticated = authenticate(
+              state.role,
+              enteredUsername,
+              enteredPassword,
+            );
+
+            if (!isAuthenticated) {
+              var otherRole = matchingOtherRole(enteredUsername, enteredPassword);
+              loginButton.disabled = false;
+              loginButton.textContent = "LOGIN";
+              password.setAttribute("aria-invalid", "true");
+              if (otherRole) {
+                var roleLabel = otherRole === "sysadmin" ? "SysAdmin" : "Faculty";
+                passwordError.textContent = "These are " + roleLabel + " credentials. Switch to the " + roleLabel + " tab to continue.";
+                formStatus.textContent = passwordError.textContent;
+                formStatus.classList.add("warning");
+                showToast("error", "Wrong login tab selected.");
+              } else {
+                passwordError.textContent =
+                  "Invalid credentials for the selected role.";
+                formStatus.textContent = "Authentication failed.";
+                formStatus.classList.remove("warning");
+                showToast("error", "Invalid username or password.");
+              }
+              return;
+            }
+
+            localStorage.setItem("userRole", state.role);
+            localStorage.setItem("userName", enteredUsername);
+            localStorage.setItem("notifCount", "3");
+            localStorage.removeItem("facultyMockSessionsCleared");
+
+            formStatus.textContent = "Login successful.";
+            showToast("success", "Login successful. Redirecting.");
+
+            if (state.role === "sysadmin") {
+              window.location.href = "admin.html";
+            } else {
+              window.location.href = "dashboard.html";
+            }
+          }, 650);
+        });
+
+        setRole("faculty");
+        loginButton.textContent = "LOGIN";
+      })();
+    </script>
+  </body>
+</html>

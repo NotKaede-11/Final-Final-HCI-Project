@@ -1,0 +1,1225 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>UPHSD Faculty Dashboard</title>
+    <style>
+      :root {
+        --maroon: #7b1113;
+        --maroon-deep: #54090b;
+        --maroon-soft: #9d2f30;
+        --gold: #d8ad47;
+        --gold-soft: #f2dfae;
+        --bg: #f6efe6;
+        --surface: #fffdfa;
+        --surface-alt: #f9f2e8;
+        --text: #211c1b;
+        --muted: #6c5f59;
+        --line: #e1d1bd;
+        --ok: #21653a;
+        --warn: #935d00;
+        --danger: #a12724;
+        --shadow: 0 18px 38px rgba(63, 18, 14, 0.12);
+        --shadow-strong: 0 24px 46px rgba(48, 8, 10, 0.18);
+        --radius: 18px;
+        --radius-sm: 12px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background:
+          radial-gradient(circle at top left, rgba(216, 173, 71, 0.18), transparent 24%),
+          linear-gradient(180deg, #faf3ea 0%, var(--bg) 100%);
+        color: var(--text);
+      }
+
+      a,
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+
+      button {
+        cursor: pointer;
+      }
+
+      .skip-link {
+        position: absolute;
+        left: 10px;
+        top: -40px;
+        background: #000;
+        color: #fff;
+        padding: 8px 12px;
+        border-radius: 8px;
+        z-index: 200;
+      }
+
+      .skip-link:focus {
+        top: 10px;
+      }
+
+      :focus-visible {
+        outline: 3px solid rgba(216, 173, 71, 0.5);
+        outline-offset: 2px;
+      }
+
+      .layout {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 292px minmax(0, 1fr);
+      }
+
+      aside {
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 18%),
+          linear-gradient(180deg, var(--maroon) 0%, var(--maroon-deep) 100%);
+        color: #fff8f0;
+        padding: 24px 18px;
+        border-right: 1px solid rgba(216, 173, 71, 0.35);
+      }
+
+      .brand {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        padding: 16px;
+        margin-bottom: 20px;
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(216, 173, 71, 0.28);
+      }
+
+      .crest {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(180deg, #fff5d3 0%, var(--gold) 100%);
+        color: var(--maroon-deep);
+        font-weight: 800;
+        border: 2px solid rgba(255, 248, 230, 0.7);
+      }
+
+      .brand h1 {
+        margin: 0;
+        font-size: 1.16rem;
+        line-height: 1.2;
+      }
+
+      .brand p {
+        margin: 4px 0 0;
+        color: rgba(255, 248, 240, 0.88);
+        font-size: 0.96rem;
+      }
+
+      .nav-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 10px;
+      }
+
+      .nav-link {
+        display: block;
+        text-decoration: none;
+        color: #fff8f0;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        padding: 13px 15px;
+        font-weight: 700;
+        font-size: 1rem;
+        line-height: 1.25;
+      }
+
+      .nav-link:hover {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(216, 173, 71, 0.45);
+      }
+
+      .nav-link.active {
+        background: linear-gradient(90deg, rgba(216, 173, 71, 0.3), rgba(216, 173, 71, 0.1));
+        color: #fffdf8;
+        border-color: rgba(216, 173, 71, 0.76);
+        box-shadow: inset 3px 0 0 var(--gold);
+      }
+
+      .content {
+        min-width: 0;
+        display: grid;
+        grid-template-rows: auto 1fr;
+      }
+
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        padding: 20px 26px;
+        background: linear-gradient(90deg, var(--maroon) 0%, #8d1719 60%, var(--maroon) 100%);
+        color: #fff9f2;
+        border-bottom: 1px solid rgba(216, 173, 71, 0.34);
+        box-shadow: var(--shadow-strong);
+      }
+
+      .header-copy h2 {
+        margin: 0;
+        font-size: 1.5rem;
+        line-height: 1.1;
+      }
+
+      .header-copy p {
+        margin: 6px 0 0;
+        color: rgba(255, 247, 236, 0.88);
+        font-size: 0.95rem;
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        position: relative;
+      }
+
+      .icon-btn,
+      .avatar-btn {
+        position: relative;
+        min-width: 46px;
+        min-height: 46px;
+        border-radius: 14px;
+        border: 1px solid rgba(216, 173, 71, 0.38);
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff9f2;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .icon-btn svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .avatar-btn {
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        background: linear-gradient(180deg, #f1d68d 0%, var(--gold) 100%);
+        color: var(--maroon-deep);
+        font-weight: 800;
+      }
+
+      .badge {
+        position: absolute;
+        top: -6px;
+        right: -6px;
+        min-width: 22px;
+        height: 22px;
+        padding: 0 6px;
+        border-radius: 999px;
+        background: var(--gold);
+        color: var(--maroon-deep);
+        display: grid;
+        place-items: center;
+        font-size: 0.74rem;
+        font-weight: 800;
+        border: 1px solid #fff1c8;
+      }
+
+      .dropdown,
+      .notif-panel {
+        position: absolute;
+        right: 0;
+        top: 58px;
+        width: min(360px, calc(100vw - 24px));
+        background: linear-gradient(180deg, var(--surface) 0%, var(--surface-alt) 100%);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        box-shadow: var(--shadow);
+        display: none;
+        color: var(--text);
+      }
+
+      .dropdown.open,
+      .notif-panel.open {
+        display: block;
+      }
+
+      .dropdown {
+        width: 200px;
+        padding: 8px;
+      }
+
+      .dropdown button {
+        width: 100%;
+        text-align: left;
+        border: 0;
+        background: transparent;
+        border-radius: 10px;
+        padding: 10px 12px;
+        color: var(--text);
+      }
+
+      .dropdown button:hover {
+        background: #f4ecdf;
+      }
+
+      .notif-head,
+      .notif-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 16px;
+        gap: 12px;
+      }
+
+      .notif-head {
+        border-bottom: 1px solid var(--line);
+      }
+
+      .notif-head h3 {
+        margin: 0;
+        font-size: 1rem;
+        color: var(--maroon);
+      }
+
+      .notif-head p {
+        margin: 4px 0 0;
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+
+      .text-btn {
+        border: 0;
+        background: transparent;
+        color: var(--maroon);
+        font-weight: 700;
+      }
+
+      .notif-list {
+        list-style: none;
+        margin: 0;
+        padding: 8px 12px 0;
+        max-height: 360px;
+        overflow: auto;
+        display: grid;
+        gap: 10px;
+      }
+
+      .notif-item {
+        display: grid;
+        gap: 6px;
+        padding: 12px;
+        border-radius: 14px;
+        border: 1px solid var(--line);
+        background: #fffdf9;
+        color: var(--text);
+      }
+
+      .notif-item.unread {
+        border-color: #dfbf72;
+        background: #fff7e5;
+      }
+
+      .notif-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        align-items: start;
+      }
+
+      .notif-tag {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        padding: 3px 8px;
+        font-size: 0.72rem;
+        font-weight: 800;
+        background: #f2e5c7;
+        color: var(--maroon-deep);
+      }
+
+      .notif-item p {
+        margin: 0;
+        color: var(--text);
+        line-height: 1.45;
+      }
+
+      .notif-item time {
+        margin: 0;
+      }
+
+      .notif-item time {
+        color: var(--muted);
+        font-size: 0.8rem;
+      }
+
+      .notif-actions {
+        border-top: 1px solid var(--line);
+      }
+
+      .notif-actions button {
+        border: 1px solid var(--line);
+        background: #fff;
+        border-radius: 10px;
+        padding: 8px 10px;
+        font-weight: 700;
+        color: var(--text);
+      }
+
+      main {
+        padding: 24px;
+        display: grid;
+        gap: 18px;
+        align-content: start;
+      }
+
+      .hero,
+      .card,
+      .widget,
+      .feed-card {
+        background: linear-gradient(180deg, var(--surface) 0%, var(--surface-alt) 100%);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+      }
+
+      .hero {
+        padding: 20px;
+      }
+
+      .hero h1 {
+        margin: 0;
+        font-size: 1.35rem;
+        color: var(--maroon);
+      }
+
+      .hero p {
+        margin: 8px 0 0;
+        color: var(--muted);
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .card {
+        padding: 18px;
+      }
+
+      .card h3,
+      .widget h3,
+      .feed-card h3 {
+        margin: 0 0 8px;
+        color: var(--maroon);
+        font-size: 1rem;
+      }
+
+      .metric {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: var(--maroon);
+      }
+
+      .metric-sub {
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
+      .section-row {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 18px;
+      }
+
+      .widget,
+      .feed-card {
+        padding: 18px;
+      }
+
+      .class-grid,
+      .task-list,
+      .feed-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .class-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .class-grid li {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: #fff;
+        padding: 14px;
+      }
+
+      .class-grid strong,
+      .task-list strong {
+        display: block;
+        margin-bottom: 4px;
+      }
+
+      .task-list,
+      .feed-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .task-list li,
+      .feed-list li {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: #fff;
+        padding: 12px 14px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        padding: 4px 10px;
+        font-size: 0.76rem;
+        font-weight: 800;
+        border: 1px solid #e0c47c;
+        background: #f7edd0;
+        color: var(--maroon-deep);
+      }
+
+      .chip.ok {
+        border-color: #b8d5b1;
+        background: #edf6ea;
+        color: var(--ok);
+      }
+
+      .chip.alert {
+        border-color: #e2b1a6;
+        background: #fff0eb;
+        color: var(--danger);
+      }
+
+      .shortcuts {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .shortcut {
+        border: 1px solid var(--line);
+        border-left: 4px solid var(--gold);
+        border-radius: 16px;
+        background: #fff;
+        padding: 16px;
+      }
+
+      .shortcut h4 {
+        margin: 0 0 8px;
+        color: var(--maroon);
+      }
+
+      .shortcut p {
+        margin: 0 0 14px;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .shortcut button {
+        border: 1px solid var(--maroon);
+        background: var(--maroon);
+        color: #fff;
+        border-radius: 10px;
+        padding: 9px 12px;
+        font-weight: 700;
+      }
+
+      .feed-list li {
+        justify-content: flex-start;
+        align-items: flex-start;
+      }
+
+      .feed-copy {
+        flex: 1;
+      }
+
+      .feed-icon {
+        width: 36px;
+        height: 36px;
+        flex: 0 0 auto;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        background: #f7edd0;
+        color: var(--maroon-deep);
+        font-weight: 800;
+      }
+
+      .feed-copy p {
+        margin: 0;
+      }
+
+      .feed-copy time {
+        display: block;
+        margin-top: 6px;
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+
+      .toast-wrap {
+        position: fixed;
+        right: 14px;
+        bottom: 14px;
+        display: grid;
+        gap: 10px;
+        z-index: 120;
+      }
+
+      .toast {
+        min-width: 240px;
+        max-width: 320px;
+        padding: 12px 14px;
+        border-radius: 14px;
+        color: #fff;
+        box-shadow: var(--shadow);
+      }
+
+      .toast.success {
+        background: #1f6a3b;
+      }
+
+      .toast.error {
+        background: #8f1f1d;
+      }
+
+      .modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(21, 13, 13, 0.45);
+        display: none;
+        place-items: center;
+        padding: 20px;
+        z-index: 130;
+      }
+
+      .modal.open {
+        display: grid;
+      }
+
+      .modal-card {
+        width: min(420px, 100%);
+        background: var(--surface);
+        border-radius: 18px;
+        border: 1px solid var(--line);
+        box-shadow: var(--shadow-strong);
+        padding: 20px;
+      }
+
+      .modal-card h3 {
+        margin-top: 0;
+        color: var(--maroon);
+      }
+
+      .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 16px;
+      }
+
+      .btn {
+        border: 1px solid var(--line);
+        background: #fff;
+        border-radius: 10px;
+        padding: 10px 12px;
+        font-weight: 700;
+      }
+
+      .btn.primary {
+        background: var(--maroon);
+        border-color: var(--maroon);
+        color: #fff;
+      }
+
+      @media (max-width: 1180px) {
+        .stats,
+        .shortcuts,
+        .class-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .section-row {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 920px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+
+        aside {
+          border-right: 0;
+          border-bottom: 1px solid rgba(216, 173, 71, 0.35);
+        }
+
+        .nav-list {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 680px) {
+        header {
+          padding: 18px 16px;
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .header-actions {
+          justify-content: flex-end;
+        }
+
+        main {
+          padding: 16px;
+        }
+
+        .stats,
+        .shortcuts,
+        .class-grid,
+        .nav-list {
+          grid-template-columns: 1fr;
+        }
+
+        .notif-panel {
+          right: -8px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#mainContent">Skip to main content</a>
+
+    <div class="layout">
+      <aside aria-label="Faculty navigation">
+        <div class="brand">
+          <div class="crest" aria-hidden="true">UP</div>
+          <div>
+            <h1>UPHSD CCS</h1>
+            <p>Faculty Portal</p>
+          </div>
+        </div>
+
+        <nav>
+          <ul class="nav-list">
+            <li><a class="nav-link active" href="dashboard.html" aria-current="page">Dashboard</a></li>
+            <li><a class="nav-link" href="students.html">Students</a></li>
+            <li><a class="nav-link" href="classes.html">Classes</a></li>
+            <li><a class="nav-link" href="calendar.html">Calendar</a></li>
+          </ul>
+        </nav>
+      </aside>
+
+      <div class="content">
+        <header>
+          <div class="header-copy">
+            <h2>Faculty Dashboard</h2>
+            <p>Overview of active classes, reviews, and academic deadlines.</p>
+          </div>
+
+          <div class="header-actions">
+            <button class="icon-btn" id="notifButton" aria-label="Open notifications" aria-expanded="false" aria-controls="notifPanel">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5"></path>
+                <path d="M9 17a3 3 0 0 0 6 0"></path>
+              </svg>
+              <span class="badge" id="notifBadge">0</span>
+            </button>
+
+            <section class="notif-panel" id="notifPanel" aria-label="Faculty notifications">
+              <div class="notif-head">
+                <div>
+                  <h3>Notifications</h3>
+                  <p>Project-connected mock updates</p>
+                </div>
+                <button class="text-btn" type="button" id="markAllRead">Mark all read</button>
+              </div>
+              <ul class="notif-list" id="notifList"></ul>
+              <div class="notif-actions">
+                <button type="button" id="seedNotifBtn">Reset feed</button>
+                <button type="button" id="closeNotifBtn">Close</button>
+              </div>
+            </section>
+
+            <button class="avatar-btn" id="avatarButton" aria-haspopup="true" aria-expanded="false" aria-controls="profileMenu">F</button>
+            <div class="dropdown" id="profileMenu" role="menu" aria-label="Profile options">
+              <button role="menuitem" type="button" id="profileAction">Profile</button>
+              <button role="menuitem" type="button" id="settingsAction">Settings</button>
+              <button role="menuitem" type="button" id="logoutAction">Logout</button>
+            </div>
+          </div>
+        </header>
+
+        <main id="mainContent" tabindex="-1">
+          <section class="hero" aria-labelledby="welcomeTitle">
+            <h1 id="welcomeTitle">Welcome, <span id="welcomeName">Faculty</span></h1>
+            <p>2nd Semester AY 2025-2026 • College of Computer Studies • Academic workload summary</p>
+          </section>
+
+          <section class="widget" aria-labelledby="classesTitle">
+            <h3 id="classesTitle">My Classes</h3>
+            <ul class="class-grid" id="classesList"></ul>
+          </section>
+
+          <section aria-labelledby="shortcutTitle">
+            <h3 id="shortcutTitle" style="margin:0 0 12px;color:var(--maroon);">Quick Shortcuts</h3>
+            <div class="shortcuts">
+              <article class="shortcut">
+                <h4>Student Roster</h4>
+                <p>Review and filter current students using list or kanban view.</p>
+                <button type="button" data-target="students.html">Open Students</button>
+              </article>
+              <article class="shortcut">
+                <h4>Class Planner</h4>
+                <p>Check schedules, sections, and delivery status in the classes module.</p>
+                <button type="button" data-target="classes.html">Open Classes</button>
+              </article>
+              <article class="shortcut">
+                <h4>Quizzes</h4>
+                <p>Open the students quiz placeholder for upcoming assessment tracking.</p>
+                <button type="button" data-target="students.html#quizzes" data-label="Quizzes">Open Quizzes</button>
+              </article>
+              <article class="shortcut">
+                <h4>Go to Calendar</h4>
+                <p>Open the faculty calendar for quizzes, deadlines, consultations, and class activities.</p>
+                <button type="button" data-target="calendar.html" data-label="Calendar">Open Calendar</button>
+              </article>
+            </div>
+          </section>
+
+          <section class="section-row" aria-label="Task and activity overview">
+            <article class="widget">
+              <h3>Pending Tasks</h3>
+              <ul class="task-list" id="pendingList"></ul>
+            </article>
+
+            <article class="widget">
+              <h3>Upcoming Deadlines</h3>
+              <ul class="task-list" id="deadlineList"></ul>
+            </article>
+          </section>
+
+          <section class="feed-card">
+            <h3>Recent Faculty Activity</h3>
+            <ul class="feed-list" id="feedList"></ul>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <section class="modal" id="logoutModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="logoutTitle">
+      <div class="modal-card">
+        <h3 id="logoutTitle">Confirm Logout</h3>
+        <p>Are you sure you want to logout from the grading system?</p>
+        <div class="modal-actions">
+          <button class="btn" type="button" id="cancelLogout">Cancel</button>
+          <button class="btn primary" type="button" id="confirmLogout">Confirm</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="toast-wrap" id="toastWrap" aria-live="polite" aria-atomic="true"></div>
+
+    <script>
+      (function () {
+        var FACULTY_CLASSES = [
+          { section: "BSCS-2A", subject: "HCI 402", schedule: "Mon/Wed 9:00-10:30 AM", students: 42, status: "On Track" },
+          { section: "BSCS-2B", subject: "HCI 402", schedule: "Tue/Fri 10:00-11:30 AM", students: 38, status: "Needs Review" },
+          { section: "BSIT-2A", subject: "Data Structures", schedule: "Thu/Sat 1:00-2:30 PM", students: 35, status: "Ready" }
+        ];
+
+        var DEFAULT_NOTIFICATIONS = [
+          { id: "gs-review", tag: "Calendar", text: "Calendar items for BSCS-2B quizzes and deadlines need final review.", time: "5 minutes ago", unread: true },
+          { id: "attendance-alert", tag: "Attendance", text: "Three students in BSCS-2A have reached 3 absences.", time: "22 minutes ago", unread: true },
+          { id: "submission", tag: "Submissions", text: "New project proposal uploaded in HCI 402 section BSCS-2A.", time: "1 hour ago", unread: true },
+          { id: "class-summary", tag: "Classes", text: "Card and list views are synced for HCI 402 and Data Structures classes.", time: "Today", unread: false },
+          { id: "deadline", tag: "Deadline", text: "Midterm grade submission closes on May 02, 2026.", time: "Today", unread: false }
+        ];
+
+        var toastWrap = document.getElementById("toastWrap");
+        var welcomeName = document.getElementById("welcomeName");
+        var classesList = document.getElementById("classesList");
+        var pendingList = document.getElementById("pendingList");
+        var deadlineList = document.getElementById("deadlineList");
+        var feedList = document.getElementById("feedList");
+        var avatarButton = document.getElementById("avatarButton");
+        var profileMenu = document.getElementById("profileMenu");
+        var profileAction = document.getElementById("profileAction");
+        var settingsAction = document.getElementById("settingsAction");
+        var logoutAction = document.getElementById("logoutAction");
+        var logoutModal = document.getElementById("logoutModal");
+        var cancelLogout = document.getElementById("cancelLogout");
+        var confirmLogout = document.getElementById("confirmLogout");
+        var notifButton = document.getElementById("notifButton");
+        var notifBadge = document.getElementById("notifBadge");
+        var notifPanel = document.getElementById("notifPanel");
+        var notifList = document.getElementById("notifList");
+        var markAllRead = document.getElementById("markAllRead");
+        var closeNotifBtn = document.getElementById("closeNotifBtn");
+        var seedNotifBtn = document.getElementById("seedNotifBtn");
+
+        function guardFacultyRole() {
+          var role = localStorage.getItem("userRole");
+          if (!role) {
+            window.location.href = "index.html";
+            return false;
+          }
+          if (role !== "faculty") {
+            window.location.href = role === "sysadmin" ? "admin.html" : "index.html";
+            return false;
+          }
+          return true;
+        }
+
+        function applyFacultyFontSize() {
+          var size = parseInt(localStorage.getItem("facultyFontSize"), 10);
+          document.documentElement.style.fontSize = size >= 14 && size <= 22 ? size + "px" : "16px";
+        }
+
+        if (!guardFacultyRole()) {
+          return;
+        }
+        applyFacultyFontSize();
+
+        function showToast(type, message) {
+          var toast = document.createElement("div");
+          toast.className = "toast " + type;
+          toast.textContent = message;
+          toastWrap.appendChild(toast);
+          window.setTimeout(function () {
+            toast.remove();
+          }, 2600);
+        }
+
+        function getNotifications() {
+          var raw = localStorage.getItem("facultyNotifications");
+          var stored = [];
+          try {
+            stored = raw ? JSON.parse(raw) : [];
+          } catch (error) {}
+          var merged = mergeNotifications(stored);
+          saveNotifications(merged);
+          return merged;
+        }
+
+        function saveNotifications(items) {
+          localStorage.setItem("facultyNotifications", JSON.stringify(items));
+        }
+
+        function mergeNotifications(items) {
+          var stored = Array.isArray(items) ? items : [];
+          var defaults = DEFAULT_NOTIFICATIONS.map(function (item) {
+            var match = stored.filter(function (storedItem) { return storedItem && storedItem.id === item.id; })[0];
+            return {
+              id: item.id,
+              tag: match && match.tag ? match.tag : item.tag,
+              text: match && match.text ? match.text : item.text,
+              time: match && match.time ? match.time : item.time,
+              unread: match ? Boolean(match.unread) : Boolean(item.unread)
+            };
+          });
+          var extra = stored.filter(function (item) {
+            return item && item.id && item.text && DEFAULT_NOTIFICATIONS.every(function (defaultItem) { return defaultItem.id !== item.id; });
+          }).map(function (item) {
+            return {
+              id: item.id,
+              tag: item.tag || "Update",
+              text: item.text,
+              time: item.time || "Recently",
+              unread: Boolean(item.unread)
+            };
+          });
+          return extra.concat(defaults);
+        }
+
+        function syncBadge(items) {
+          var unread = items.filter(function (item) {
+            return item.unread;
+          }).length;
+          notifBadge.textContent = String(unread);
+          notifBadge.setAttribute("aria-label", unread + " unread notifications");
+          localStorage.setItem("notifCount", String(unread));
+        }
+
+        function renderNotifications() {
+          var items = getNotifications();
+          notifList.innerHTML = "";
+          items.forEach(function (item) {
+            var li = document.createElement("li");
+            li.className = "notif-item" + (item.unread ? " unread" : "");
+            li.innerHTML =
+              '<div class="notif-top"><span class="notif-tag">' +
+              item.tag +
+              "</span>" +
+              (item.unread ? '<button class="text-btn" type="button" data-read="' + item.id + '">Mark read</button>' : "") +
+              "</div><p>" +
+              item.text +
+              "</p><time>" +
+              item.time +
+              "</time>";
+            notifList.appendChild(li);
+          });
+          syncBadge(items);
+        }
+
+        function addNotification(tag, text) {
+          var items = getNotifications();
+          items.unshift({
+            id: "n-" + Date.now(),
+            tag: tag,
+            text: text,
+            time: "Just now",
+            unread: true
+          });
+          saveNotifications(items);
+          renderNotifications();
+        }
+
+        function closeMenu() {
+          profileMenu.classList.remove("open");
+          avatarButton.setAttribute("aria-expanded", "false");
+        }
+
+        function closeNotifications() {
+          notifPanel.classList.remove("open");
+          notifButton.setAttribute("aria-expanded", "false");
+        }
+
+        function openLogoutModal() {
+          logoutModal.classList.add("open");
+          logoutModal.setAttribute("aria-hidden", "false");
+          confirmLogout.focus();
+        }
+
+        function closeLogoutModal() {
+          logoutModal.classList.remove("open");
+          logoutModal.setAttribute("aria-hidden", "true");
+          avatarButton.focus();
+        }
+
+        function buildDashboard() {
+          FACULTY_CLASSES.forEach(function (item) {
+            var li = document.createElement("li");
+            li.innerHTML =
+              "<strong>" +
+              item.section +
+              " • " +
+              item.subject +
+              "</strong><span>" +
+              item.schedule +
+              '</span><div style="margin-top:10px;display:flex;justify-content:space-between;gap:10px;align-items:center;"><span>' +
+              item.students +
+              " students</span><span class=\"chip" +
+              (item.status === "Ready" ? " ok" : item.status === "Needs Review" ? " alert" : "") +
+              '">' +
+              item.status +
+              "</span></div>";
+            classesList.appendChild(li);
+          });
+
+          [
+            { task: "Finalize rubric scores for BSCS-2B capstone checkpoint", chip: "Urgent", chipClass: "chip alert" },
+            { task: "Confirm attendance summary before Friday sync", chip: "Today", chipClass: "chip" },
+            { task: "Review quiz analytics for HCI 402", chip: "Queued", chipClass: "chip ok" }
+          ].forEach(function (item) {
+            var li = document.createElement("li");
+            li.innerHTML = "<strong>" + item.task + '</strong><span class="' + item.chipClass + '">' + item.chip + "</span>";
+            pendingList.appendChild(li);
+          });
+
+          [
+            { task: "Quiz 4 publication", when: "Apr 26" },
+            { task: "Attendance escalation report", when: "Apr 28" },
+            { task: "Midterm grade submission", when: "May 02" }
+          ].forEach(function (item) {
+            var li = document.createElement("li");
+            li.innerHTML = "<strong>" + item.task + '</strong><span class="chip">' + item.when + "</span>";
+            deadlineList.appendChild(li);
+          });
+
+          [
+            { code: "CA", text: "Calendar items for HCI 402 section BSCS-2B were updated.", time: "5 minutes ago" },
+            { code: "AT", text: "Attendance alert generated for three learners in BSCS-2A.", time: "22 minutes ago" },
+            { code: "CA", text: "Calendar deadlines and section activities were refreshed for the current term.", time: "1 hour ago" }
+          ].forEach(function (item) {
+            var li = document.createElement("li");
+            li.innerHTML =
+              '<div class="feed-icon" aria-hidden="true">' +
+              item.code +
+              '</div><div class="feed-copy"><p>' +
+              item.text +
+              "</p><time>" +
+              item.time +
+              "</time></div>";
+            feedList.appendChild(li);
+          });
+        }
+
+        var name = localStorage.getItem("userName") || "Faculty";
+        welcomeName.textContent = name;
+        avatarButton.textContent = name.charAt(0).toUpperCase();
+
+        buildDashboard();
+        renderNotifications();
+
+        document.querySelectorAll(".shortcut button").forEach(function (button) {
+          button.addEventListener("click", function () {
+            var target = button.getAttribute("data-target");
+            var label = button.getAttribute("data-label") || target.replace(".html", "");
+            addNotification("Shortcut", "Opened " + label + " from dashboard shortcuts.");
+            window.location.href = target;
+          });
+        });
+
+        avatarButton.addEventListener("click", function (event) {
+          event.stopPropagation();
+          if (profileMenu.classList.contains("open")) {
+            closeMenu();
+          } else {
+            closeNotifications();
+            profileMenu.classList.add("open");
+            avatarButton.setAttribute("aria-expanded", "true");
+          }
+        });
+
+        notifButton.addEventListener("click", function (event) {
+          event.stopPropagation();
+          if (notifPanel.classList.contains("open")) {
+            closeNotifications();
+          } else {
+            closeMenu();
+            renderNotifications();
+            notifPanel.classList.add("open");
+            notifButton.setAttribute("aria-expanded", "true");
+          }
+        });
+
+        markAllRead.addEventListener("click", function (event) {
+          event.stopPropagation();
+          var items = getNotifications().map(function (item) {
+            item.unread = false;
+            return item;
+          });
+          saveNotifications(items);
+          renderNotifications();
+          showToast("success", "Notifications marked as read.");
+        });
+
+        closeNotifBtn.addEventListener("click", function (event) {
+          event.stopPropagation();
+          closeNotifications();
+        });
+
+        seedNotifBtn.addEventListener("click", function (event) {
+          event.stopPropagation();
+          saveNotifications(DEFAULT_NOTIFICATIONS.slice());
+          renderNotifications();
+          showToast("success", "Notification feed reset.");
+        });
+
+        profileMenu.addEventListener("click", function (event) {
+          event.stopPropagation();
+        });
+
+        notifPanel.addEventListener("click", function (event) {
+          event.stopPropagation();
+        });
+
+        notifList.addEventListener("click", function (event) {
+          event.stopPropagation();
+          var id = event.target.getAttribute("data-read");
+          if (!id) {
+            return;
+          }
+          var items = getNotifications().map(function (item) {
+            if (item.id === id) {
+              item.unread = false;
+            }
+            return item;
+          });
+          saveNotifications(items);
+          renderNotifications();
+        });
+
+        profileAction.addEventListener("click", function () {
+          window.location.href = "profile.html";
+        });
+
+        settingsAction.addEventListener("click", function () {
+          window.location.href = "settings.html";
+        });
+
+        logoutAction.addEventListener("click", function () {
+          closeMenu();
+          openLogoutModal();
+        });
+
+        cancelLogout.addEventListener("click", closeLogoutModal);
+
+        logoutModal.addEventListener("click", function (event) {
+          if (event.target === logoutModal) {
+            closeLogoutModal();
+          }
+        });
+
+        confirmLogout.addEventListener("click", function () {
+          localStorage.removeItem("userRole");
+          localStorage.removeItem("userName");
+          localStorage.removeItem("notifCount");
+          localStorage.removeItem("isUnlocked");
+          window.location.href = "index.html";
+        });
+
+        document.addEventListener("click", function (event) {
+          if (!profileMenu.contains(event.target) && !avatarButton.contains(event.target)) {
+            closeMenu();
+          }
+          if (!notifPanel.contains(event.target) && !notifButton.contains(event.target)) {
+            closeNotifications();
+          }
+        });
+
+        document.addEventListener("keydown", function (event) {
+          if (event.key === "Escape") {
+            closeMenu();
+            closeNotifications();
+            if (logoutModal.classList.contains("open")) {
+              closeLogoutModal();
+            }
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>
