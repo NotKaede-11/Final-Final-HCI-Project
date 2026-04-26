@@ -128,9 +128,11 @@
         border-radius: 999px; padding: 3px 8px; background: var(--maroon); color: #fff; font-size: 0.72rem; font-weight: 800;
       }
       .event-chip {
-        display: block; border: 1px solid #e0c47c; border-left: 4px solid var(--gold); border-radius: 10px;
+        display: block; width: 100%; border: 1px solid #e0c47c; border-left: 4px solid var(--gold); border-radius: 10px;
         background: #fff8e4; color: var(--maroon-deep); padding: 7px 8px; font-size: 0.82rem; line-height: 1.3; font-weight: 700;
+        text-align: left; cursor: pointer;
       }
+      .event-chip:hover { filter: brightness(0.98); box-shadow: 0 2px 8px rgba(84, 9, 11, 0.08); }
       .event-chip.quiz { border-left-color: #7b1113; background: #fff0ec; }
       .event-chip.deadline { border-left-color: #a12724; background: #fff1eb; }
       .event-chip.classwork { border-left-color: #21653a; background: #edf6ea; color: #194d2f; }
@@ -194,6 +196,7 @@
       .actions { margin-top: 14px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
       .btn { border: 1px solid var(--line); background: #fff; border-radius: 10px; padding: 10px 12px; font-weight: 700; }
       .btn.primary { background: var(--maroon); border-color: var(--maroon); color: #fff; }
+      .btn.danger { background: var(--danger); border-color: var(--danger); color: #fff; }
       .table-ref { border: 1px solid var(--line); border-radius: 16px; overflow-x: auto; background: #fff; }
       .table-ref table { width: 100%; border-collapse: collapse; min-width: 420px; }
       .table-ref th, .table-ref td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #eee2d2; }
@@ -384,8 +387,9 @@
           </label>
           <label><span>Details</span><input id="calendarTaskDetails" type="text" placeholder="Section or note" /></label>
           <div class="modal-actions">
+            <button class="btn danger" type="button" id="removeTaskBtn" hidden>Remove</button>
             <button class="btn" type="button" id="cancelTaskModalBtn">Cancel</button>
-            <button class="btn primary" type="submit">Add Task</button>
+            <button class="btn primary" type="submit" id="saveTaskBtn">Add Task</button>
           </div>
         </form>
       </div>
@@ -442,6 +446,10 @@
         var calendarTaskType = document.getElementById("calendarTaskType");
         var calendarTaskDetails = document.getElementById("calendarTaskDetails");
         var cancelTaskModalBtn = document.getElementById("cancelTaskModalBtn");
+        var calendarTaskTitleText = document.getElementById("calendarTaskTitleText");
+        var saveTaskBtn = document.getElementById("saveTaskBtn");
+        var removeTaskBtn = document.getElementById("removeTaskBtn");
+        var editingCalendarEventId = null;
 
         function guardFacultyRole() {
           var role = localStorage.getItem("userRole");
@@ -529,9 +537,9 @@
             var parsed = JSON.parse(localStorage.getItem("calendarTasks") || "[]");
             return Array.isArray(parsed) ? parsed.filter(function (item) {
               return item && item.title && Number(item.day) >= 1 && Number(item.day) <= 30;
-            }).map(function (item) {
+            }).map(function (item, index) {
               return {
-                id: item.id || "task-" + Date.now(),
+                id: item.id || ("task-legacy-" + index + "-" + Number(item.day)),
                 day: Number(item.day),
                 title: item.title,
                 type: ["quiz", "classwork", "consultation", "deadline"].indexOf(item.type) >= 0 ? item.type : "deadline",
@@ -545,27 +553,86 @@
         function saveStoredCalendarTasks(items) {
           localStorage.setItem("calendarTasks", JSON.stringify(items));
         }
+        function getCalendarEventOverrides() {
+          try {
+            var parsed = JSON.parse(localStorage.getItem("calendarEventOverrides") || "{}");
+            return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+          } catch (error) {
+            return {};
+          }
+        }
+        function saveCalendarEventOverrides(items) {
+          localStorage.setItem("calendarEventOverrides", JSON.stringify(items));
+        }
+        function getRemovedCalendarEventIds() {
+          try {
+            var parsed = JSON.parse(localStorage.getItem("calendarRemovedEventIds") || "[]");
+            return Array.isArray(parsed) ? parsed.filter(function (id) { return typeof id === "string"; }) : [];
+          } catch (error) {
+            return [];
+          }
+        }
+        function saveRemovedCalendarEventIds(items) {
+          localStorage.setItem("calendarRemovedEventIds", JSON.stringify(items));
+        }
+        function getCalendarTodayDay() {
+          var now = new Date();
+          if (now.getFullYear() === 2026 && now.getMonth() === 3 && now.getDate() >= 1 && now.getDate() <= 30) {
+            return now.getDate();
+          }
+          return 26;
+        }
         function getCalendarDayCell(day) {
           return Array.prototype.slice.call(calendarGrid.querySelectorAll(".calendar-day:not(.muted)")).filter(function (cell) {
             var date = cell.querySelector(".calendar-date");
             return date && parseInt(date.textContent, 10) === day;
           })[0];
         }
-        function renderCalendarEvents() {
-          var events = DEFAULT_CALENDAR_EVENTS.concat(getStoredCalendarTasks()).sort(function (a, b) {
+        function renderTodayMarker() {
+          calendarGrid.querySelectorAll(".calendar-day.today").forEach(function (cell) { cell.classList.remove("today"); });
+          calendarGrid.querySelectorAll(".today-pill").forEach(function (pill) { pill.remove(); });
+          var todayCell = getCalendarDayCell(getCalendarTodayDay());
+          if (!todayCell) { return; }
+          var date = todayCell.querySelector(".calendar-date");
+          var pill = document.createElement("span");
+          pill.className = "today-pill";
+          pill.textContent = "Today";
+          todayCell.classList.add("today");
+          date.appendChild(pill);
+        }
+        function getCalendarEvents() {
+          var overrides = getCalendarEventOverrides();
+          var removed = getRemovedCalendarEventIds();
+          var defaults = DEFAULT_CALENDAR_EVENTS.filter(function (eventItem) {
+            return removed.indexOf(eventItem.id) < 0;
+          }).map(function (eventItem) {
+            return Object.assign({}, eventItem, overrides[eventItem.id] || {});
+          });
+          return defaults.concat(getStoredCalendarTasks()).sort(function (a, b) {
             return a.day - b.day;
           });
+        }
+        function findCalendarEvent(id) {
+          return getCalendarEvents().filter(function (eventItem) { return eventItem.id === id; })[0];
+        }
+        function renderCalendarEvents() {
+          var events = getCalendarEvents();
+          var todayDay = getCalendarTodayDay();
           calendarGrid.querySelectorAll(".event-chip").forEach(function (chip) { chip.remove(); });
+          renderTodayMarker();
           upcomingEventList.innerHTML = "";
           events.forEach(function (eventItem) {
             var cell = getCalendarDayCell(eventItem.day);
             if (cell) {
-              var chip = document.createElement("span");
+              var chip = document.createElement("button");
+              chip.type = "button";
               chip.className = "event-chip " + eventItem.type;
               chip.textContent = eventItem.title;
+              chip.setAttribute("data-event-id", eventItem.id);
+              chip.setAttribute("aria-label", "Edit calendar task " + eventItem.title);
               cell.appendChild(chip);
             }
-            if (eventItem.day >= 26 || eventItem.id.indexOf("task-") === 0) {
+            if (eventItem.day >= todayDay || eventItem.id.indexOf("task-") === 0) {
               var li = document.createElement("li");
               var strong = document.createElement("strong");
               var span = document.createElement("span");
@@ -576,6 +643,43 @@
               upcomingEventList.appendChild(li);
             }
           });
+        }
+        function getTaskFormData() {
+          var day = Number(calendarTaskDay.value);
+          var title = calendarTaskTitle.value.trim();
+          if (!title || day < 1 || day > 30) {
+            showToast("error", "Enter a task title and April date from 1 to 30.");
+            return null;
+          }
+          return {
+            day: day,
+            title: title,
+            type: calendarTaskType.value,
+            details: calendarTaskDetails.value.trim() || calendarTaskType.options[calendarTaskType.selectedIndex].text
+          };
+        }
+        function updateCalendarEvent(id, data) {
+          if (id.indexOf("task-") === 0) {
+            saveStoredCalendarTasks(getStoredCalendarTasks().map(function (item) {
+              return item.id === id ? Object.assign({}, item, data) : item;
+            }));
+            return;
+          }
+          var overrides = getCalendarEventOverrides();
+          overrides[id] = Object.assign({ id: id }, data);
+          saveCalendarEventOverrides(overrides);
+        }
+        function removeCalendarEvent(id) {
+          if (id.indexOf("task-") === 0) {
+            saveStoredCalendarTasks(getStoredCalendarTasks().filter(function (item) { return item.id !== id; }));
+            return;
+          }
+          var removed = getRemovedCalendarEventIds();
+          if (removed.indexOf(id) < 0) { removed.push(id); }
+          saveRemovedCalendarEventIds(removed);
+          var overrides = getCalendarEventOverrides();
+          delete overrides[id];
+          saveCalendarEventOverrides(overrides);
         }
         function settingEnabled(key) { return localStorage.getItem(key) === "true"; }
         function applyAccessibilityPreferences() {
@@ -594,7 +698,27 @@
         function closeNotifications() { notifPanel.classList.remove("open"); notifButton.setAttribute("aria-expanded", "false"); }
         function openLogoutModal() { logoutModal.classList.add("open"); logoutModal.setAttribute("aria-hidden", "false"); confirmLogout.focus(); }
         function closeLogoutModal() { logoutModal.classList.remove("open"); logoutModal.setAttribute("aria-hidden", "true"); avatarButton.focus(); }
-        function openTaskModal() {
+        function resetTaskForm(day) {
+          calendarTaskForm.reset();
+          calendarTaskDay.value = String(day || getCalendarTodayDay());
+          editingCalendarEventId = null;
+          calendarTaskTitleText.textContent = "Add Calendar Task";
+          saveTaskBtn.textContent = "Add Task";
+          removeTaskBtn.hidden = true;
+        }
+        function openTaskModal(eventItem) {
+          if (eventItem && eventItem.id) {
+            editingCalendarEventId = eventItem.id;
+            calendarTaskTitleText.textContent = "Edit Calendar Task";
+            calendarTaskTitle.value = eventItem.title;
+            calendarTaskDay.value = String(eventItem.day);
+            calendarTaskType.value = eventItem.type;
+            calendarTaskDetails.value = eventItem.details || "";
+            saveTaskBtn.textContent = "Save Changes";
+            removeTaskBtn.hidden = false;
+          } else {
+            resetTaskForm(getCalendarTodayDay());
+          }
           calendarTaskModal.classList.add("open");
           calendarTaskModal.setAttribute("aria-hidden", "false");
           window.setTimeout(function () { calendarTaskTitle.focus(); }, 0);
@@ -602,6 +726,7 @@
         function closeTaskModal() {
           calendarTaskModal.classList.remove("open");
           calendarTaskModal.setAttribute("aria-hidden", "true");
+          editingCalendarEventId = null;
           openTaskModalBtn.focus();
         }
 
@@ -631,32 +756,43 @@
           event.stopPropagation();
           saveNotifications(DEFAULT_NOTIFICATIONS.slice()); renderNotifications(); showToast("success", "Notification feed reset.");
         });
-        openTaskModalBtn.addEventListener("click", openTaskModal);
+        openTaskModalBtn.addEventListener("click", function () { openTaskModal(); });
         cancelTaskModalBtn.addEventListener("click", closeTaskModal);
         calendarTaskModal.addEventListener("click", function (event) {
           if (event.target === calendarTaskModal) { closeTaskModal(); }
         });
+        calendarGrid.addEventListener("click", function (event) {
+          var chip = event.target.closest("[data-event-id]");
+          if (!chip) { return; }
+          var eventItem = findCalendarEvent(chip.getAttribute("data-event-id"));
+          if (eventItem) { openTaskModal(eventItem); }
+        });
+        removeTaskBtn.addEventListener("click", function () {
+          if (!editingCalendarEventId) { return; }
+          var eventItem = findCalendarEvent(editingCalendarEventId);
+          removeCalendarEvent(editingCalendarEventId);
+          renderCalendarEvents();
+          addNotification("Calendar", (eventItem ? eventItem.title : "Calendar task") + " was removed.");
+          closeTaskModal();
+          showToast("success", "Calendar task removed.");
+        });
         calendarTaskForm.addEventListener("submit", function (event) {
           event.preventDefault();
-          var day = Number(calendarTaskDay.value);
-          var title = calendarTaskTitle.value.trim();
-          if (!title || day < 1 || day > 30) {
-            showToast("error", "Enter a task title and April date from 1 to 30.");
+          var data = getTaskFormData();
+          if (!data) { return; }
+          if (editingCalendarEventId) {
+            updateCalendarEvent(editingCalendarEventId, data);
+            renderCalendarEvents();
+            addNotification("Calendar", data.title + " was updated for April " + data.day + ".");
+            closeTaskModal();
+            showToast("success", "Calendar task updated.");
             return;
           }
           var tasks = getStoredCalendarTasks();
-          tasks.push({
-            id: "task-" + Date.now(),
-            day: day,
-            title: title,
-            type: calendarTaskType.value,
-            details: calendarTaskDetails.value.trim() || calendarTaskType.options[calendarTaskType.selectedIndex].text
-          });
+          tasks.push(Object.assign({ id: "task-" + Date.now() }, data));
           saveStoredCalendarTasks(tasks);
           renderCalendarEvents();
-          addNotification("Calendar", title + " was added to April " + day + ".");
-          calendarTaskForm.reset();
-          calendarTaskDay.value = String(day);
+          addNotification("Calendar", data.title + " was added to April " + data.day + ".");
           closeTaskModal();
           showToast("success", "Calendar task added.");
         });
