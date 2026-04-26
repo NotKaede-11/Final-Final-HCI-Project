@@ -537,6 +537,22 @@
         background: #fff0eb;
         color: var(--danger);
       }
+      .remove-assessment-btn {
+        min-height: 32px;
+        border: 1px solid #e2b1a6;
+        border-radius: 6px;
+        background: #fff7f4;
+        color: var(--danger);
+        font-size: 12px;
+        font-weight: 800;
+        padding: 4px 8px;
+        cursor: pointer;
+      }
+      .remove-assessment-btn:hover,
+      .remove-assessment-btn:focus-visible {
+        border-color: var(--danger);
+        background: #fff0eb;
+      }
       .attendance-select {
         border: 1px solid var(--line);
         border-radius: 8px;
@@ -917,6 +933,7 @@
                         <th>Coverage</th>
                         <th>Score</th>
                         <th>Status</th>
+                        <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -925,30 +942,35 @@
                         <td><input class="text-edit" id="quizCoverage1" type="text" value="Heuristics and affordances" aria-label="Quiz 1 coverage" /></td>
                         <td><input class="input-field grade-input quiz-score" data-grade="q1" type="number" min="0" max="100" value="88" aria-label="Quiz 1 score" /><div class="validation-hint" id="hint-q1"></div></td>
                         <td><span class="status-pill quiz-status">Graded</span></td>
+                        <td><button class="remove-assessment-btn" type="button" data-remove-assessment="quiz" aria-label="Remove quiz 1">Remove</button></td>
                       </tr>
                       <tr class="week-col" data-week="2">
                         <td><input class="text-edit" id="quizLabel2" type="text" value="Wireframing Concepts Quiz" aria-label="Quiz 2 name" /></td>
                         <td><input class="text-edit" id="quizCoverage2" type="text" value="Information hierarchy" aria-label="Quiz 2 coverage" /></td>
                         <td><input class="input-field grade-input quiz-score" data-grade="q2" type="number" min="0" max="100" value="91" aria-label="Quiz 2 score" /><div class="validation-hint" id="hint-q2"></div></td>
                         <td><span class="status-pill quiz-status">Graded</span></td>
+                        <td><button class="remove-assessment-btn" type="button" data-remove-assessment="quiz" aria-label="Remove quiz 2">Remove</button></td>
                       </tr>
                       <tr class="week-col" data-week="3">
                         <td><input class="text-edit" id="quizLabel3" type="text" value="Prototype Evaluation Quiz" aria-label="Quiz 3 name" /></td>
                         <td><input class="text-edit" id="quizCoverage3" type="text" value="Testing and feedback" aria-label="Quiz 3 coverage" /></td>
                         <td><input class="input-field grade-input quiz-score" data-grade="q3" type="number" min="0" max="100" value="86" aria-label="Quiz 3 score" /><div class="validation-hint" id="hint-q3"></div></td>
                         <td><span class="status-pill quiz-status">Graded</span></td>
+                        <td><button class="remove-assessment-btn" type="button" data-remove-assessment="quiz" aria-label="Remove quiz 3">Remove</button></td>
                       </tr>
                       <tr class="week-col" data-week="4">
                         <td><input class="text-edit" id="quizLabel4" type="text" value="Accessibility Review Quiz" aria-label="Quiz 4 name" /></td>
                         <td><input class="text-edit" id="quizCoverage4" type="text" value="WCAG and readability" aria-label="Quiz 4 coverage" /></td>
                         <td><input class="input-field grade-input quiz-score" data-grade="q4" type="number" min="0" max="100" value="93" aria-label="Quiz 4 score" /><div class="validation-hint" id="hint-q4"></div></td>
                         <td><span class="status-pill quiz-status">Graded</span></td>
+                        <td><button class="remove-assessment-btn" type="button" data-remove-assessment="quiz" aria-label="Remove quiz 4">Remove</button></td>
                       </tr>
                       <tr class="week-col" data-week="5">
                         <td><input class="text-edit" id="quizLabel5" type="text" value="Final Interface Critique" aria-label="Quiz 5 name" /></td>
                         <td><input class="text-edit" id="quizCoverage5" type="text" value="HCI rubric alignment" aria-label="Quiz 5 coverage" /></td>
                         <td><input class="input-field grade-input quiz-score" data-grade="q5" type="number" min="0" max="100" value="90" aria-label="Quiz 5 score" /><div class="validation-hint" id="hint-q5"></div></td>
                         <td><span class="status-pill quiz-status">Graded</span></td>
+                        <td><button class="remove-assessment-btn" type="button" data-remove-assessment="quiz" aria-label="Remove quiz 5">Remove</button></td>
                       </tr>
                     </tbody>
                   </table>
@@ -983,37 +1005,42 @@
                 </div>
                 <div class="table-wrap">
                   <table>
-                    <thead><tr><th>Assignment</th><th>Description</th><th>Score</th><th>Formula Share</th></tr></thead>
+                    <thead><tr><th>Assignment</th><th>Description</th><th>Score</th><th>Formula Share</th><th>Action</th></tr></thead>
                     <tbody>
                       <tr>
                         <td><input class="text-edit" id="assignmentLabel1" type="text" value="Persona Analysis" aria-label="Assignment 1 name" /></td>
                         <td><input class="text-edit" id="assignmentDesc1" type="text" value="User profile and goal mapping" aria-label="Assignment 1 description" /></td>
                         <td><input class="input-field grade-input assignment-score" data-grade="rec1" type="number" min="0" max="100" value="90" aria-label="Assignment 1 score" /><div class="validation-hint" id="hint-rec1"></div></td>
                         <td><input class="constant-field" type="text" value="50%" readonly disabled aria-label="Recitation formula share" /></td>
+                        <td><button class="remove-assessment-btn" type="button" data-remove-assessment="assignment" aria-label="Remove assignment 1">Remove</button></td>
                       </tr>
                       <tr>
                         <td><input class="text-edit" id="assignmentLabel2" type="text" value="Task Flow Review" aria-label="Assignment 2 name" /></td>
                         <td><input class="text-edit" id="assignmentDesc2" type="text" value="Workflow and error prevention" aria-label="Assignment 2 description" /></td>
                         <td><input class="input-field grade-input assignment-score" data-grade="rec2" type="number" min="0" max="100" value="87" aria-label="Assignment 2 score" /><div class="validation-hint" id="hint-rec2"></div></td>
                         <td><input class="constant-field" type="text" value="50%" readonly disabled /></td>
+                        <td><button class="remove-assessment-btn" type="button" data-remove-assessment="assignment" aria-label="Remove assignment 2">Remove</button></td>
                       </tr>
                       <tr>
                         <td><input class="text-edit" id="assignmentLabel3" type="text" value="Heuristic Evaluation" aria-label="Assignment 3 name" /></td>
                         <td><input class="text-edit" id="assignmentDesc3" type="text" value="Nielsen-style review notes" aria-label="Assignment 3 description" /></td>
                         <td><input class="input-field grade-input assignment-score" data-grade="rec3" type="number" min="0" max="100" value="92" aria-label="Assignment 3 score" /><div class="validation-hint" id="hint-rec3"></div></td>
                         <td><input class="constant-field" type="text" value="50%" readonly disabled /></td>
+                        <td><button class="remove-assessment-btn" type="button" data-remove-assessment="assignment" aria-label="Remove assignment 3">Remove</button></td>
                       </tr>
                       <tr>
                         <td><input class="text-edit" id="assignmentLabel4" type="text" value="Rubric Alignment Checklist" aria-label="Assignment 4 name" /></td>
                         <td><input class="text-edit" id="assignmentDesc4" type="text" value="Criteria mapping and completeness check" aria-label="Assignment 4 description" /></td>
                         <td><input class="input-field grade-input assignment-score" data-grade="rec4" type="number" min="0" max="100" value="88" aria-label="Assignment 4 score" /><div class="validation-hint" id="hint-rec4"></div></td>
                         <td><input class="constant-field" type="text" value="50%" readonly disabled /></td>
+                        <td><button class="remove-assessment-btn" type="button" data-remove-assessment="assignment" aria-label="Remove assignment 4">Remove</button></td>
                       </tr>
                       <tr>
                         <td><input class="text-edit" id="assignmentLabel5" type="text" value="Accessibility Annotation" aria-label="Assignment 5 name" /></td>
                         <td><input class="text-edit" id="assignmentDesc5" type="text" value="Contrast, labels, and keyboard notes" aria-label="Assignment 5 description" /></td>
                         <td><input class="input-field grade-input assignment-score" data-grade="rec5" type="number" min="0" max="100" value="91" aria-label="Assignment 5 score" /><div class="validation-hint" id="hint-rec5"></div></td>
                         <td><input class="constant-field" type="text" value="50%" readonly disabled /></td>
+                        <td><button class="remove-assessment-btn" type="button" data-remove-assessment="assignment" aria-label="Remove assignment 5">Remove</button></td>
                       </tr>
                     </tbody>
                   </table>
@@ -1999,13 +2026,15 @@
               '<td><input class="text-edit" type="text" value="New Quiz ' + count + '" aria-label="Quiz ' + count + ' name" /></td>' +
               '<td><input class="text-edit" type="text" value="Assessment coverage pending" aria-label="Quiz ' + count + ' coverage" /></td>' +
               '<td><input class="input-field grade-input quiz-score" data-grade="' + key + '" type="number" min="0" max="100" value="0" aria-label="Quiz ' + count + ' score" /><div class="validation-hint" id="hint-' + key + '"></div></td>' +
-              '<td><span class="status-pill quiz-status unrecorded">Unrecorded</span></td>';
+              '<td><span class="status-pill quiz-status unrecorded">Unrecorded</span></td>' +
+              '<td><button class="remove-assessment-btn" type="button" data-remove-assessment="quiz" aria-label="Remove quiz ' + count + '">Remove</button></td>';
           } else {
             row.innerHTML =
               '<td><input class="text-edit" type="text" value="New Assignment ' + count + '" aria-label="Assignment ' + count + ' name" /></td>' +
               '<td><input class="text-edit" type="text" value="Activity details pending" aria-label="Assignment ' + count + ' description" /></td>' +
               '<td><input class="input-field grade-input assignment-score" data-grade="' + key + '" type="number" min="0" max="100" value="0" aria-label="Assignment ' + count + ' score" /><div class="validation-hint" id="hint-' + key + '"></div></td>' +
-              '<td><input class="constant-field" type="text" value="50%" readonly disabled /></td>';
+              '<td><input class="constant-field" type="text" value="50%" readonly disabled /></td>' +
+              '<td><button class="remove-assessment-btn" type="button" data-remove-assessment="assignment" aria-label="Remove assignment ' + count + '">Remove</button></td>';
           }
           tableBody.appendChild(row);
           var input = row.querySelector(".grade-input");
@@ -2013,6 +2042,14 @@
           input.focus();
           calculateGrades();
           showToast((isQuiz ? "Quiz" : "Assignment") + " row added.");
+        }
+        function removeAssessmentRow(button) {
+          var row = button.closest("tr");
+          var type = button.getAttribute("data-remove-assessment") || "assessment";
+          if (!row) { return; }
+          row.remove();
+          calculateGrades();
+          showToast((type === "quiz" ? "Quiz" : "Assignment") + " row removed.");
         }
 
         renderStudentBanner();
@@ -2026,6 +2063,14 @@
         document.querySelectorAll(".grade-input").forEach(bindGradeInput);
         document.getElementById("addQuizBtn").addEventListener("click", function () { addAssessmentRow("quiz"); });
         document.getElementById("addAssignmentBtn").addEventListener("click", function () { addAssessmentRow("assignment"); });
+        document.getElementById("panel-quizzes").addEventListener("click", function (event) {
+          var button = event.target.closest("[data-remove-assessment]");
+          if (button) { removeAssessmentRow(button); }
+        });
+        document.getElementById("panel-assignments").addEventListener("click", function (event) {
+          var button = event.target.closest("[data-remove-assessment]");
+          if (button) { removeAssessmentRow(button); }
+        });
         document.querySelectorAll("[data-attendance]").forEach(function (select) {
           select.addEventListener("change", calculateGrades);
         });

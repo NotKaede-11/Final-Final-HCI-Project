@@ -411,7 +411,7 @@
             </div>
             <div class="field">
               <label for="studentIdInput">Student ID</label>
-              <input id="studentIdInput" name="id" type="text" placeholder="e.g., 2026-FAC-256" aria-label="Student ID" required />
+              <input id="studentIdInput" name="id" type="text" placeholder="e.g., 2026-FAC-256" aria-label="Student ID" autocomplete="off" required />
               <div class="field-error" id="studentIdError" role="alert"></div>
             </div>
             <div class="field">
@@ -798,10 +798,24 @@
           if (!student) { return; }
           window.location.href = "student-detail.html?id=" + encodeURIComponent(student.id);
         }
+        function formatStudentId(value) {
+          var raw = value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+          var year = raw.match(/^20\d{2}/);
+          var number = raw.match(/(\d{3})$/);
+          if (year && number) {
+            return year[0] + "-FAC-" + number[1];
+          }
+          return value.toUpperCase().replace(/\s+/g, "");
+        }
+        function applyStudentIdFormat() {
+          var formatted = formatStudentId(studentIdInput.value);
+          studentIdInput.value = formatted;
+          return formatted;
+        }
         function getStudentFormData() {
           return {
             name: studentNameInput.value.trim(),
-            id: studentIdInput.value.trim(),
+            id: formatStudentId(studentIdInput.value.trim()),
             section: studentSectionInput.value,
             status: studentStatusInput.value
           };
@@ -822,6 +836,10 @@
           if (showErrors) { clearStudentErrors(); }
           if (!student.name) { valid = false; if (showErrors) { setStudentError(studentNameInput, studentNameError, "Name is required."); } }
           if (!student.id) { valid = false; if (showErrors) { setStudentError(studentIdInput, studentIdError, "Student ID is required."); } }
+          else if (!/^20\d{2}-FAC-\d{3}$/.test(student.id)) {
+            valid = false;
+            if (showErrors) { setStudentError(studentIdInput, studentIdError, "Use the format 2026-FAC-256."); }
+          }
           if (!student.section) { valid = false; if (showErrors) { setStudentError(studentSectionInput, studentSectionError, "Section is required."); } }
           if (!student.status) { valid = false; if (showErrors) { setStudentError(studentStatusInput, studentStatusError, "Status is required."); } }
           saveStudentBtn.disabled = !valid;
@@ -940,9 +958,14 @@
           input.addEventListener("change", function () { validateStudentForm(false); });
           input.addEventListener("blur", function () { validateStudentForm(true); });
         });
+        studentIdInput.addEventListener("blur", function () {
+          applyStudentIdFormat();
+          validateStudentForm(true);
+        });
         studentSectionInput.addEventListener("change", updateStudentClassPreview);
         addStudentForm.addEventListener("submit", function (event) {
           event.preventDefault();
+          applyStudentIdFormat();
           if (!validateStudentForm(true)) { return; }
           var student = getStudentFormData();
           if (hasDuplicateStudentId(student.id)) {

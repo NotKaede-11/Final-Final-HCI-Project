@@ -107,6 +107,7 @@
       }
       .calendar-hero h1 { margin: 0; color: var(--maroon); font-size: 1.45rem; }
       .calendar-hero p { margin: 7px 0 0; color: var(--muted); line-height: 1.5; max-width: 760px; }
+      .calendar-actions { display: grid; justify-items: end; gap: 10px; }
       .calendar-month { display: inline-flex; align-items: center; gap: 10px; color: var(--maroon-deep); font-weight: 800; }
       .calendar-month span { border: 1px solid #e1c885; background: #fff7df; border-radius: 999px; padding: 8px 12px; }
       .calendar-card { overflow: hidden; }
@@ -164,10 +165,14 @@
       .grade-seen { background: #edf6ea; border: 1px solid #b8d5b1; color: var(--ok); }
       .grade-seen.not-seen { background: #fff0eb; border-color: #e2b1a6; color: var(--danger); }
       .grade-seen.finalized { background: #e7f0ff; border-color: #7aa2d8; color: #15406d; }
-      input {
+      input, select {
         width: 100%; border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; background: #fff;
       }
       input[readonly] { background: #f5eee4; color: var(--muted); font-weight: 700; }
+      .task-form { display: grid; gap: 10px; margin-top: 12px; }
+      .task-form label { display: grid; gap: 6px; color: var(--muted); font-size: 0.82rem; font-weight: 800; }
+      .task-form label span { color: var(--maroon); }
+      .task-form .btn { width: 100%; justify-content: center; min-height: 44px; }
       html[data-contrast="high"] body { background: #fff; color: #111; }
       html[data-contrast="high"] .panel, html[data-contrast="high"] .field-card, html[data-contrast="high"] .meta-card, html[data-contrast="high"] .table-ref { background: #fff; border-color: #111; }
       body.no-motion *, body.no-motion *::before, body.no-motion *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
@@ -201,6 +206,7 @@
       .modal { position: fixed; inset: 0; background: rgba(21,13,13,0.45); display: none; place-items: center; padding: 20px; z-index: 130; }
       .modal.open { display: grid; }
       .modal-card { width: min(420px, 100%); background: var(--surface); padding: 20px; }
+      .modal-card.form-card { width: min(520px, 100%); }
       .modal-card h3 { margin-top: 0; color: var(--maroon); }
       .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; }
       @media (max-width: 920px) {
@@ -272,8 +278,11 @@
               <h1 id="calendarTitle">Academic Calendar</h1>
               <p>Faculty-facing schedule view for mock quizzes, section activities, consultation windows, and deadline reminders.</p>
             </div>
-            <div class="calendar-month" aria-label="Current calendar month">
-              <span>April 2026</span>
+            <div class="calendar-actions">
+              <div class="calendar-month" aria-label="Current calendar month">
+                <span>April 2026</span>
+              </div>
+              <button class="btn primary" type="button" id="openTaskModalBtn">Add Task</button>
             </div>
           </section>
 
@@ -282,7 +291,7 @@
               <div class="calendar-head" aria-hidden="true">
                 <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
               </div>
-              <div class="calendar-grid">
+              <div class="calendar-grid" id="calendarGrid">
                 <div class="calendar-day muted"><div class="calendar-date">29</div></div>
                 <div class="calendar-day muted"><div class="calendar-date">30</div></div>
                 <div class="calendar-day muted"><div class="calendar-date">31</div></div>
@@ -325,7 +334,7 @@
               <article class="panel">
                 <h3>Upcoming Schedule</h3>
                 <p>Near-term faculty items based on the current mock semester.</p>
-                <ul class="event-list">
+                <ul class="event-list" id="upcomingEventList">
                   <li><strong>Quiz 4 publication</strong><span>Apr 26 • HCI 402 • BSCS-2B</span></li>
                   <li><strong>Attendance escalation report</strong><span>Apr 28 • BSCS-2A monitoring</span></li>
                   <li><strong>Section advising follow-up</strong><span>Apr 30 • At-risk learner check-in</span></li>
@@ -359,6 +368,29 @@
       </div>
     </section>
 
+    <section class="modal" id="calendarTaskModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="calendarTaskTitleText">
+      <div class="modal-card form-card">
+        <h3 id="calendarTaskTitleText">Add Calendar Task</h3>
+        <form class="task-form" id="calendarTaskForm">
+          <label><span>Task title</span><input id="calendarTaskTitle" type="text" placeholder="e.g., BSCS-2A Quiz 5" required /></label>
+          <label><span>April date</span><input id="calendarTaskDay" type="number" min="1" max="30" value="26" required /></label>
+          <label><span>Legend type</span>
+            <select id="calendarTaskType" required>
+              <option value="quiz">Quiz or assessment</option>
+              <option value="classwork">Class activity</option>
+              <option value="consultation">Consultation or advising</option>
+              <option value="deadline">Deadline or review</option>
+            </select>
+          </label>
+          <label><span>Details</span><input id="calendarTaskDetails" type="text" placeholder="Section or note" /></label>
+          <div class="modal-actions">
+            <button class="btn" type="button" id="cancelTaskModalBtn">Cancel</button>
+            <button class="btn primary" type="submit">Add Task</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
     <div class="toast-wrap" id="toastWrap" aria-live="polite" aria-atomic="true"></div>
 
     <script>
@@ -369,6 +401,20 @@
           { id: "submission", tag: "Submissions", text: "New project proposal uploaded in HCI 402 section BSCS-2A.", time: "1 hour ago", unread: true },
           { id: "class-summary", tag: "Classes", text: "Card and list views are synced for HCI 402 and Data Structures classes.", time: "Today", unread: false },
           { id: "deadline", tag: "Deadline", text: "Midterm grade submission closes on May 02, 2026.", time: "Today", unread: false }
+        ];
+        var DEFAULT_CALENDAR_EVENTS = [
+          { id: "lab-checkpoint", day: 2, title: "BSIT-2A lab checkpoint", type: "classwork", details: "Class activity" },
+          { id: "design-critique", day: 6, title: "HCI 402 design critique", type: "classwork", details: "Class activity" },
+          { id: "quiz-3", day: 8, title: "BSCS-2A Quiz 3", type: "quiz", details: "Quiz or assessment" },
+          { id: "advising-window", day: 10, title: "Advising window", type: "consultation", details: "Consultation or advising" },
+          { id: "ds-practical", day: 14, title: "Data Structures practical", type: "classwork", details: "Class activity" },
+          { id: "quiz-4-draft", day: 16, title: "BSCS-2B Quiz 4 draft", type: "quiz", details: "Quiz or assessment" },
+          { id: "prototype-review", day: 20, title: "Prototype review", type: "classwork", details: "Class activity" },
+          { id: "faculty-consultation", day: 22, title: "Faculty consultation", type: "consultation", details: "Consultation or advising" },
+          { id: "analytics-review", day: 24, title: "Quiz analytics review", type: "deadline", details: "Deadline or review" },
+          { id: "quiz-publication", day: 26, title: "Quiz 4 publication", type: "quiz", details: "HCI 402 • BSCS-2B" },
+          { id: "attendance-report", day: 28, title: "Attendance escalation report", type: "deadline", details: "BSCS-2A monitoring" },
+          { id: "section-advising", day: 30, title: "Section advising follow-up", type: "consultation", details: "At-risk learner check-in" }
         ];
         var toastWrap = document.getElementById("toastWrap");
         var avatarButton = document.getElementById("avatarButton");
@@ -386,6 +432,16 @@
         var markAllRead = document.getElementById("markAllRead");
         var closeNotifBtn = document.getElementById("closeNotifBtn");
         var seedNotifBtn = document.getElementById("seedNotifBtn");
+        var calendarGrid = document.getElementById("calendarGrid");
+        var upcomingEventList = document.getElementById("upcomingEventList");
+        var openTaskModalBtn = document.getElementById("openTaskModalBtn");
+        var calendarTaskModal = document.getElementById("calendarTaskModal");
+        var calendarTaskForm = document.getElementById("calendarTaskForm");
+        var calendarTaskTitle = document.getElementById("calendarTaskTitle");
+        var calendarTaskDay = document.getElementById("calendarTaskDay");
+        var calendarTaskType = document.getElementById("calendarTaskType");
+        var calendarTaskDetails = document.getElementById("calendarTaskDetails");
+        var cancelTaskModalBtn = document.getElementById("cancelTaskModalBtn");
 
         function guardFacultyRole() {
           var role = localStorage.getItem("userRole");
@@ -468,6 +524,59 @@
           saveNotifications(items);
           renderNotifications();
         }
+        function getStoredCalendarTasks() {
+          try {
+            var parsed = JSON.parse(localStorage.getItem("calendarTasks") || "[]");
+            return Array.isArray(parsed) ? parsed.filter(function (item) {
+              return item && item.title && Number(item.day) >= 1 && Number(item.day) <= 30;
+            }).map(function (item) {
+              return {
+                id: item.id || "task-" + Date.now(),
+                day: Number(item.day),
+                title: item.title,
+                type: ["quiz", "classwork", "consultation", "deadline"].indexOf(item.type) >= 0 ? item.type : "deadline",
+                details: item.details || "Faculty-added task"
+              };
+            }) : [];
+          } catch (error) {
+            return [];
+          }
+        }
+        function saveStoredCalendarTasks(items) {
+          localStorage.setItem("calendarTasks", JSON.stringify(items));
+        }
+        function getCalendarDayCell(day) {
+          return Array.prototype.slice.call(calendarGrid.querySelectorAll(".calendar-day:not(.muted)")).filter(function (cell) {
+            var date = cell.querySelector(".calendar-date");
+            return date && parseInt(date.textContent, 10) === day;
+          })[0];
+        }
+        function renderCalendarEvents() {
+          var events = DEFAULT_CALENDAR_EVENTS.concat(getStoredCalendarTasks()).sort(function (a, b) {
+            return a.day - b.day;
+          });
+          calendarGrid.querySelectorAll(".event-chip").forEach(function (chip) { chip.remove(); });
+          upcomingEventList.innerHTML = "";
+          events.forEach(function (eventItem) {
+            var cell = getCalendarDayCell(eventItem.day);
+            if (cell) {
+              var chip = document.createElement("span");
+              chip.className = "event-chip " + eventItem.type;
+              chip.textContent = eventItem.title;
+              cell.appendChild(chip);
+            }
+            if (eventItem.day >= 26 || eventItem.id.indexOf("task-") === 0) {
+              var li = document.createElement("li");
+              var strong = document.createElement("strong");
+              var span = document.createElement("span");
+              strong.textContent = eventItem.title;
+              span.textContent = "Apr " + String(eventItem.day).padStart(2, "0") + " • " + eventItem.details;
+              li.appendChild(strong);
+              li.appendChild(span);
+              upcomingEventList.appendChild(li);
+            }
+          });
+        }
         function settingEnabled(key) { return localStorage.getItem(key) === "true"; }
         function applyAccessibilityPreferences() {
           if (settingEnabled("facultyHighContrast")) {
@@ -485,10 +594,21 @@
         function closeNotifications() { notifPanel.classList.remove("open"); notifButton.setAttribute("aria-expanded", "false"); }
         function openLogoutModal() { logoutModal.classList.add("open"); logoutModal.setAttribute("aria-hidden", "false"); confirmLogout.focus(); }
         function closeLogoutModal() { logoutModal.classList.remove("open"); logoutModal.setAttribute("aria-hidden", "true"); avatarButton.focus(); }
+        function openTaskModal() {
+          calendarTaskModal.classList.add("open");
+          calendarTaskModal.setAttribute("aria-hidden", "false");
+          window.setTimeout(function () { calendarTaskTitle.focus(); }, 0);
+        }
+        function closeTaskModal() {
+          calendarTaskModal.classList.remove("open");
+          calendarTaskModal.setAttribute("aria-hidden", "true");
+          openTaskModalBtn.focus();
+        }
 
         avatarButton.textContent = "M";
         applyAccessibilityPreferences();
         renderNotifications();
+        renderCalendarEvents();
 
         avatarButton.addEventListener("click", function (event) {
           event.stopPropagation();
@@ -510,6 +630,35 @@
         seedNotifBtn.addEventListener("click", function (event) {
           event.stopPropagation();
           saveNotifications(DEFAULT_NOTIFICATIONS.slice()); renderNotifications(); showToast("success", "Notification feed reset.");
+        });
+        openTaskModalBtn.addEventListener("click", openTaskModal);
+        cancelTaskModalBtn.addEventListener("click", closeTaskModal);
+        calendarTaskModal.addEventListener("click", function (event) {
+          if (event.target === calendarTaskModal) { closeTaskModal(); }
+        });
+        calendarTaskForm.addEventListener("submit", function (event) {
+          event.preventDefault();
+          var day = Number(calendarTaskDay.value);
+          var title = calendarTaskTitle.value.trim();
+          if (!title || day < 1 || day > 30) {
+            showToast("error", "Enter a task title and April date from 1 to 30.");
+            return;
+          }
+          var tasks = getStoredCalendarTasks();
+          tasks.push({
+            id: "task-" + Date.now(),
+            day: day,
+            title: title,
+            type: calendarTaskType.value,
+            details: calendarTaskDetails.value.trim() || calendarTaskType.options[calendarTaskType.selectedIndex].text
+          });
+          saveStoredCalendarTasks(tasks);
+          renderCalendarEvents();
+          addNotification("Calendar", title + " was added to April " + day + ".");
+          calendarTaskForm.reset();
+          calendarTaskDay.value = String(day);
+          closeTaskModal();
+          showToast("success", "Calendar task added.");
         });
         profileMenu.addEventListener("click", function (event) {
           event.stopPropagation();
@@ -542,6 +691,7 @@
           if (event.key === "Escape") {
             closeMenu(); closeNotifications();
             if (logoutModal.classList.contains("open")) { closeLogoutModal(); }
+            if (calendarTaskModal.classList.contains("open")) { closeTaskModal(); }
           }
         });
       })();
