@@ -7,589 +7,741 @@
     <style>
       :root {
         --primary: #800000;
+        --primary-dark: #600000;
         --accent: #ffb800;
-        --bg-light: #f5f6f8;
+        --bg-light: #f8f9fa;
         --surface: #ffffff;
-        --text-main: #1e242b;
-        --text-muted: #627080;
-        --border: #d4dbe4;
-        --ok: #1d7a42;
-        --warn: #b54708;
-        --danger: #b42318;
-        --radius-sm: 8px;
-        --radius-md: 12px;
-        --shadow-sm: 0 8px 20px rgba(14, 18, 24, 0.08);
-        --shadow-lg: 0 16px 30px rgba(14, 18, 24, 0.12);
-        --focus-ring: 0 0 0 3px rgba(128, 0, 0, 0.2);
+        --surface-soft: #fffaf0;
+        --text: #1f2328;
+        --text-muted: #666;
+        --border: #e3d5c4;
+        --success: #4caf50;
+        --warning: #ffc107;
+        --danger: #e53935;
+        --status-success: #4caf50;
+        --status-warning: #ffc107;
+        --status-danger: #e53935;
+        --shadow: 0 18px 38px rgba(74, 20, 14, 0.12);
       }
 
-      * {
-        box-sizing: border-box;
-      }
-
-      html,
-      body {
+      * { box-sizing: border-box; }
+      html, body {
         margin: 0;
         min-height: 100%;
-        font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
-        background: var(--bg-light);
-        color: var(--text-main);
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background:
+          radial-gradient(circle at top left, rgba(255, 184, 0, 0.14), transparent 24%),
+          linear-gradient(180deg, #fbf5ec 0%, var(--bg-light) 100%);
+        color: var(--text);
       }
-
+      button, input, select { font: inherit; }
+      button { cursor: pointer; min-height: 44px; }
+      :focus-visible { outline: 3px solid rgba(255, 184, 0, 0.58); outline-offset: 2px; }
       .skip-link {
         position: absolute;
-        left: 8px;
         top: -44px;
+        left: 10px;
+        z-index: 1000;
         background: #000;
         color: #fff;
         padding: 8px 12px;
-        border-radius: 6px;
-        z-index: 1000;
+        border-radius: 8px;
       }
-
-      .skip-link:focus {
-        top: 8px;
-      }
-
-      :focus-visible {
-        outline: none;
-        box-shadow: var(--focus-ring);
-      }
+      .skip-link:focus { top: 10px; }
 
       .layout {
         min-height: 100vh;
         display: grid;
-        grid-template-columns: 260px 1fr;
+        grid-template-columns: 270px minmax(0, 1fr);
       }
-
       aside {
-        background: #fff;
-        border-right: 1px solid var(--border);
-        padding: 24px 16px;
+        background: linear-gradient(180deg, #7b1113 0%, #56080a 100%);
+        color: #fff7ec;
+        padding: 22px 16px;
+        border-right: 1px solid rgba(255, 184, 0, 0.28);
       }
-
       .brand {
-        margin-bottom: 22px;
-        border-bottom: 1px solid var(--border);
-        padding-bottom: 14px;
+        padding: 14px 14px 18px;
+        margin-bottom: 18px;
+        border: 1px solid rgba(255, 184, 0, 0.22);
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.07);
       }
-
       .brand h1 {
         margin: 0;
-        font-size: 1.03rem;
+        font-size: 1.08rem;
       }
-
       .brand p {
-        margin: 4px 0 0;
-        color: var(--text-muted);
-        font-size: 0.88rem;
+        margin: 5px 0 0;
+        color: rgba(255, 247, 236, 0.78);
+        font-size: 0.9rem;
       }
-
-      .nav-list {
+      nav ul {
         list-style: none;
         margin: 0;
         padding: 0;
         display: grid;
         gap: 8px;
       }
-
       .nav-btn {
         width: 100%;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.05);
+        color: #fff7ec;
+        padding: 11px 12px;
         text-align: left;
-        border: 1px solid #dfe5ed;
-        background: #f9fbfc;
-        border-radius: 10px;
-        padding: 10px 12px;
-        font: inherit;
-        font-weight: 600;
-        cursor: pointer;
-        color: #33404f;
+        font-weight: 800;
       }
-
+      .nav-btn:hover {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(255, 184, 0, 0.35);
+      }
       .nav-btn.active {
-        border-color: #cfa4a4;
-        background: #fff4f4;
-        color: var(--primary);
+        background: rgba(255, 184, 0, 0.18);
+        border-color: rgba(255, 184, 0, 0.66);
+        box-shadow: inset 4px 0 0 var(--accent);
       }
 
       .content {
+        min-width: 0;
         display: grid;
         grid-template-rows: auto 1fr;
-        min-width: 0;
       }
-
       header {
-        border-bottom: 1px solid var(--border);
-        background: #fff;
-        padding: 12px 24px;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        gap: 12px;
+        gap: 14px;
         flex-wrap: wrap;
+        padding: 16px 24px;
+        background: linear-gradient(90deg, var(--primary) 0%, #8b1517 58%, var(--primary) 100%);
+        color: #fff9ef;
+        border-bottom: 1px solid rgba(255, 184, 0, 0.42);
+        box-shadow: 0 14px 30px rgba(67, 10, 12, 0.16);
       }
-
-      .banner {
-        border: 1px solid #f0d9a7;
-        background: #fff9ec;
-        color: #5e4300;
-        border-radius: 10px;
-        padding: 10px 12px;
-        font-weight: 700;
+      .header-title {
+        display: grid;
+        gap: 3px;
+      }
+      .header-title strong {
+        font-size: 1.02rem;
+      }
+      .header-title span {
+        color: rgba(255, 248, 236, 0.82);
         font-size: 0.9rem;
       }
-
-      .header-right {
+      .header-actions {
         display: flex;
         align-items: center;
+        gap: 10px;
+      }
+      .online-badge {
+        display: inline-flex;
+        align-items: center;
         gap: 8px;
-      }
-
-      .chip {
+        min-height: 44px;
+        border: 1px solid rgba(255, 255, 255, 0.25);
         border-radius: 999px;
-        border: 1px solid #d6e6dd;
-        background: #edf8f0;
-        color: #1e6a39;
-        padding: 4px 10px;
-        font-size: 0.8rem;
-        font-weight: 700;
+        padding: 0 13px;
+        background: rgba(255, 255, 255, 0.1);
+        font-weight: 800;
       }
-
-      .logout {
+      .console-access {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: 999px;
+        padding: 0 13px;
+        background: rgba(255, 255, 255, 0.08);
+        color: rgba(255, 249, 239, 0.9);
+        font-size: 0.88rem;
+        font-weight: 800;
+      }
+      .online-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--success);
+        box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7);
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.55); }
+        70% { transform: scale(1.12); box-shadow: 0 0 0 8px rgba(76, 175, 80, 0); }
+        100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+      }
+      .logout-btn, .primary-btn, .danger-btn, .ghost-btn, .accent-btn {
+        border-radius: 8px;
+        padding: 10px 13px;
+        font-weight: 900;
+        transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+      }
+      .logout-btn, .primary-btn {
         border: 1px solid var(--primary);
         background: var(--primary);
         color: #fff;
-        border-radius: 8px;
-        padding: 8px 12px;
-        font: inherit;
-        font-weight: 700;
-        cursor: pointer;
+      }
+      .logout-btn:hover, .primary-btn:hover {
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+        box-shadow: 0 8px 18px rgba(96, 0, 0, 0.2);
+      }
+      .accent-btn {
+        border: 1px solid #c99600;
+        background: var(--accent);
+        color: #2a1c00;
+      }
+      .ghost-btn {
+        border: 1px solid var(--border);
+        background: #fff;
+        color: var(--text);
+      }
+      .danger-btn {
+        border: 1px solid var(--danger);
+        background: #fff5f3;
+        color: var(--danger);
+      }
+      .button-row {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 10px;
+        flex-wrap: wrap;
       }
 
       main {
         padding: 24px;
         display: grid;
-        gap: 14px;
+        gap: 16px;
         align-content: start;
       }
-
-      .grid {
+      .admin-panel {
+        display: none;
+        gap: 16px;
+      }
+      .admin-panel.active {
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+      .panel-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .panel-head h2 {
+        margin: 0 0 5px;
+        color: var(--primary);
+      }
+      .panel-head p {
+        margin: 0;
+        color: var(--text-muted);
+        line-height: 1.5;
+      }
+      .card, .metric-card {
+        background: linear-gradient(180deg, var(--surface) 0%, #fffaf4 100%);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+      }
+      .card {
+        padding: 16px;
+      }
+      .metric-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 12px;
       }
-
-      .card {
-        background: #fff;
-        border: 1px solid var(--border);
-        border-radius: var(--radius-md);
-        box-shadow: var(--shadow-sm);
+      .metric-card {
+        padding: 15px;
+      }
+      .metric-card span {
+        display: block;
+        color: var(--text-muted);
+        font-size: 0.84rem;
+        margin-bottom: 8px;
+      }
+      .metric-card strong {
+        color: var(--primary);
+        font-size: 1.2rem;
+      }
+      .terminal {
+        height: 360px;
+        overflow: auto;
+        margin: 0;
         padding: 14px;
+        border-radius: 8px;
+        background: linear-gradient(180deg, #2b090d 0%, #15070a 100%);
+        color: #fff1d8;
+        border: 1px solid rgba(255, 184, 0, 0.24);
+        font-family: Consolas, "Courier New", monospace;
+        font-size: 0.9rem;
+        line-height: 1.55;
+        white-space: pre-wrap;
       }
 
-      .card h2 {
-        margin: 0 0 4px;
-        font-size: 0.95rem;
+      .table-wrap {
+        width: 100%;
+        overflow-x: auto;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: #fff;
+      }
+      table {
+        width: 100%;
+        min-width: 760px;
+        border-collapse: collapse;
+      }
+      th, td {
+        padding: 12px;
+        border-bottom: 1px solid #eee2d2;
+        text-align: left;
+        vertical-align: middle;
+      }
+      th {
+        background: #f7efe3;
+        color: var(--primary);
+        font-size: 0.86rem;
+      }
+      tbody tr:nth-child(even) {
+        background: #fffaf3;
+      }
+      tbody tr:last-child td {
+        border-bottom: 0;
+      }
+      .row-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .small-btn {
+        min-height: 36px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: #fff;
+        color: var(--text);
+        padding: 7px 9px;
+        font-weight: 800;
+      }
+      .small-btn:hover {
+        border-color: rgba(128, 0, 0, 0.38);
+        color: var(--primary);
+      }
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        border-radius: 999px;
+        padding: 6px 10px;
+        font-weight: 900;
+        border: 1px solid transparent;
+        white-space: nowrap;
+      }
+      .status-badge::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: currentColor;
+      }
+      .status-active, .status-operational {
+        color: #1b6d35;
+        background: #edf8f0;
+        border-color: #bce3c5;
+      }
+      .status-inactive, .status-degraded, .status-pending {
+        color: #855b00;
+        background: #fff8dd;
+        border-color: #ead37a;
+      }
+      .status-suspended, .status-maintenance {
+        color: #a32018;
+        background: #fff0ee;
+        border-color: #e7b6ad;
       }
 
-      .metric {
-        font-size: 1.22rem;
+      .backup-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+      .progress-track {
+        width: 100%;
+        height: 12px;
+        margin-top: 10px;
+        border-radius: 999px;
+        overflow: hidden;
+        background: #eee5dc;
+        border: 1px solid #dfd0bf;
+      }
+      .progress-fill {
+        width: 0%;
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+        transition: width 0.25s ease;
+      }
+      .field {
+        display: grid;
+        gap: 6px;
+      }
+      .field label {
+        color: var(--primary);
+        font-weight: 900;
+        font-size: 0.86rem;
+      }
+      .field select, .field input {
+        width: 100%;
+        min-height: 44px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: #fff;
+        padding: 9px 10px;
+        color: var(--text);
+      }
+      .backup-progress {
+        display: none;
+        margin-top: 12px;
+      }
+      .backup-progress.active {
+        display: block;
+      }
+
+      .api-status-card {
+        display: grid;
+        grid-template-columns: 90px 1.3fr 1fr 100px 120px;
+        gap: 10px;
+        align-items: center;
+        padding: 12px;
+        border-bottom: 1px solid #eee2d2;
+        transition: background 0.2s ease, transform 0.2s ease;
+      }
+      .api-status-card:last-child { border-bottom: 0; }
+      .method-chip {
+        display: inline-flex;
+        justify-content: center;
+        border-radius: 999px;
+        padding: 6px 9px;
+        background: #f7efe3;
+        color: var(--primary);
+        font-weight: 900;
+      }
+      .spinner {
+        display: none;
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(128, 0, 0, 0.24);
+        border-top-color: var(--primary);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+      .loading .spinner { display: inline-block; }
+      @keyframes spin { to { transform: rotate(360deg); } }
+
+      .modal {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        display: none;
+        place-items: center;
+        padding: 20px;
+        background: rgba(25, 14, 13, 0.48);
+      }
+      .modal.open { display: grid; }
+      .modal-card {
+        width: min(460px, 100%);
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: #fffdfa;
+        box-shadow: var(--shadow);
+        padding: 18px;
+      }
+      .modal-card h2 {
+        margin: 0 0 8px;
+        color: var(--primary);
+      }
+      .modal-card p {
+        margin: 0 0 14px;
+        color: var(--text-muted);
+        line-height: 1.45;
+      }
+      .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 16px;
+        flex-wrap: wrap;
+      }
+      .toast-wrap {
+        position: fixed;
+        right: 14px;
+        bottom: 14px;
+        z-index: 120;
+        display: grid;
+        gap: 10px;
+      }
+      .toast {
+        min-width: 250px;
+        max-width: 360px;
+        border-radius: 8px;
+        border: 1px solid rgba(128, 0, 0, 0.22);
+        border-left: 5px solid var(--primary);
+        background: #fffdfa;
+        color: var(--text);
+        box-shadow: var(--shadow);
+        padding: 12px 13px;
         font-weight: 800;
       }
 
-      .metric.ok {
-        color: var(--ok);
+      @media (max-width: 1020px) {
+        .layout { grid-template-columns: 1fr; }
+        aside { border-right: 0; border-bottom: 1px solid rgba(255, 184, 0, 0.28); }
+        nav ul { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .api-status-card { grid-template-columns: 1fr 1fr; }
       }
-
-      .metric.warn {
-        color: var(--warn);
+      @media (max-width: 768px) {
+        header, main { padding: 16px; }
+        nav ul, .backup-grid, .metric-grid { grid-template-columns: 1fr; }
+        .panel-head { display: grid; }
+        .button-row { justify-content: stretch; }
+        .button-row button, .logout-btn { width: 100%; }
+        .header-actions { width: 100%; justify-content: space-between; }
+        .api-status-card { grid-template-columns: 1fr; }
       }
-
-      .metric.danger {
-        color: var(--danger);
-      }
-
-      .terminal {
-        background: #111827;
-        border-radius: 10px;
-        color: #c9e1ff;
-        border: 1px solid #1f2d45;
-        box-shadow: var(--shadow-lg);
-        padding: 12px;
-        overflow: auto;
-        font-family: Consolas, "Courier New", monospace;
-        font-size: 0.85rem;
-        line-height: 1.45;
-        min-height: 260px;
-      }
-
-      .toggles {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 10px;
-      }
-
-      .toggle-item {
-        border: 1px solid var(--border);
-        border-radius: 10px;
-        background: #fff;
-        padding: 12px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 10px;
-      }
-
-      .switch {
-        width: 44px;
-        height: 24px;
-        border-radius: 999px;
-        border: 1px solid #cad3df;
-        background: #e7ebf0;
-        position: relative;
-        cursor: not-allowed;
-      }
-
-      .switch::before {
-        content: "";
-        position: absolute;
-        left: 2px;
-        top: 2px;
-        width: 18px;
-        height: 18px;
-        border-radius: 50%;
-        background: #fff;
-        border: 1px solid #c6cfdb;
-      }
-
-      .switch[aria-checked="true"] {
-        background: #fcefbf;
-        border-color: #e8cb72;
-      }
-
-      .switch[aria-checked="true"]::before {
-        left: 22px;
-      }
-
-      .toast-wrap {
-        position: fixed;
-        right: 12px;
-        bottom: 12px;
-        display: grid;
-        gap: 8px;
-        z-index: 90;
-      }
-
-      .toast {
-        background: #fff;
-        border: 1px solid var(--border);
-        border-left: 4px solid var(--danger);
-        border-radius: 8px;
-        padding: 10px 12px;
-        box-shadow: var(--shadow-sm);
-        font-size: 0.9rem;
-        min-width: 230px;
-      }
-
-      @media (max-width: 980px) {
-        .layout {
-          grid-template-columns: 1fr;
-        }
-
-        aside {
-          border-right: 0;
-          border-bottom: 1px solid var(--border);
-        }
-
-        .grid {
-          grid-template-columns: 1fr;
-        }
-
-        .toggles {
-          grid-template-columns: 1fr;
-        }
-      }
-
-      @media (max-width: 640px) {
-        header,
-        main {
-          padding: 14px;
-        }
-      }
-
       @media (prefers-reduced-motion: reduce) {
-        *,
-        *::before,
-        *::after {
+        *, *::before, *::after {
+          animation-duration: 0.001ms !important;
           transition-duration: 0.001ms !important;
-        }
-      }
-      body.perpetual-shell {
-        background:
-          radial-gradient(circle at top left, rgba(214, 170, 67, 0.18), transparent 24%),
-          linear-gradient(180deg, #f7efe5 0%, #f3e9de 100%);
-      }
-
-      body.perpetual-shell aside {
-        background:
-          linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 18%),
-          linear-gradient(180deg, #7b1113 0%, #58090b 100%);
-        border-right: 1px solid rgba(214, 170, 67, 0.35);
-        color: #fff8ef;
-      }
-
-      body.perpetual-shell .brand {
-        padding: 14px 14px 18px;
-        margin-bottom: 20px;
-        border-bottom: 1px solid rgba(214, 170, 67, 0.28);
-        background: linear-gradient(
-          135deg,
-          rgba(255, 255, 255, 0.09),
-          rgba(255, 255, 255, 0.02)
-        );
-        border-radius: 18px;
-      }
-
-      body.perpetual-shell .brand h1,
-      body.perpetual-shell header,
-      body.perpetual-shell .banner,
-      body.perpetual-shell #adminChip {
-        color: #fff8ef;
-      }
-
-      body.perpetual-shell .brand p {
-        color: rgba(255, 248, 239, 0.74);
-      }
-
-      body.perpetual-shell .nav-btn {
-        border-radius: 14px;
-        border: 1px solid transparent;
-        background: rgba(255, 255, 255, 0.04);
-        color: #fff4ea;
-      }
-
-      body.perpetual-shell .nav-btn:hover {
-        background: rgba(255, 255, 255, 0.1);
-        border-color: rgba(214, 170, 67, 0.42);
-        color: #fffef9;
-      }
-
-      body.perpetual-shell .nav-btn.active {
-        background: linear-gradient(
-          90deg,
-          rgba(214, 170, 67, 0.28),
-          rgba(214, 170, 67, 0.1)
-        );
-        border-color: rgba(214, 170, 67, 0.72);
-        color: #fff9ef;
-        box-shadow: inset 3px 0 0 #d6aa43;
-      }
-
-      body.perpetual-shell .content {
-        background:
-          radial-gradient(circle at top right, rgba(214, 170, 67, 0.14), transparent 22%),
-          linear-gradient(180deg, rgba(255, 252, 247, 0.7) 0%, rgba(244, 235, 225, 0.7) 100%);
-      }
-
-      body.perpetual-shell header {
-        background: linear-gradient(90deg, #7b1113 0%, #931719 58%, #7e1114 100%);
-        border-bottom: 1px solid rgba(214, 170, 67, 0.42);
-        box-shadow: 0 22px 48px rgba(53, 7, 9, 0.18);
-      }
-
-      body.perpetual-shell .banner,
-      body.perpetual-shell .card,
-      body.perpetual-shell .toggle-item,
-      body.perpetual-shell .toast {
-        background: linear-gradient(180deg, #fffdfa 0%, #fbf6ef 100%);
-        border-color: #e0d0bc;
-        box-shadow: 0 18px 38px rgba(58, 18, 13, 0.12);
-      }
-
-      body.perpetual-shell .card h2,
-      body.perpetual-shell .metric {
-        color: #7b1113;
-      }
-
-      body.perpetual-shell .terminal {
-        background: linear-gradient(180deg, #3f0d11 0%, #1d0a10 100%);
-        border-color: rgba(214, 170, 67, 0.24);
-        color: #f9efdd;
-      }
-
-      body.perpetual-shell .chip {
-        border-color: rgba(214, 170, 67, 0.38);
-        background: rgba(255, 255, 255, 0.08);
-        color: #fff8ef;
-      }
-
-      body.perpetual-shell .logout {
-        background: linear-gradient(180deg, #7b1113 0%, #58090b 100%);
-        border-color: rgba(214, 170, 67, 0.38);
-        color: #fff8ef;
-      }
-
-      @media (max-width: 980px) {
-        body.perpetual-shell aside {
-          border-right: 0;
-          border-bottom: 1px solid rgba(214, 170, 67, 0.28);
         }
       }
     </style>
   </head>
-  <body class="perpetual-shell admin-shell">
+  <body>
     <a class="skip-link" href="#mainContent">Skip to main content</a>
 
     <div class="layout">
       <aside aria-label="SysAdmin modules">
         <div class="brand">
           <h1>UPHSD SysAdmin</h1>
-          <p>Technical Operations Console</p>
         </div>
-
-        <nav>
-          <ul class="nav-list">
-            <li>
-              <button
-                class="nav-btn active"
-                type="button"
-                data-module="System Logs"
-              >
-                System Logs
-              </button>
-            </li>
-            <li>
-              <button class="nav-btn" type="button" data-module="User Roles">
-                User Roles
-              </button>
-            </li>
-            <li>
-              <button
-                class="nav-btn"
-                type="button"
-                data-module="Database Backup"
-              >
-                Database Backup
-              </button>
-            </li>
-            <li>
-              <button class="nav-btn" type="button" data-module="API Status">
-                API Status
-              </button>
-            </li>
+        <nav aria-label="Admin module navigation">
+          <ul>
+            <li><button class="nav-btn active" type="button" data-panel="logsPanel">System Logs</button></li>
+            <li><button class="nav-btn" type="button" data-panel="rolesPanel">User Roles</button></li>
+            <li><button class="nav-btn" type="button" data-panel="backupPanel">Database Backup</button></li>
+            <li><button class="nav-btn" type="button" data-panel="apiPanel">API Status</button></li>
           </ul>
         </nav>
       </aside>
 
       <div class="content">
         <header>
-          <div class="banner">
-            Technical Dashboard - Admin modules disabled for Phase 1
+          <div class="header-title">
+            <strong>UPHSD SysAdmin Console</strong>
           </div>
-          <div class="header-right">
-            <span class="chip" id="adminChip">SysAdmin Online</span>
-            <button class="logout" id="logoutBtn" type="button">Logout</button>
+          <div class="header-actions">
+            <span class="console-access" id="consoleAccess">Console Access: Dr. Marian Rivera (SysAdmin Console)</span>
+            <span class="online-badge" role="status"><span class="online-dot" aria-hidden="true"></span> Online</span>
+            <button class="logout-btn" id="logoutBtn" type="button">Logout</button>
           </div>
         </header>
 
         <main id="mainContent" tabindex="-1">
-          <section class="grid" aria-label="Uptime indicators">
-            <article class="card">
-              <h2>Server Uptime</h2>
-              <p class="metric ok">99.98%</p>
-            </article>
-            <article class="card">
-              <h2>Failed Jobs</h2>
-              <p class="metric warn">2 / 180</p>
-            </article>
-            <article class="card">
-              <h2>Unauthorized Attempts</h2>
-              <p class="metric danger">5</p>
-            </article>
+          <!-- HCI: Visibility - Live log timestamp & status indicators -->
+          <section class="admin-panel active" id="logsPanel" aria-labelledby="logsTitle">
+            <div class="panel-head">
+              <div>
+                <h2 id="logsTitle">System Logs</h2>
+                <p>Timestamped technical activity for faculty sessions, grading saves, cache events, and admin actions.</p>
+              </div>
+              <div class="button-row">
+                <button class="primary-btn" id="refreshLogsBtn" type="button">Refresh Logs</button>
+                <button class="danger-btn" id="clearLogsBtn" type="button">Clear Logs</button>
+              </div>
+            </div>
+            <pre class="terminal" id="logPanel" role="status" aria-live="polite"></pre>
           </section>
 
-          <section class="card" aria-labelledby="terminalTitle">
-            <h2 id="terminalTitle">Mock Terminal Logs</h2>
-            <pre class="terminal" id="logPanel">
-[08:12:02] boot sequence initialized
-[08:12:04] api status check: partial availability
-[08:12:07] user role sync: pending due to maintenance window
-[08:12:11] backup service: standby mode enabled
-[08:12:15] alert: phase 1 modules are UI-locked
-
--- UPDATE PLACEHOLDER: connect log stream source when backend is ready --</pre
-            >
+          <section class="admin-panel" id="rolesPanel" aria-labelledby="rolesTitle">
+            <div class="panel-head">
+              <div>
+                <h2 id="rolesTitle">User Roles</h2>
+                <p>Role assignments and account states for system operators, faculty, and service accounts.</p>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>User ID</th>
+                    <th>Full Name</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Last Active</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="usersBody"></tbody>
+              </table>
+            </div>
           </section>
 
-          <section class="toggles" aria-label="Disabled admin controls">
-            <article class="toggle-item">
+          <section class="admin-panel" id="backupPanel" aria-labelledby="backupTitle">
+            <div class="panel-head">
               <div>
-                <strong>Auto Backup</strong>
-                <p>Temporarily disabled for prototype.</p>
+                <h2 id="backupTitle">Database Backup</h2>
+                <p>Mock backup schedule, retention, and storage visibility for the grading database.</p>
               </div>
-              <button
-                class="switch"
-                type="button"
-                aria-checked="false"
-                aria-label="Auto backup toggle disabled"
-              ></button>
-            </article>
-
-            <article class="toggle-item">
-              <div>
-                <strong>Role Provisioning</strong>
-                <p>Temporarily disabled for prototype.</p>
+              <button class="primary-btn" id="manualBackupBtn" type="button">Trigger Manual Backup</button>
+            </div>
+            <!-- DEMO: Mock backup progress & localStorage persistence -->
+            <div class="backup-grid">
+              <article class="metric-card">
+                <span>Last Successful Backup</span>
+                <strong id="lastBackupDate">Apr 18, 2026</strong>
+                <p id="lastBackupTime">09:30 AM</p>
+              </article>
+              <article class="metric-card">
+                <span>Next Scheduled Run</span>
+                <strong>Apr 19, 2026</strong>
+                <p>02:00 AM (Daily Cron)</p>
+              </article>
+              <article class="metric-card">
+                <span>Storage Usage</span>
+                <strong>1.4 GB / 5.0 GB</strong>
+                <div class="progress-track" role="progressbar" aria-label="Storage usage" aria-valuemin="0" aria-valuemax="100" aria-valuenow="28">
+                  <div class="progress-fill" style="width: 28%"></div>
+                </div>
+              </article>
+              <article class="metric-card">
+                <div class="field">
+                  <label for="retentionSelect">Retention Policy</label>
+                  <select id="retentionSelect">
+                    <option value="7">7 Days</option>
+                    <option value="14">14 Days</option>
+                    <option value="30">30 Days</option>
+                    <option value="90">90 Days</option>
+                  </select>
+                </div>
+              </article>
+            </div>
+            <div class="backup-progress" id="backupProgressWrap">
+              <strong id="backupProgressText">Backing up... 0%</strong>
+              <div class="progress-track" role="progressbar" aria-label="Manual backup progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="backupProgressTrack">
+                <div class="progress-fill" id="backupProgressFill"></div>
               </div>
-              <button
-                class="switch"
-                type="button"
-                aria-checked="true"
-                aria-label="Role provisioning toggle disabled"
-              ></button>
-            </article>
-
-            <article class="toggle-item">
-              <div>
-                <strong>Incident Webhook</strong>
-                <p>Temporarily disabled for prototype.</p>
-              </div>
-              <button
-                class="switch"
-                type="button"
-                aria-checked="false"
-                aria-label="Incident webhook toggle disabled"
-              ></button>
-            </article>
-
-            <article class="toggle-item">
-              <div>
-                <strong>API Write Access</strong>
-                <p>Temporarily disabled for prototype.</p>
-              </div>
-              <button
-                class="switch"
-                type="button"
-                aria-checked="false"
-                aria-label="API write access toggle disabled"
-              ></button>
-            </article>
+            </div>
           </section>
+
+          <section class="admin-panel" id="apiPanel" aria-labelledby="apiTitle">
+            <div class="panel-head">
+              <div>
+                <h2 id="apiTitle">API Status</h2>
+                <p>Mock endpoint health, latency, and uptime for grading workflows.</p>
+              </div>
+              <button class="accent-btn" id="healthCheckBtn" type="button"><span class="spinner" aria-hidden="true"></span> Run Health Check</button>
+            </div>
+            <!-- DEMO: Mock latency simulation -->
+            <div class="card" id="apiList"></div>
+          </section>
+
+          <!-- LEADER UPDATE: Replace mockState with backend API when available -->
         </main>
       </div>
     </div>
 
-    <div
-      class="toast-wrap"
-      id="toastWrap"
-      aria-live="polite"
-      aria-atomic="true"
-    ></div>
+    <section class="modal" id="confirmModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+      <div class="modal-card">
+        <h2 id="confirmTitle">Confirm action</h2>
+        <p id="confirmMessage">Are you sure?</p>
+        <div class="modal-actions">
+          <button class="ghost-btn" id="cancelConfirmBtn" type="button">Cancel</button>
+          <button class="primary-btn" id="confirmActionBtn" type="button">Confirm</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="modal" id="roleModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="roleTitle">
+      <div class="modal-card">
+        <h2 id="roleTitle">Edit Role</h2>
+        <p id="roleUserLabel">Select a new role for this account.</p>
+        <div class="field">
+          <label for="roleSelect">Role</label>
+          <select id="roleSelect">
+            <option value="Faculty">Faculty</option>
+            <option value="SysAdmin">SysAdmin</option>
+            <option value="ReadOnly">ReadOnly</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button class="ghost-btn" id="cancelRoleBtn" type="button">Cancel</button>
+          <button class="primary-btn" id="saveRoleBtn" type="button">Save Role</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="toast-wrap" id="toastWrap" aria-live="polite" aria-atomic="true"></div>
 
     <script>
       (function () {
+        const facultyName = "Dr. Marian Rivera";
+        var DEFAULT_STATE = {
+          users: [
+            { id: "ADM-001", name: "Homer T. Favenir", role: "SysAdmin", status: "Active", lastActive: "Today, 08:30 AM" },
+            { id: "FAC-024", name: "Maria S. Santos", role: "Faculty", status: "Active", lastActive: "Yesterday, 03:15 PM" },
+            { id: "FAC-018", name: "John A. Cruz", role: "Faculty", status: "Inactive", lastActive: "2 weeks ago" },
+            { id: "FAC-041", name: "Grace L. Tan", role: "Faculty", status: "Inactive", lastActive: "1 month ago" },
+            { id: "BOT-007", name: "System_AutoSync", role: "Service", status: "Active", lastActive: "N/A" }
+          ],
+          logs: [
+            "[10:14:22] Faculty login: homer.favenir@uphsd.edu",
+            "[10:14:48] Session token issued: FAC-024",
+            "[10:15:01] Grade draft saved: BSCS-2207",
+            "[10:15:33] Student record viewed: 2026-FAC-244",
+            "[10:16:04] API pulse check completed: 4 operational, 1 maintenance",
+            "[10:16:45] Cache cleared by sysadmin",
+            "[10:17:11] Backup schedule verified: daily 02:00 AM",
+            "[10:18:02] Role table synchronized from mock store",
+            "[10:18:44] Attendance update queued: BSCS-2A",
+            "[10:19:05] Audit snapshot prepared for class report"
+          ],
+          backup: {
+            lastDate: "Apr 18, 2026",
+            lastTime: "09:30 AM",
+            retention: "30"
+          },
+          api: [
+            { method: "GET", endpoint: "/api/v1/students", status: "Operational", latency: "42ms", uptime: "99.98%" },
+            { method: "POST", endpoint: "/api/v1/grades", status: "Operational", latency: "68ms", uptime: "99.95%" },
+            { method: "GET", endpoint: "/api/v1/attendance", status: "Degraded", latency: "312ms", uptime: "98.40%" },
+            { method: "PUT", endpoint: "/api/v1/transmute", status: "Operational", latency: "55ms", uptime: "99.99%" },
+            { method: "DELETE", endpoint: "/api/v1/drafts", status: "Maintenance", latency: "N/A", uptime: "97.20%" }
+          ]
+        };
+
         var toastWrap = document.getElementById("toastWrap");
-        var logoutBtn = document.getElementById("logoutBtn");
+        var usersBody = document.getElementById("usersBody");
         var logPanel = document.getElementById("logPanel");
+        var apiList = document.getElementById("apiList");
+        var confirmModal = document.getElementById("confirmModal");
+        var confirmTitle = document.getElementById("confirmTitle");
+        var confirmMessage = document.getElementById("confirmMessage");
+        var cancelConfirmBtn = document.getElementById("cancelConfirmBtn");
+        var confirmActionBtn = document.getElementById("confirmActionBtn");
+        var roleModal = document.getElementById("roleModal");
+        var roleUserLabel = document.getElementById("roleUserLabel");
+        var roleSelect = document.getElementById("roleSelect");
+        var cancelRoleBtn = document.getElementById("cancelRoleBtn");
+        var saveRoleBtn = document.getElementById("saveRoleBtn");
+        var consoleAccess = document.getElementById("consoleAccess");
+        var activeConfirmAction = null;
+        var activeRoleUserId = null;
+        var activeModal = null;
+        var backupTimer = null;
+        var sysAdminState = loadState();
 
         function guardAdminRole() {
           var role = localStorage.getItem("userRole");
@@ -598,59 +750,313 @@
             return false;
           }
           if (role !== "sysadmin") {
-            if (role === "faculty") {
-              window.location.href = "dashboard.html";
-            } else {
-              window.location.href = "index.html";
-            }
+            window.location.href = role === "faculty" ? "dashboard.html" : "index.html";
             return false;
           }
           return true;
         }
+        if (!guardAdminRole()) { return; }
 
-        if (!guardAdminRole()) {
-          return;
+        function clone(value) {
+          return JSON.parse(JSON.stringify(value));
         }
-
+        function loadState() {
+          var state = clone(DEFAULT_STATE);
+          try {
+            var saved = JSON.parse(localStorage.getItem("sysAdminState") || "{}");
+            if (saved && typeof saved === "object") {
+              if (Array.isArray(saved.users)) { state.users = saved.users; }
+              if (Array.isArray(saved.logs)) { state.logs = saved.logs; }
+              if (saved.backup) { state.backup = Object.assign(state.backup, saved.backup); }
+              if (Array.isArray(saved.api)) { state.api = saved.api; }
+            }
+            var savedUsers = JSON.parse(localStorage.getItem("mockUsers") || "null");
+            var savedBackup = JSON.parse(localStorage.getItem("backupState") || "null");
+            var savedApi = JSON.parse(localStorage.getItem("apiStatus") || "null");
+            if (Array.isArray(savedUsers)) { state.users = savedUsers; }
+            if (savedBackup) { state.backup = Object.assign(state.backup, savedBackup); }
+            if (Array.isArray(savedApi)) { state.api = savedApi; }
+          } catch (error) {
+            state = clone(DEFAULT_STATE);
+          }
+          return state;
+        }
+        function saveState() {
+          localStorage.setItem("sysAdminState", JSON.stringify(sysAdminState));
+          localStorage.setItem("mockUsers", JSON.stringify(sysAdminState.users));
+          localStorage.setItem("backupState", JSON.stringify(sysAdminState.backup));
+          localStorage.setItem("apiStatus", JSON.stringify(sysAdminState.api));
+        }
+        function normalizeUserStatuses() {
+          sysAdminState.users = sysAdminState.users.map(function (user) {
+            if (user.status === "Suspended") {
+              user.status = "Inactive";
+            }
+            return user;
+          });
+        }
         function showToast(message) {
           var toast = document.createElement("div");
           toast.className = "toast";
           toast.textContent = message;
           toastWrap.appendChild(toast);
+          window.setTimeout(function () { toast.remove(); }, 3000);
+        }
+        function formatTime() {
+          return new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+        }
+        function formatBackupDate(date) {
+          return date.toLocaleDateString([], { month: "short", day: "numeric", year: "numeric" });
+        }
+        function formatBackupTime(date) {
+          return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+        }
+        function addLog(message) {
+          sysAdminState.logs.push("[" + formatTime() + "] " + message);
+          if (sysAdminState.logs.length > 80) { sysAdminState.logs = sysAdminState.logs.slice(-80); }
+          saveState();
+          renderLogs();
+        }
+        function statusClass(status) {
+          var normalized = status.toLowerCase();
+          if (normalized === "active" || normalized === "operational") { return "status-active status-operational"; }
+          if (normalized === "inactive" || normalized === "degraded" || normalized === "reset pending") { return "status-inactive status-degraded status-pending"; }
+          return "status-suspended status-maintenance";
+        }
+        function renderLogs() {
+          logPanel.textContent = sysAdminState.logs.join("\n");
+          logPanel.scrollTop = logPanel.scrollHeight;
+        }
+        function renderUsers() {
+          usersBody.innerHTML = "";
+          sysAdminState.users.forEach(function (user) {
+            var row = document.createElement("tr");
+            var actions = user.role === "Service"
+              ? '<button class="small-btn" type="button" data-action="viewLogs" data-id="' + user.id + '">View Logs</button>'
+              : '<button class="small-btn" type="button" data-action="editRole" data-id="' + user.id + '">Edit Role</button> <button class="small-btn" type="button" data-action="resetPass" data-id="' + user.id + '">Reset Pass</button>';
+            row.innerHTML =
+              "<td>" + user.id + "</td>" +
+              "<td>" + user.name + "</td>" +
+              "<td><strong>" + user.role + "</strong></td>" +
+              '<td><span class="status-badge ' + statusClass(user.status) + '">' + user.status + "</span></td>" +
+              "<td>" + user.lastActive + "</td>" +
+              '<td><div class="row-actions">' + actions + "</div></td>";
+            usersBody.appendChild(row);
+          });
+        }
+        function renderBackup() {
+          document.getElementById("lastBackupDate").textContent = sysAdminState.backup.lastDate;
+          document.getElementById("lastBackupTime").textContent = sysAdminState.backup.lastTime;
+          document.getElementById("retentionSelect").value = sysAdminState.backup.retention;
+        }
+        function renderApi() {
+          apiList.innerHTML = "";
+          sysAdminState.api.forEach(function (item) {
+            var row = document.createElement("div");
+            row.className = "api-status-card";
+            row.innerHTML =
+              '<span class="method-chip">' + item.method + "</span>" +
+              "<strong>" + item.endpoint + "</strong>" +
+              '<span class="status-badge ' + statusClass(item.status) + '">' + item.status + "</span>" +
+              "<span>" + item.latency + "</span>" +
+              "<span>" + item.uptime + "</span>";
+            apiList.appendChild(row);
+          });
+        }
+        function renderAll() {
+          renderLogs();
+          renderUsers();
+          renderBackup();
+          renderApi();
+        }
+        function openModal(modal, focusTarget) {
+          activeModal = modal;
+          modal.classList.add("open");
+          modal.setAttribute("aria-hidden", "false");
+          if (focusTarget) { focusTarget.focus(); }
+        }
+        function closeModal(modal) {
+          if (activeModal === modal) { activeModal = null; }
+          modal.classList.remove("open");
+          modal.setAttribute("aria-hidden", "true");
+        }
+        function confirmAction(title, message, action) {
+          confirmTitle.textContent = title;
+          confirmMessage.textContent = message;
+          activeConfirmAction = action;
+          openModal(confirmModal, cancelConfirmBtn);
+        }
+        function findUser(id) {
+          return sysAdminState.users.filter(function (user) { return user.id === id; })[0];
+        }
+        function openRoleEditor(userId) {
+          var user = findUser(userId);
+          if (!user) { return; }
+          activeRoleUserId = userId;
+          roleUserLabel.textContent = "Select a new role for " + user.name + ".";
+          roleSelect.value = user.role === "Service" ? "ReadOnly" : user.role;
+          openModal(roleModal, roleSelect);
+        }
+        function runManualBackup() {
+          var button = document.getElementById("manualBackupBtn");
+          var wrap = document.getElementById("backupProgressWrap");
+          var fill = document.getElementById("backupProgressFill");
+          var text = document.getElementById("backupProgressText");
+          var track = document.getElementById("backupProgressTrack");
+          var progress = 0;
+          window.clearInterval(backupTimer);
+          button.disabled = true;
+          wrap.classList.add("active");
+          fill.style.width = "0%";
+          track.setAttribute("aria-valuenow", "0");
+          text.textContent = "Backing up... 0%";
+          backupTimer = window.setInterval(function () {
+            progress += 5;
+            fill.style.width = progress + "%";
+            track.setAttribute("aria-valuenow", String(progress));
+            text.textContent = "Backing up... " + progress + "%";
+            if (progress >= 100) {
+              window.clearInterval(backupTimer);
+              var now = new Date();
+              sysAdminState.backup.lastDate = formatBackupDate(now);
+              sysAdminState.backup.lastTime = formatBackupTime(now);
+              saveState();
+              renderBackup();
+              addLog("Manual backup completed by sysadmin");
+              showToast("Manual backup completed successfully. Data synchronized.");
+              button.disabled = false;
+              window.setTimeout(function () {
+                wrap.classList.remove("active");
+                fill.style.width = "0%";
+              }, 700);
+            }
+          }, 100);
+        }
+        function runHealthCheck() {
+          var button = document.getElementById("healthCheckBtn");
+          var statuses = ["Operational", "Degraded", "Maintenance"];
+          button.disabled = true;
+          button.classList.add("loading");
           window.setTimeout(function () {
-            toast.remove();
-          }, 2400);
+            var changed = 1 + Math.floor(Math.random() * 2);
+            var touched = {};
+            for (var i = 0; i < changed; i += 1) {
+              var index = Math.floor(Math.random() * sysAdminState.api.length);
+              touched[index] = true;
+            }
+            Object.keys(touched).forEach(function (index) {
+              var endpoint = sysAdminState.api[Number(index)];
+              endpoint.status = statuses[Math.floor(Math.random() * statuses.length)];
+              endpoint.latency = endpoint.status === "Maintenance" ? "N/A" : String(40 + Math.floor(Math.random() * 480)) + "ms";
+            });
+            saveState();
+            renderApi();
+            addLog("API health check completed: " + Object.keys(touched).length + " endpoint snapshot updated");
+            showToast("Health check complete. Monitoring resumed.");
+            button.disabled = false;
+            button.classList.remove("loading");
+          }, 1500);
         }
 
         document.querySelectorAll(".nav-btn").forEach(function (button) {
           button.addEventListener("click", function () {
-            document.querySelectorAll(".nav-btn").forEach(function (node) {
-              node.classList.remove("active");
-            });
+            document.querySelectorAll(".nav-btn").forEach(function (item) { item.classList.remove("active"); });
+            document.querySelectorAll(".admin-panel").forEach(function (panel) { panel.classList.remove("active"); });
             button.classList.add("active");
-            var module = button.getAttribute("data-module");
-            showToast(module + " is disabled for Phase 1.");
-            logPanel.textContent +=
-              "\n[" +
-              new Date().toLocaleTimeString() +
-              "] module request blocked: " +
-              module;
+            document.getElementById(button.getAttribute("data-panel")).classList.add("active");
           });
         });
-
-        document.querySelectorAll(".switch").forEach(function (toggle) {
-          toggle.addEventListener("click", function () {
-            showToast("Toggle blocked: backend controls are disabled.");
+        document.getElementById("refreshLogsBtn").addEventListener("click", function () {
+          var samples = [
+            "Faculty login validated: maria.santos@uphsd.edu",
+            "Grade draft autosave completed: BSCS-2A",
+            "Cache heartbeat acknowledged",
+            "API status poll completed",
+            "Report export queued by faculty user"
+          ];
+          addLog(samples[Math.floor(Math.random() * samples.length)]);
+          showToast("Logs refreshed.");
+        });
+        document.getElementById("clearLogsBtn").addEventListener("click", function () {
+          confirmAction("Clear logs?", "This clears the mock log feed for the current browser session.", function () {
+            sysAdminState.logs = [];
+            saveState();
+            renderLogs();
+            showToast("Logs cleared.");
           });
         });
-
-        logoutBtn.addEventListener("click", function () {
-          localStorage.removeItem("userRole");
-          localStorage.removeItem("userName");
-          localStorage.removeItem("notifCount");
-          localStorage.removeItem("isUnlocked");
-          window.location.href = "index.html";
+        usersBody.addEventListener("click", function (event) {
+          var button = event.target.closest("button[data-action]");
+          if (!button) { return; }
+          var action = button.getAttribute("data-action");
+          var userId = button.getAttribute("data-id");
+          var user = findUser(userId);
+          if (!user) { return; }
+          if (action === "editRole") {
+            openRoleEditor(userId);
+          } else if (action === "resetPass") {
+            confirmAction("Reset password?", "Send a password reset email to " + user.name + "?", function () {
+              var previous = user.status;
+              user.status = "Reset Pending";
+              saveState();
+              renderUsers();
+              showToast("Password reset email sent.");
+              window.setTimeout(function () {
+                user.status = previous;
+                saveState();
+                renderUsers();
+              }, 3000);
+            });
+          } else if (action === "viewLogs") {
+            document.querySelector('[data-panel="logsPanel"]').click();
+            addLog("Service account log view opened: " + user.id);
+          }
         });
+        saveRoleBtn.addEventListener("click", function () {
+          var user = findUser(activeRoleUserId);
+          if (!user) { return; }
+          user.role = roleSelect.value;
+          saveState();
+          renderUsers();
+          closeModal(roleModal);
+          showToast("Role updated for " + user.name + ".");
+        });
+        cancelRoleBtn.addEventListener("click", function () { closeModal(roleModal); });
+        roleModal.addEventListener("click", function (event) { if (event.target === roleModal) { closeModal(roleModal); } });
+        document.getElementById("retentionSelect").addEventListener("change", function (event) {
+          sysAdminState.backup.retention = event.target.value;
+          saveState();
+          showToast("Retention policy updated to " + event.target.value + " days.");
+        });
+        document.getElementById("manualBackupBtn").addEventListener("click", runManualBackup);
+        document.getElementById("healthCheckBtn").addEventListener("click", runHealthCheck);
+        document.getElementById("logoutBtn").addEventListener("click", function () {
+          confirmAction("Confirm logout?", "You will be returned to the login screen.", function () {
+            localStorage.removeItem("userRole");
+            localStorage.removeItem("userName");
+            localStorage.removeItem("notifCount");
+            localStorage.removeItem("isUnlocked");
+            window.location.href = "index.html";
+          });
+        });
+        cancelConfirmBtn.addEventListener("click", function () { closeModal(confirmModal); });
+        confirmActionBtn.addEventListener("click", function () {
+          var action = activeConfirmAction;
+          activeConfirmAction = null;
+          closeModal(confirmModal);
+          if (typeof action === "function") { action(); }
+        });
+        confirmModal.addEventListener("click", function (event) { if (event.target === confirmModal) { closeModal(confirmModal); } });
+        document.addEventListener("keydown", function (event) {
+          if (event.key === "Escape") {
+            if (activeModal) { closeModal(activeModal); }
+          }
+        });
+
+        normalizeUserStatuses();
+        consoleAccess.textContent = "Console Access: " + facultyName + " (SysAdmin Console)";
+        saveState();
+        renderAll();
       })();
     </script>
   </body>

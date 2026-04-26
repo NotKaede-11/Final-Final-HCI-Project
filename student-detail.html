@@ -294,13 +294,18 @@
         padding: 10px 12px;
         font-weight: 800;
       }
+      .edit-trigger.danger {
+        border-color: var(--danger);
+        background: #fff0eb;
+        color: var(--danger);
+      }
       .tabs-shell {
         display: grid;
         gap: 0;
       }
       .tab-nav {
         display: flex;
-        gap: 22px;
+        gap: 18px;
         overflow-x: auto;
         padding: 0 18px;
         border: 1px solid var(--line);
@@ -313,7 +318,7 @@
         border: 0;
         border-bottom: 4px solid transparent;
         border-radius: 0;
-        padding: 15px 0 12px;
+        padding: 13px 0 11px;
         background: transparent;
         color: var(--muted);
         font-weight: 800;
@@ -327,11 +332,13 @@
       .tab-panel {
         display: none;
         border-radius: 0 0 14px 14px;
-        padding: 20px;
+        padding: 12px;
+        background: #fffdf9;
+        box-shadow: none;
       }
       .tab-panel.active { display: block; }
       .panel h3, .grade-card h3 {
-        margin: 0 0 6px;
+        margin: 0 0 4px;
         color: var(--primary);
       }
       .panel p, .grade-card p {
@@ -342,14 +349,14 @@
       .info-grid {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 12px;
-        margin-top: 14px;
+        gap: 10px;
+        margin-top: 12px;
       }
       .info-item {
         border: 1px solid var(--line);
         border-radius: 12px;
         background: #fffdf9;
-        padding: 13px;
+        padding: 12px;
       }
       .info-item span {
         display: block;
@@ -363,18 +370,24 @@
       .grade-layout {
         display: grid;
         grid-template-columns: 1fr;
-        gap: 16px;
+        gap: 0;
         align-items: start;
       }
       .grade-card {
-        padding: 16px;
+        padding: 14px;
+        border-radius: 10px;
+        box-shadow: none;
       }
       .panel-head {
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
-        gap: 12px;
+        gap: 10px;
         flex-wrap: wrap;
+      }
+      .panel-head > div {
+        display: grid;
+        gap: 4px;
       }
       .add-quiz-btn {
         border: 1px solid var(--primary);
@@ -389,7 +402,7 @@
         border: 1px solid var(--line);
         border-radius: 14px;
         background: #fff;
-        margin-top: 14px;
+        margin-top: 12px;
       }
       table {
         width: 100%;
@@ -398,7 +411,7 @@
       }
       th, td {
         border-bottom: 1px solid #eee2d2;
-        padding: 11px 12px;
+        padding: 10px 11px;
         text-align: left;
         line-height: 1.35;
       }
@@ -453,11 +466,11 @@
         background: #fff5f3;
       }
       .mini-summary {
-        margin-top: 12px;
+        margin-top: 10px;
         border: 1px solid var(--line);
         border-radius: 12px;
         background: #fffdf9;
-        padding: 12px;
+        padding: 10px;
       }
       .mini-summary table { min-width: 0; }
       .mini-summary .table-wrap { margin-top: 0; }
@@ -465,19 +478,19 @@
       .summary-toolbar {
         display: flex;
         justify-content: flex-end;
-        margin-top: 12px;
+        margin-top: 10px;
       }
       .summary-cards {
         display: grid;
         grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 12px;
-        margin-top: 14px;
+        gap: 10px;
+        margin-top: 12px;
       }
       .summary-card {
         border: 1px solid var(--line);
         border-radius: 12px;
         background: #fffdf9;
-        padding: 13px;
+        padding: 12px;
       }
       .summary-card span {
         display: block;
@@ -720,6 +733,7 @@
               </div>
               <div class="banner-actions">
                 <button class="edit-trigger" id="editStudentBtn" type="button">Edit Student Details</button>
+                <button class="edit-trigger danger" id="removeStudentBtn" type="button">Remove Student</button>
               </div>
             </div>
           </div>
@@ -747,57 +761,89 @@
           </nav>
 
           <section class="panel tab-panel active" id="panel-school" role="tabpanel" aria-labelledby="tab-school">
-            <h3>School Informations</h3>
-            <p>Academic placement and enrollment identifiers for this prototype record.</p>
-            <div class="info-grid">
-              <div class="info-item"><span>College</span><strong>College of Computer Studies</strong></div>
-              <div class="info-item"><span>Program</span><strong id="programName">BS Computer Science</strong></div>
-              <div class="info-item"><span>Campus</span><strong>UPHSD Las Pinas</strong></div>
-              <div class="info-item"><span>Year Level</span><strong>2nd Year</strong></div>
-              <div class="info-item"><span>Enrollment Status</span><strong id="studentStatus">Active</strong></div>
-              <div class="info-item"><span>Subject Assignment</span><strong id="schoolSubject">-</strong></div>
+            <div class="grade-layout">
+              <div class="grade-card">
+                <div class="panel-head">
+                  <div>
+                    <h3>School Informations</h3>
+                    <p>Academic placement and enrollment identifiers for this prototype record.</p>
+                  </div>
+                </div>
+                <div class="info-grid">
+                  <div class="info-item"><span>College</span><strong>College of Computer Studies</strong></div>
+                  <div class="info-item"><span>Program</span><strong id="programName">BS Computer Science</strong></div>
+                  <div class="info-item"><span>Campus</span><strong>UPHSD Las Pinas</strong></div>
+                  <div class="info-item"><span>Year Level</span><strong>2nd Year</strong></div>
+                  <div class="info-item"><span>Enrollment Status</span><strong id="studentStatus">Active</strong></div>
+                  <div class="info-item"><span>Subject Assignment</span><strong id="schoolSubject">-</strong></div>
+                </div>
+              </div>
             </div>
             <!-- LEADER UPDATE: Replace with real data -->
           </section>
 
           <section class="panel tab-panel" id="panel-personal" role="tabpanel" aria-labelledby="tab-personal">
-            <h3>Personal</h3>
-            <p>Structured placeholder profile information for advising and faculty review.</p>
-            <div class="info-grid">
-              <div class="info-item"><span>Contact Number</span><strong id="studentContact">09XX-XXX-1234</strong></div>
-              <div class="info-item"><span>Email</span><strong id="studentEmail">student@uph.edu.ph</strong></div>
-              <div class="info-item"><span>Guardian</span><strong id="studentGuardian">Registered Guardian</strong></div>
-              <div class="info-item"><span>Address</span><strong id="studentAddress">Las Pinas City</strong></div>
-              <div class="info-item"><span>Advising Notes</span><strong id="advisingNotes">Monitor class standing and attendance.</strong></div>
-              <div class="info-item"><span>Record Type</span><strong>Mock prototype data</strong></div>
+            <div class="grade-layout">
+              <div class="grade-card">
+                <div class="panel-head">
+                  <div>
+                    <h3>Personal</h3>
+                    <p>Structured placeholder profile information for advising and faculty review.</p>
+                  </div>
+                </div>
+                <div class="info-grid">
+                  <div class="info-item"><span>Contact Number</span><strong id="studentContact">09XX-XXX-1234</strong></div>
+                  <div class="info-item"><span>Email</span><strong id="studentEmail">student@uph.edu.ph</strong></div>
+                  <div class="info-item"><span>Guardian</span><strong id="studentGuardian">Registered Guardian</strong></div>
+                  <div class="info-item"><span>Address</span><strong id="studentAddress">Las Pinas City</strong></div>
+                  <div class="info-item"><span>Advising Notes</span><strong id="advisingNotes">Monitor class standing and attendance.</strong></div>
+                  <div class="info-item"><span>Record Type</span><strong>Mock prototype data</strong></div>
+                </div>
+              </div>
             </div>
             <!-- LEADER UPDATE: Replace with real data -->
           </section>
 
           <section class="panel tab-panel" id="panel-schedule" role="tabpanel" aria-labelledby="tab-schedule">
-            <h3>Schedule</h3>
-            <p>Current enrolled schedule resolved from the class section.</p>
-            <div class="info-grid">
-              <div class="info-item"><span>Subject</span><strong id="scheduleSubject">-</strong></div>
-              <div class="info-item"><span>Schedule</span><strong id="scheduleTime">-</strong></div>
-              <div class="info-item"><span>Room</span><strong id="scheduleRoom">-</strong></div>
-              <div class="info-item"><span>Consultation</span><strong>Friday, 3:00-4:00 PM</strong></div>
-              <div class="info-item"><span>Class Mode</span><strong>Laboratory and lecture</strong></div>
-              <div class="info-item"><span>Faculty</span><strong id="scheduleFaculty">Faculty</strong></div>
+            <div class="grade-layout">
+              <div class="grade-card">
+                <div class="panel-head">
+                  <div>
+                    <h3>Schedule</h3>
+                    <p>Current enrolled schedule resolved from the class section.</p>
+                  </div>
+                </div>
+                <div class="info-grid">
+                  <div class="info-item"><span>Subject</span><strong id="scheduleSubject">-</strong></div>
+                  <div class="info-item"><span>Schedule</span><strong id="scheduleTime">-</strong></div>
+                  <div class="info-item"><span>Room</span><strong id="scheduleRoom">-</strong></div>
+                  <div class="info-item"><span>Consultation</span><strong>Friday, 3:00-4:00 PM</strong></div>
+                  <div class="info-item"><span>Class Mode</span><strong>Laboratory and lecture</strong></div>
+                  <div class="info-item"><span>Faculty</span><strong id="scheduleFaculty">Faculty</strong></div>
+                </div>
+              </div>
             </div>
             <!-- LEADER UPDATE: Replace with real data -->
           </section>
 
           <section class="panel tab-panel" id="panel-settings" role="tabpanel" aria-labelledby="tab-settings">
-            <h3>Settings</h3>
-            <p>Static controls reserved for student-specific faculty preferences.</p>
-            <div class="info-grid">
-              <div class="info-item"><span>Grade Alerts</span><strong>Enabled for at-risk thresholds</strong></div>
-              <div class="info-item"><span>Computation Mode</span><strong>TOR-aligned weighted calculation</strong></div>
-              <div class="info-item"><span>Visibility</span><strong>Faculty-only prototype view</strong></div>
-              <div class="info-item"><span>Data Source</span><strong>Local mock roster</strong></div>
-              <div class="info-item"><span>Export Status</span><strong>Not configured</strong></div>
-              <div class="info-item"><span>Audit Trail</span><strong>Placeholder only</strong></div>
+            <div class="grade-layout">
+              <div class="grade-card">
+                <div class="panel-head">
+                  <div>
+                    <h3>Settings</h3>
+                    <p>Static controls reserved for student-specific faculty preferences.</p>
+                  </div>
+                </div>
+                <div class="info-grid">
+                  <div class="info-item"><span>Grade Alerts</span><strong>Enabled for at-risk thresholds</strong></div>
+                  <div class="info-item"><span>Computation Mode</span><strong>TOR-aligned weighted calculation</strong></div>
+                  <div class="info-item"><span>Visibility</span><strong>Faculty-only prototype view</strong></div>
+                  <div class="info-item"><span>Data Source</span><strong>Local mock roster</strong></div>
+                  <div class="info-item"><span>Export Status</span><strong>Not configured</strong></div>
+                  <div class="info-item"><span>Audit Trail</span><strong>Placeholder only</strong></div>
+                </div>
+              </div>
             </div>
             <!-- LEADER UPDATE: Replace with real data -->
           </section>
@@ -875,173 +921,209 @@
           </section>
 
           <section class="panel tab-panel" id="panel-assignments" role="tabpanel" aria-labelledby="tab-assignments">
-            <div class="panel-head">
-              <div>
-                <h3>Assignments</h3>
-                <p>Recitation/activity average feeds the research project component.</p>
-              </div>
-              <button class="add-quiz-btn" id="addAssignmentBtn" type="button">+ Add Assignment</button>
-            </div>
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th>Assignment</th><th>Description</th><th>Score</th><th>Formula Share</th></tr></thead>
-                <tbody>
-                  <tr>
-                    <td><input class="text-edit" id="assignmentLabel1" type="text" value="Persona Analysis" aria-label="Assignment 1 name" /></td>
-                    <td><input class="text-edit" id="assignmentDesc1" type="text" value="User profile and goal mapping" aria-label="Assignment 1 description" /></td>
-                    <td><input class="input-field grade-input assignment-score" data-grade="rec1" type="number" min="0" max="100" value="90" aria-label="Assignment 1 score" /><div class="validation-hint" id="hint-rec1"></div></td>
-                    <td><input class="constant-field" type="text" value="50%" readonly disabled aria-label="Recitation formula share" /></td>
-                  </tr>
-                  <tr>
-                    <td><input class="text-edit" id="assignmentLabel2" type="text" value="Task Flow Review" aria-label="Assignment 2 name" /></td>
-                    <td><input class="text-edit" id="assignmentDesc2" type="text" value="Workflow and error prevention" aria-label="Assignment 2 description" /></td>
-                    <td><input class="input-field grade-input assignment-score" data-grade="rec2" type="number" min="0" max="100" value="87" aria-label="Assignment 2 score" /><div class="validation-hint" id="hint-rec2"></div></td>
-                    <td><input class="constant-field" type="text" value="50%" readonly disabled /></td>
-                  </tr>
-                  <tr>
-                    <td><input class="text-edit" id="assignmentLabel3" type="text" value="Heuristic Evaluation" aria-label="Assignment 3 name" /></td>
-                    <td><input class="text-edit" id="assignmentDesc3" type="text" value="Nielsen-style review notes" aria-label="Assignment 3 description" /></td>
-                    <td><input class="input-field grade-input assignment-score" data-grade="rec3" type="number" min="0" max="100" value="92" aria-label="Assignment 3 score" /><div class="validation-hint" id="hint-rec3"></div></td>
-                    <td><input class="constant-field" type="text" value="50%" readonly disabled /></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="mini-summary">
-              <div class="table-wrap">
-                <table>
-                  <thead><tr><th>Assignment Average</th><th>Formula Share</th><th>Use in Research / Project</th></tr></thead>
-                  <tbody><tr><td><input class="computed-field" id="recitationAverage" type="text" readonly disabled aria-label="Computed assignment average" /></td><td><input class="constant-field" type="text" value="50%" readonly disabled /></td><td><input class="computed-field" id="assignmentFormulaUse" type="text" readonly disabled /></td></tr></tbody>
-                </table>
+            <div class="grade-layout">
+              <div class="grade-card">
+                <div class="panel-head">
+                  <div>
+                    <h3>Assignments</h3>
+                    <p>Recitation/activity average feeds the research project component.</p>
+                  </div>
+                  <button class="add-quiz-btn" id="addAssignmentBtn" type="button">+ Add Assignment</button>
+                </div>
+                <div class="table-wrap">
+                  <table>
+                    <thead><tr><th>Assignment</th><th>Description</th><th>Score</th><th>Formula Share</th></tr></thead>
+                    <tbody>
+                      <tr>
+                        <td><input class="text-edit" id="assignmentLabel1" type="text" value="Persona Analysis" aria-label="Assignment 1 name" /></td>
+                        <td><input class="text-edit" id="assignmentDesc1" type="text" value="User profile and goal mapping" aria-label="Assignment 1 description" /></td>
+                        <td><input class="input-field grade-input assignment-score" data-grade="rec1" type="number" min="0" max="100" value="90" aria-label="Assignment 1 score" /><div class="validation-hint" id="hint-rec1"></div></td>
+                        <td><input class="constant-field" type="text" value="50%" readonly disabled aria-label="Recitation formula share" /></td>
+                      </tr>
+                      <tr>
+                        <td><input class="text-edit" id="assignmentLabel2" type="text" value="Task Flow Review" aria-label="Assignment 2 name" /></td>
+                        <td><input class="text-edit" id="assignmentDesc2" type="text" value="Workflow and error prevention" aria-label="Assignment 2 description" /></td>
+                        <td><input class="input-field grade-input assignment-score" data-grade="rec2" type="number" min="0" max="100" value="87" aria-label="Assignment 2 score" /><div class="validation-hint" id="hint-rec2"></div></td>
+                        <td><input class="constant-field" type="text" value="50%" readonly disabled /></td>
+                      </tr>
+                      <tr>
+                        <td><input class="text-edit" id="assignmentLabel3" type="text" value="Heuristic Evaluation" aria-label="Assignment 3 name" /></td>
+                        <td><input class="text-edit" id="assignmentDesc3" type="text" value="Nielsen-style review notes" aria-label="Assignment 3 description" /></td>
+                        <td><input class="input-field grade-input assignment-score" data-grade="rec3" type="number" min="0" max="100" value="92" aria-label="Assignment 3 score" /><div class="validation-hint" id="hint-rec3"></div></td>
+                        <td><input class="constant-field" type="text" value="50%" readonly disabled /></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="mini-summary">
+                  <div class="table-wrap">
+                    <table>
+                      <thead><tr><th>Assignment Average</th><th>Formula Share</th><th>Use in Research / Project</th></tr></thead>
+                      <tbody><tr><td><input class="computed-field" id="recitationAverage" type="text" readonly disabled aria-label="Computed assignment average" /></td><td><input class="constant-field" type="text" value="50%" readonly disabled /></td><td><input class="computed-field" id="assignmentFormulaUse" type="text" readonly disabled /></td></tr></tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
             </div>
             <!-- LEADER UPDATE: Replace with real data -->
           </section>
 
           <section class="panel tab-panel" id="panel-exam" role="tabpanel" aria-labelledby="tab-exam">
-            <h3>Major Exam</h3>
-            <p>Major examination contributes 30% to the final grade.</p>
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th>Exam</th><th>Coverage</th><th>Score</th><th>Weight</th><th>Weighted Grade</th></tr></thead>
-                <tbody>
-                  <tr>
-                    <td>Prelim Exam</td>
-                    <td>Foundations and interface principles</td>
-                    <td><input class="input-field grade-input exam-score" data-grade="prelimExam" type="number" min="0" max="100" value="87" aria-label="Prelim exam score" /><div class="validation-hint" id="hint-prelimExam"></div></td>
-                    <td><input class="constant-field" type="text" value="Reference" readonly disabled /></td>
-                    <td><input class="computed-field" id="prelimExamGrade" type="text" readonly disabled aria-label="Computed prelim exam weighted reference" /></td>
-                  </tr>
-                  <tr>
-                    <td>Midterm Exam</td>
-                    <td>Prototype review and usability testing</td>
-                    <td><input class="input-field grade-input exam-score" data-grade="midtermExam" type="number" min="0" max="100" value="90" aria-label="Midterm exam score" /><div class="validation-hint" id="hint-midtermExam"></div></td>
-                    <td><input class="constant-field" type="text" value="Reference" readonly disabled /></td>
-                    <td><input class="computed-field" id="midtermExamGrade" type="text" readonly disabled aria-label="Computed midterm exam weighted reference" /></td>
-                  </tr>
-                  <tr>
-                    <td>Finals Exam</td>
-                    <td>Final interface assessment</td>
-                    <td><input class="input-field grade-input exam-score" data-grade="majorExam" type="number" min="0" max="100" value="89" aria-label="Finals major exam raw score" /><div class="validation-hint" id="hint-majorExam"></div></td>
-                    <td><input class="constant-field" type="text" value="30%" readonly disabled aria-label="Major exam weight" /></td>
-                    <td><input class="computed-field" id="majorExamGrade" type="text" readonly disabled aria-label="Computed major exam weighted grade" /></td>
-                  </tr>
-                  <tr>
-                    <td><strong>Exam Average</strong></td>
-                    <td>Prelim, midterm, finals reference average</td>
-                    <td><input class="computed-field" id="examAverage" type="text" readonly disabled aria-label="Computed exam average" /></td>
-                    <td><input class="constant-field" type="text" value="Finals used for TOR" readonly disabled /></td>
-                    <td><input class="computed-field" id="examRuleNote" type="text" readonly disabled aria-label="Major exam rule note" /></td>
-                  </tr>
-                </tbody>
-              </table>
+            <div class="grade-layout">
+              <div class="grade-card">
+                <div class="panel-head">
+                  <div>
+                    <h3>Major Exam</h3>
+                    <p>Major examination contributes 30% to the final grade.</p>
+                  </div>
+                </div>
+                <div class="table-wrap">
+                  <table>
+                    <thead><tr><th>Exam</th><th>Coverage</th><th>Score</th><th>Weight</th><th>Weighted Grade</th></tr></thead>
+                    <tbody>
+                      <tr>
+                        <td>Prelim Exam</td>
+                        <td>Foundations and interface principles</td>
+                        <td><input class="input-field grade-input exam-score" data-grade="prelimExam" type="number" min="0" max="100" value="87" aria-label="Prelim exam score" /><div class="validation-hint" id="hint-prelimExam"></div></td>
+                        <td><input class="constant-field" type="text" value="Reference" readonly disabled /></td>
+                        <td><input class="computed-field" id="prelimExamGrade" type="text" readonly disabled aria-label="Computed prelim exam weighted reference" /></td>
+                      </tr>
+                      <tr>
+                        <td>Midterm Exam</td>
+                        <td>Prototype review and usability testing</td>
+                        <td><input class="input-field grade-input exam-score" data-grade="midtermExam" type="number" min="0" max="100" value="90" aria-label="Midterm exam score" /><div class="validation-hint" id="hint-midtermExam"></div></td>
+                        <td><input class="constant-field" type="text" value="Reference" readonly disabled /></td>
+                        <td><input class="computed-field" id="midtermExamGrade" type="text" readonly disabled aria-label="Computed midterm exam weighted reference" /></td>
+                      </tr>
+                      <tr>
+                        <td>Finals Exam</td>
+                        <td>Final interface assessment</td>
+                        <td><input class="input-field grade-input exam-score" data-grade="majorExam" type="number" min="0" max="100" value="89" aria-label="Finals major exam raw score" /><div class="validation-hint" id="hint-majorExam"></div></td>
+                        <td><input class="constant-field" type="text" value="30%" readonly disabled aria-label="Major exam weight" /></td>
+                        <td><input class="computed-field" id="majorExamGrade" type="text" readonly disabled aria-label="Computed major exam weighted grade" /></td>
+                      </tr>
+                      <tr>
+                        <td><strong>Exam Average</strong></td>
+                        <td>Prelim, midterm, finals reference average</td>
+                        <td><input class="computed-field" id="examAverage" type="text" readonly disabled aria-label="Computed exam average" /></td>
+                        <td><input class="constant-field" type="text" value="Finals used for TOR" readonly disabled /></td>
+                        <td><input class="computed-field" id="examRuleNote" type="text" readonly disabled aria-label="Major exam rule note" /></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </section>
 
           <section class="panel tab-panel" id="panel-attendance" role="tabpanel" aria-labelledby="tab-attendance">
-            <h3>Attendance</h3>
-            <p>Attendance raw score contributes 10% to class performance.</p>
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th>Component</th><th class="week-col" data-week="1">Week 1</th><th class="week-col" data-week="2">Week 2</th><th class="week-col" data-week="3">Week 3</th><th class="week-col" data-week="4">Week 4</th><th class="week-col" data-week="5">Week 5</th><th class="week-col" data-week="6">Week 6</th><th>Raw</th><th>Weight</th><th>Weighted Grade</th></tr></thead>
-                <tbody>
-                  <tr>
-                    <td>Attendance Standing</td>
-                    <td class="week-col" data-week="1"><select class="attendance-select" data-attendance aria-label="Week 1 attendance"><option selected>Present</option><option>Late</option><option>Absent</option><option>Excused</option></select></td>
-                    <td class="week-col" data-week="2"><select class="attendance-select" data-attendance aria-label="Week 2 attendance"><option selected>Present</option><option>Late</option><option>Absent</option><option>Excused</option></select></td>
-                    <td class="week-col" data-week="3"><select class="attendance-select" data-attendance aria-label="Week 3 attendance"><option selected>Present</option><option>Late</option><option>Absent</option><option>Excused</option></select></td>
-                    <td class="week-col" data-week="4"><select class="attendance-select" data-attendance aria-label="Week 4 attendance"><option>Present</option><option selected>Late</option><option>Absent</option><option>Excused</option></select></td>
-                    <td class="week-col" data-week="5"><select class="attendance-select" data-attendance aria-label="Week 5 attendance"><option selected>Present</option><option>Late</option><option>Absent</option><option>Excused</option></select></td>
-                    <td class="week-col" data-week="6"><select class="attendance-select" data-attendance aria-label="Week 6 attendance"><option selected>Present</option><option>Late</option><option>Absent</option><option>Excused</option></select></td>
-                    <td><input class="computed-field" id="attendanceRaw" type="text" readonly disabled aria-label="Computed attendance raw score" /></td>
-                    <td><input class="constant-field" type="text" value="10%" readonly disabled aria-label="Attendance weight" /></td>
-                    <td><input class="computed-field" id="attendanceGrade" type="text" readonly disabled aria-label="Computed attendance weighted grade" /></td>
-                  </tr>
-                </tbody>
-              </table>
+            <div class="grade-layout">
+              <div class="grade-card">
+                <div class="panel-head">
+                  <div>
+                    <h3>Attendance</h3>
+                    <p>Attendance raw score contributes 10% to class performance.</p>
+                  </div>
+                </div>
+                <div class="table-wrap">
+                  <table>
+                    <thead><tr><th>Component</th><th class="week-col" data-week="1">Week 1</th><th class="week-col" data-week="2">Week 2</th><th class="week-col" data-week="3">Week 3</th><th class="week-col" data-week="4">Week 4</th><th class="week-col" data-week="5">Week 5</th><th class="week-col" data-week="6">Week 6</th><th>Raw</th><th>Weight</th><th>Weighted Grade</th></tr></thead>
+                    <tbody>
+                      <tr>
+                        <td>Attendance Standing</td>
+                        <td class="week-col" data-week="1"><select class="attendance-select" data-attendance aria-label="Week 1 attendance"><option selected>Present</option><option>Late</option><option>Absent</option><option>Excused</option></select></td>
+                        <td class="week-col" data-week="2"><select class="attendance-select" data-attendance aria-label="Week 2 attendance"><option selected>Present</option><option>Late</option><option>Absent</option><option>Excused</option></select></td>
+                        <td class="week-col" data-week="3"><select class="attendance-select" data-attendance aria-label="Week 3 attendance"><option selected>Present</option><option>Late</option><option>Absent</option><option>Excused</option></select></td>
+                        <td class="week-col" data-week="4"><select class="attendance-select" data-attendance aria-label="Week 4 attendance"><option>Present</option><option selected>Late</option><option>Absent</option><option>Excused</option></select></td>
+                        <td class="week-col" data-week="5"><select class="attendance-select" data-attendance aria-label="Week 5 attendance"><option selected>Present</option><option>Late</option><option>Absent</option><option>Excused</option></select></td>
+                        <td class="week-col" data-week="6"><select class="attendance-select" data-attendance aria-label="Week 6 attendance"><option selected>Present</option><option>Late</option><option>Absent</option><option>Excused</option></select></td>
+                        <td><input class="computed-field" id="attendanceRaw" type="text" readonly disabled aria-label="Computed attendance raw score" /></td>
+                        <td><input class="constant-field" type="text" value="10%" readonly disabled aria-label="Attendance weight" /></td>
+                        <td><input class="computed-field" id="attendanceGrade" type="text" readonly disabled aria-label="Computed attendance weighted grade" /></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </section>
 
           <section class="panel tab-panel" id="panel-projects" role="tabpanel" aria-labelledby="tab-projects">
-            <h3>Projects</h3>
-            <p>Project average contributes to the research project component in the TOR formula.</p>
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th>Project</th><th>Deliverable</th><th>Score</th><th>Formula Share</th></tr></thead>
-                <tbody>
-                  <tr>
-                    <td><input class="text-edit" id="projectLabel1" type="text" value="Faculty Portal Wireframe" aria-label="Project 1 name" /></td>
-                    <td><input class="text-edit" id="projectDesc1" type="text" value="Low-fidelity layout and flow" aria-label="Project 1 deliverable" /></td>
-                    <td><input class="input-field grade-input project-score" data-grade="project1" type="number" min="0" max="100" value="89" aria-label="Project 1 score" /><div class="validation-hint" id="hint-project1"></div></td>
-                    <td><input class="constant-field" type="text" value="10%" readonly disabled aria-label="Project formula share" /></td>
-                  </tr>
-                  <tr>
-                    <td><input class="text-edit" id="projectLabel2" type="text" value="Interactive Prototype" aria-label="Project 2 name" /></td>
-                    <td><input class="text-edit" id="projectDesc2" type="text" value="Clickable workflow demonstration" aria-label="Project 2 deliverable" /></td>
-                    <td><input class="input-field grade-input project-score" data-grade="project2" type="number" min="0" max="100" value="94" aria-label="Project 2 score" /><div class="validation-hint" id="hint-project2"></div></td>
-                    <td><input class="constant-field" type="text" value="10%" readonly disabled /></td>
-                  </tr>
-                  <tr>
-                    <td><input class="text-edit" id="projectLabel3" type="text" value="Final Usability Report" aria-label="Project 3 name" /></td>
-                    <td><input class="text-edit" id="projectDesc3" type="text" value="Findings and design revisions" aria-label="Project 3 deliverable" /></td>
-                    <td><input class="input-field grade-input project-score" data-grade="project3" type="number" min="0" max="100" value="91" aria-label="Project 3 score" /><div class="validation-hint" id="hint-project3"></div></td>
-                    <td><input class="constant-field" type="text" value="10%" readonly disabled /></td>
-                  </tr>
-                  <tr>
-                    <td><strong>Project Average</strong></td>
-                    <td>Computed from all project rows</td>
-                    <td><input class="computed-field" id="projectAverage" type="text" readonly disabled aria-label="Computed project average" /></td>
-                    <td><input class="computed-field" id="researchProjectGrade" type="text" readonly disabled aria-label="Computed research project weighted grade" /></td>
-                  </tr>
-                </tbody>
-              </table>
+            <div class="grade-layout">
+              <div class="grade-card">
+                <div class="panel-head">
+                  <div>
+                    <h3>Projects</h3>
+                    <p>Project average contributes to the research project component in the TOR formula.</p>
+                  </div>
+                </div>
+                <div class="table-wrap">
+                  <table>
+                    <thead><tr><th>Project</th><th>Deliverable</th><th>Score</th><th>Formula Share</th></tr></thead>
+                    <tbody>
+                      <tr>
+                        <td><input class="text-edit" id="projectLabel1" type="text" value="Faculty Portal Wireframe" aria-label="Project 1 name" /></td>
+                        <td><input class="text-edit" id="projectDesc1" type="text" value="Low-fidelity layout and flow" aria-label="Project 1 deliverable" /></td>
+                        <td><input class="input-field grade-input project-score" data-grade="project1" type="number" min="0" max="100" value="89" aria-label="Project 1 score" /><div class="validation-hint" id="hint-project1"></div></td>
+                        <td><input class="constant-field" type="text" value="10%" readonly disabled aria-label="Project formula share" /></td>
+                      </tr>
+                      <tr>
+                        <td><input class="text-edit" id="projectLabel2" type="text" value="Interactive Prototype" aria-label="Project 2 name" /></td>
+                        <td><input class="text-edit" id="projectDesc2" type="text" value="Clickable workflow demonstration" aria-label="Project 2 deliverable" /></td>
+                        <td><input class="input-field grade-input project-score" data-grade="project2" type="number" min="0" max="100" value="94" aria-label="Project 2 score" /><div class="validation-hint" id="hint-project2"></div></td>
+                        <td><input class="constant-field" type="text" value="10%" readonly disabled /></td>
+                      </tr>
+                      <tr>
+                        <td><input class="text-edit" id="projectLabel3" type="text" value="Final Usability Report" aria-label="Project 3 name" /></td>
+                        <td><input class="text-edit" id="projectDesc3" type="text" value="Findings and design revisions" aria-label="Project 3 deliverable" /></td>
+                        <td><input class="input-field grade-input project-score" data-grade="project3" type="number" min="0" max="100" value="91" aria-label="Project 3 score" /><div class="validation-hint" id="hint-project3"></div></td>
+                        <td><input class="constant-field" type="text" value="10%" readonly disabled /></td>
+                      </tr>
+                      <tr>
+                        <td><strong>Project Average</strong></td>
+                        <td>Computed from all project rows</td>
+                        <td><input class="computed-field" id="projectAverage" type="text" readonly disabled aria-label="Computed project average" /></td>
+                        <td><input class="computed-field" id="researchProjectGrade" type="text" readonly disabled aria-label="Computed research project weighted grade" /></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </section>
 
           <section class="panel tab-panel" id="panel-summary" role="tabpanel" aria-labelledby="tab-summary">
-            <h3>Summary of Grades</h3>
-            <p id="calculationStatus" aria-live="polite">Grade calculation is ready.</p>
-            <div class="summary-cards">
-              <div class="summary-card"><span>Class Performance</span><strong id="classPerformanceCard">0.00</strong></div>
-              <div class="summary-card"><span>Final Raw Grade</span><strong id="finalGradeCard">0.00</strong></div>
-              <div class="summary-card"><span>Transmuted Grade</span><strong id="transmutedCard">5.00</strong></div>
-              <div class="summary-card"><span>Remarks</span><strong id="remarksCard">Failed</strong></div>
-            </div>
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th>Grade Area</th><th>Raw / Average</th><th>Weight / Formula</th><th>Computed Grade</th></tr></thead>
-                <tbody>
-                  <tr><td>Attendance</td><td><input class="input-field summary-override" id="summaryAttendanceRaw" data-summary="attendance" type="number" min="0" max="100" /></td><td><input class="constant-field" type="text" value="10%" readonly disabled /></td><td><input class="computed-field" id="summaryAttendanceGrade" type="text" readonly disabled /></td></tr>
-                  <tr><td>Quizzes</td><td><input class="input-field summary-override" id="summaryQuizAverage" data-summary="quizzes" type="number" min="0" max="100" /></td><td><input class="constant-field" type="text" value="30%" readonly disabled /></td><td><input class="computed-field" id="summaryQuizGrade" type="text" readonly disabled /></td></tr>
-                  <tr><td>Assignments / Recitation</td><td><input class="input-field summary-override" id="summaryAssignmentAverage" data-summary="assignments" type="number" min="0" max="100" /></td><td><input class="constant-field" type="text" value="50% formula share" readonly disabled /></td><td><input class="computed-field" id="summaryAssignmentNote" type="text" readonly disabled /></td></tr>
-                  <tr><td>Projects</td><td><input class="input-field summary-override" id="summaryProjectAverage" data-summary="projects" type="number" min="0" max="100" /></td><td><input class="constant-field" type="text" value="10% formula share" readonly disabled /></td><td><input class="computed-field" id="summaryProjectNote" type="text" readonly disabled /></td></tr>
-                  <tr><td>Research / Project</td><td><input class="computed-field" id="summaryResearchRaw" type="text" readonly disabled /></td><td><input class="constant-field" type="text" value="(Recitation 50% + Project 10%) * 30%" readonly disabled /></td><td><input class="computed-field" id="summaryResearchGrade" type="text" readonly disabled /></td></tr>
-                  <tr><td>Class Performance</td><td><input class="computed-field" id="summaryClassPerformance" type="text" readonly disabled /></td><td><input class="constant-field" type="text" value="Subtotal" readonly disabled /></td><td><input class="computed-field" id="summaryClassPerformanceGrade" type="text" readonly disabled /></td></tr>
-                  <tr><td>Major Exam</td><td><input class="input-field summary-override" id="summaryMajorRaw" data-summary="major" type="number" min="0" max="100" /></td><td><input class="constant-field" type="text" value="30%" readonly disabled /></td><td><input class="computed-field" id="summaryMajorGrade" type="text" readonly disabled /></td></tr>
-                  <tr><td>Finale Grade</td><td><input class="computed-field" id="summaryFinalRaw" type="text" readonly disabled /></td><td><input class="constant-field" type="text" value="Class Performance + Major Exam" readonly disabled /></td><td><input class="computed-field" id="summaryFinalGrade" type="text" readonly disabled /></td></tr>
-                  <tr><td>Transmutation</td><td><input class="computed-field" id="summaryTransmuted" type="text" readonly disabled /></td><td><input class="constant-field" type="text" value="Institutional scale" readonly disabled /></td><td><span class="status-pill" id="summaryRemarks">Passed</span></td></tr>
-                </tbody>
-              </table>
+            <div class="grade-layout">
+              <div class="grade-card">
+                <div class="panel-head">
+                  <div>
+                    <h3>Summary of Grades</h3>
+                    <p id="calculationStatus" aria-live="polite">Grade calculation is ready.</p>
+                  </div>
+                </div>
+                <div class="summary-cards">
+                  <div class="summary-card"><span>Class Performance</span><strong id="classPerformanceCard">0.00</strong></div>
+                  <div class="summary-card"><span>Final Raw Grade</span><strong id="finalGradeCard">0.00</strong></div>
+                  <div class="summary-card"><span>Transmuted Grade</span><strong id="transmutedCard">5.00</strong></div>
+                  <div class="summary-card"><span>Remarks</span><strong id="remarksCard">Failed</strong></div>
+                </div>
+                <div class="table-wrap">
+                  <table>
+                    <thead><tr><th>Grade Area</th><th>Raw / Average</th><th>Weight / Formula</th><th>Computed Grade</th></tr></thead>
+                    <tbody>
+                      <tr><td>Attendance</td><td><input class="input-field summary-override" id="summaryAttendanceRaw" data-summary="attendance" type="number" min="0" max="100" /></td><td><input class="constant-field" type="text" value="10%" readonly disabled /></td><td><input class="computed-field" id="summaryAttendanceGrade" type="text" readonly disabled /></td></tr>
+                      <tr><td>Quizzes</td><td><input class="input-field summary-override" id="summaryQuizAverage" data-summary="quizzes" type="number" min="0" max="100" /></td><td><input class="constant-field" type="text" value="30%" readonly disabled /></td><td><input class="computed-field" id="summaryQuizGrade" type="text" readonly disabled /></td></tr>
+                      <tr><td>Assignments / Recitation</td><td><input class="input-field summary-override" id="summaryAssignmentAverage" data-summary="assignments" type="number" min="0" max="100" /></td><td><input class="constant-field" type="text" value="50% formula share" readonly disabled /></td><td><input class="computed-field" id="summaryAssignmentNote" type="text" readonly disabled /></td></tr>
+                      <tr><td>Projects</td><td><input class="input-field summary-override" id="summaryProjectAverage" data-summary="projects" type="number" min="0" max="100" /></td><td><input class="constant-field" type="text" value="10% formula share" readonly disabled /></td><td><input class="computed-field" id="summaryProjectNote" type="text" readonly disabled /></td></tr>
+                      <tr><td>Research / Project</td><td><input class="computed-field" id="summaryResearchRaw" type="text" readonly disabled /></td><td><input class="constant-field" type="text" value="(Recitation 50% + Project 10%) * 30%" readonly disabled /></td><td><input class="computed-field" id="summaryResearchGrade" type="text" readonly disabled /></td></tr>
+                      <tr><td>Class Performance</td><td><input class="computed-field" id="summaryClassPerformance" type="text" readonly disabled /></td><td><input class="constant-field" type="text" value="Subtotal" readonly disabled /></td><td><input class="computed-field" id="summaryClassPerformanceGrade" type="text" readonly disabled /></td></tr>
+                      <tr><td>Major Exam</td><td><input class="input-field summary-override" id="summaryMajorRaw" data-summary="major" type="number" min="0" max="100" /></td><td><input class="constant-field" type="text" value="30%" readonly disabled /></td><td><input class="computed-field" id="summaryMajorGrade" type="text" readonly disabled /></td></tr>
+                      <tr><td>Finale Grade</td><td><input class="computed-field" id="summaryFinalRaw" type="text" readonly disabled /></td><td><input class="constant-field" type="text" value="Class Performance + Major Exam" readonly disabled /></td><td><input class="computed-field" id="summaryFinalGrade" type="text" readonly disabled /></td></tr>
+                      <tr><td>Transmutation</td><td><input class="computed-field" id="summaryTransmuted" type="text" readonly disabled /></td><td><input class="constant-field" type="text" value="Institutional scale" readonly disabled /></td><td><span class="status-pill" id="summaryRemarks">Passed</span></td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </section>
         </section>
@@ -1127,6 +1209,17 @@
       </div>
     </section>
 
+    <section class="modal" id="removeStudentModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="removeStudentTitle">
+      <div class="modal-card">
+        <h3 id="removeStudentTitle">Remove Student?</h3>
+        <p class="modal-copy" id="removeStudentMessage">This student will be removed from the mock roster for this browser session.</p>
+        <div class="modal-actions">
+          <button class="btn" type="button" id="cancelRemoveStudent">Cancel</button>
+          <button class="btn primary" type="button" id="confirmRemoveStudent">Remove Student</button>
+        </div>
+      </div>
+    </section>
+
     <div class="toast-wrap" id="toastWrap" aria-live="polite" aria-atomic="true"></div>
 
     <script>
@@ -1155,9 +1248,14 @@
         var cancelLogout = document.getElementById("cancelLogout");
         var confirmLogout = document.getElementById("confirmLogout");
         var editStudentBtn = document.getElementById("editStudentBtn");
+        var removeStudentBtn = document.getElementById("removeStudentBtn");
         var editStudentModal = document.getElementById("editStudentModal");
         var editStudentForm = document.getElementById("editStudentForm");
         var cancelEditStudent = document.getElementById("cancelEditStudent");
+        var removeStudentModal = document.getElementById("removeStudentModal");
+        var removeStudentMessage = document.getElementById("removeStudentMessage");
+        var cancelRemoveStudent = document.getElementById("cancelRemoveStudent");
+        var confirmRemoveStudent = document.getElementById("confirmRemoveStudent");
         var editStudentNameInput = document.getElementById("editStudentNameInput");
         var editStudentIdInput = document.getElementById("editStudentIdInput");
         var editStudentStatusInput = document.getElementById("editStudentStatusInput");
@@ -1193,6 +1291,17 @@
         function saveStudentOverrides(overrides) {
           localStorage.setItem("studentDetailOverrides", JSON.stringify(overrides));
         }
+        function getRemovedStudentKeys() {
+          try {
+            var parsed = JSON.parse(localStorage.getItem("removedStudentKeys") || "[]");
+            return Array.isArray(parsed) ? parsed : [];
+          } catch (error) {
+            return [];
+          }
+        }
+        function saveRemovedStudentKeys(keys) {
+          localStorage.setItem("removedStudentKeys", JSON.stringify(keys));
+        }
         function getStoredStudents() {
           try {
             var parsed = JSON.parse(localStorage.getItem("mockStudents") || "[]");
@@ -1222,6 +1331,14 @@
             return parsed && typeof parsed === "object" ? parsed : {};
           } catch (error) {
             return {};
+          }
+        }
+        function getRemovedClassKeys() {
+          try {
+            var parsed = JSON.parse(localStorage.getItem("removedClassKeys") || "[]");
+            return Array.isArray(parsed) ? parsed : [];
+          } catch (error) {
+            return [];
           }
         }
         function getStoredClasses() {
@@ -1276,14 +1393,23 @@
           };
         }
         function getAllStudents() {
-          return DEFAULT_STUDENTS.map(function (item) {
+          var removed = getRemovedStudentKeys();
+          return DEFAULT_STUDENTS.filter(function (item) {
+            return removed.indexOf(item.id) === -1;
+          }).map(function (item) {
             return enrichStudent(item);
-          }).concat(getStoredStudents().map(function (item) {
+          }).concat(getStoredStudents().filter(function (item) {
+            var sourceKey = item.sourceKey || item.id;
+            return removed.indexOf(sourceKey) === -1 && removed.indexOf(item.id) === -1;
+          }).map(function (item) {
             return enrichStudent(item);
           }));
         }
         function getClassCatalog() {
-          return DEFAULT_CLASSES.map(function (item) {
+          var removed = getRemovedClassKeys();
+          return DEFAULT_CLASSES.filter(function (item) {
+            return removed.indexOf(item.subject + "|" + item.section) === -1;
+          }).map(function (item) {
             return applyClassOverrides({
               subject: item.subject,
               section: item.section,
@@ -1292,7 +1418,9 @@
               students: item.students,
               sourceKey: item.subject + "|" + item.section
             });
-          }).concat(getStoredClasses().map(applyClassOverrides));
+          }).concat(getStoredClasses().filter(function (item) {
+            return removed.indexOf(getClassSourceKey(item)) === -1;
+          }).map(applyClassOverrides));
         }
         function getClassBySection(section) {
           return getClassCatalog().filter(function (item) {
@@ -1511,6 +1639,41 @@
           clearEditStudentErrors();
           closeModal(editStudentModal, editStudentBtn);
         }
+        function openRemoveStudentModal() {
+          var student = getSelectedStudent().student;
+          removeStudentMessage.textContent = student.name + " will be removed from the mock roster for this browser session.";
+          openModal(removeStudentModal, cancelRemoveStudent);
+        }
+        function closeRemoveStudentModal() {
+          closeModal(removeStudentModal, removeStudentBtn);
+        }
+        function removeCurrentStudent() {
+          var student = getSelectedStudent().student;
+          var sourceKey = student.sourceKey || student.id;
+          var removed = getRemovedStudentKeys();
+          if (removed.indexOf(sourceKey) === -1) { removed.push(sourceKey); }
+          if (removed.indexOf(student.id) === -1) { removed.push(student.id); }
+          saveRemovedStudentKeys(removed);
+
+          try {
+            var stored = JSON.parse(localStorage.getItem("mockStudents") || "[]");
+            if (Array.isArray(stored)) {
+              stored = stored.filter(function (item) {
+                var itemKey = item.sourceKey || item.recordKey || item.originalId || item.id;
+                return itemKey !== sourceKey && item.id !== student.id;
+              });
+              localStorage.setItem("mockStudents", JSON.stringify(stored));
+            }
+          } catch (error) {}
+
+          var overrides = getStudentOverrides();
+          delete overrides[sourceKey];
+          delete overrides[student.id];
+          saveStudentOverrides(overrides);
+          closeRemoveStudentModal();
+          showToast("Student removed from mock roster.");
+          window.setTimeout(function () { window.location.href = "students.html"; }, 700);
+        }
         function gradeValue(key) {
           var input = document.querySelector('[data-grade="' + key + '"]');
           var value = Number(input.value);
@@ -1725,6 +1888,7 @@
           input.addEventListener("blur", calculateGrades);
         });
         editStudentBtn.addEventListener("click", openEditStudentModal);
+        removeStudentBtn.addEventListener("click", openRemoveStudentModal);
         editStudentSectionInput.addEventListener("change", updateEditStudentClassPreview);
         [editStudentNameInput, editStudentIdInput, editStudentEmailInput].forEach(function (input) {
           input.addEventListener("input", function () { validateEditStudentForm(false); });
@@ -1753,6 +1917,11 @@
         });
         editStudentModal.addEventListener("click", function (event) {
           if (event.target === editStudentModal) { closeEditStudentModal(); }
+        });
+        cancelRemoveStudent.addEventListener("click", closeRemoveStudentModal);
+        confirmRemoveStudent.addEventListener("click", removeCurrentStudent);
+        removeStudentModal.addEventListener("click", function (event) {
+          if (event.target === removeStudentModal) { closeRemoveStudentModal(); }
         });
         document.getElementById("backToStudents").addEventListener("click", function (event) {
           event.preventDefault();
@@ -1795,6 +1964,7 @@
             closeMenu();
             closeNotifications();
             if (activeModal === editStudentModal) { closeEditStudentModal(); }
+            else if (activeModal === removeStudentModal) { closeRemoveStudentModal(); }
             else if (activeModal === logoutModal) { closeLogoutModal(); }
           }
         });

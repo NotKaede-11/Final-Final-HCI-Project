@@ -5,61 +5,1054 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>UPHSD Settings</title>
     <style>
-      :root { --maroon:#7b1113; --maroon-deep:#54090b; --gold:#d8ad47; --bg:#f6efe6; --surface:#fffdfa; --surface-alt:#f9f2e8; --text:#211c1b; --muted:#6c5f59; --line:#e1d1bd; --ok:#21653a; --danger:#a12724; --shadow:0 18px 38px rgba(63,18,14,0.12); --shadow-strong:0 24px 46px rgba(48,8,10,0.18); }
-      *{box-sizing:border-box} html,body{margin:0;min-height:100%;font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif;background:radial-gradient(circle at top left, rgba(216,173,71,.18), transparent 24%),linear-gradient(180deg,#faf3ea 0%,var(--bg) 100%);color:var(--text)}
-      a,button,input,select{font:inherit} button{cursor:pointer}
-      .skip-link{position:absolute;left:10px;top:-40px;background:#000;color:#fff;padding:8px 12px;border-radius:8px;z-index:200}.skip-link:focus{top:10px}:focus-visible{outline:3px solid rgba(216,173,71,.5);outline-offset:2px}
-      .layout{min-height:100vh;display:grid;grid-template-columns:292px minmax(0,1fr)} aside{background:linear-gradient(180deg,rgba(255,255,255,.05),transparent 18%),linear-gradient(180deg,var(--maroon) 0%,var(--maroon-deep) 100%);color:#fff8f0;padding:24px 18px;border-right:1px solid rgba(216,173,71,.35)}
-      .brand{display:flex;gap:14px;align-items:center;padding:16px;margin-bottom:20px;border-radius:22px;background:rgba(255,255,255,.08);border:1px solid rgba(216,173,71,.28)} .crest{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(180deg,#fff5d3 0%,var(--gold) 100%);color:var(--maroon-deep);font-weight:800;border:2px solid rgba(255,248,230,.7)} .brand h1{margin:0;font-size:1.16rem}.brand p{margin:4px 0 0;color:rgba(255,248,240,.88);font-size:.96rem}
-      .nav-list{list-style:none;padding:0;margin:0;display:grid;gap:10px}.nav-link{display:block;text-decoration:none;color:#fff8f0;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:13px 15px;font-weight:700;font-size:1rem;line-height:1.25}.nav-link:hover{background:rgba(255,255,255,.12);border-color:rgba(216,173,71,.45)}.nav-link.active{background:linear-gradient(90deg,rgba(216,173,71,.3),rgba(216,173,71,.1));color:#fffdf8;border-color:rgba(216,173,71,.76);box-shadow:inset 3px 0 0 var(--gold)}
-      .content{min-width:0;display:grid;grid-template-rows:auto 1fr} header{position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 26px;background:linear-gradient(90deg,var(--maroon) 0%,#8d1719 60%,var(--maroon) 100%);color:#fff9f2;border-bottom:1px solid rgba(216,173,71,.34);box-shadow:var(--shadow-strong)} .header-copy h2{margin:0;font-size:1.5rem}.header-copy p{margin:6px 0 0;color:rgba(255,247,236,.88);font-size:.95rem}
-      .header-actions{display:flex;align-items:center;gap:12px;position:relative}.icon-btn,.avatar-btn{position:relative;min-width:46px;min-height:46px;border-radius:14px;border:1px solid rgba(216,173,71,.38);background:rgba(255,255,255,.1);color:#fff9f2;display:inline-flex;align-items:center;justify-content:center}.icon-btn svg{width:20px;height:20px}.avatar-btn{width:46px;height:46px;border-radius:50%;background:linear-gradient(180deg,#f1d68d 0%,var(--gold) 100%);color:var(--maroon-deep);font-weight:800}.badge{position:absolute;top:-6px;right:-6px;min-width:22px;height:22px;padding:0 6px;border-radius:999px;background:var(--gold);color:var(--maroon-deep);display:grid;place-items:center;font-size:.74rem;font-weight:800;border:1px solid #fff1c8}
-      .dropdown,.notif-panel{position:absolute;right:0;top:58px;width:min(360px,calc(100vw - 24px));background:linear-gradient(180deg,var(--surface) 0%,var(--surface-alt) 100%);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);display:none;color:var(--text);z-index:40}.dropdown.open,.notif-panel.open{display:block}.dropdown{width:200px;padding:8px}.dropdown button{width:100%;text-align:left;border:0;background:transparent;border-radius:10px;padding:10px 12px;color:var(--text)}.dropdown button:hover{background:#f4ecdf}
-      .notif-head,.notif-actions{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px}.notif-head{border-bottom:1px solid var(--line)}.notif-head h3{margin:0;font-size:1rem;color:var(--maroon)}.notif-head p{margin:4px 0 0;color:var(--muted);font-size:.85rem}.text-btn{border:0;background:transparent;color:var(--maroon);font-weight:700}.notif-list{list-style:none;margin:0;padding:8px 12px 0;max-height:360px;overflow:auto;display:grid;gap:10px}.notif-item{display:grid;gap:6px;padding:12px;border-radius:14px;border:1px solid var(--line);background:#fffdf9;color:var(--text)}.notif-item.unread{border-color:#dfbf72;background:#fff7e5}.notif-top{display:flex;justify-content:space-between;gap:10px;align-items:start}.notif-tag{display:inline-flex;align-items:center;border-radius:999px;padding:3px 8px;font-size:.72rem;font-weight:800;background:#f2e5c7;color:var(--maroon-deep)}.notif-item p{margin:0;color:var(--text);line-height:1.45}.notif-item time{margin:0;color:var(--muted);font-size:.8rem}.notif-actions{border-top:1px solid var(--line)}.notif-actions button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 10px;font-weight:700;color:var(--text)}
-      main{padding:24px;display:grid;gap:18px;align-content:start}
-      .settings-layout{display:grid;grid-template-columns:240px 1fr;gap:18px}.tab-nav,.panel,.danger-zone,.modal-card{background:linear-gradient(180deg,var(--surface) 0%,var(--surface-alt) 100%);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}
-      .tab-nav{padding:10px;display:grid;gap:8px}.tab-btn{border:0;background:transparent;text-align:left;padding:12px 14px;border-radius:12px;font-weight:700;color:var(--muted)}.tab-btn.active{background:#fff;color:var(--maroon);box-shadow:0 4px 10px rgba(0,0,0,.08)}
-      .panel{padding:18px;display:none;gap:16px}.panel.active{display:grid}.panel h3{margin:0;color:var(--maroon)}.panel p{margin:0;color:var(--muted)}
-      .form-grid,.toggle-grid,.session-list{display:grid;gap:14px}.form-grid{grid-template-columns:1fr 1fr}.field{display:grid;gap:6px}.field input,.field select{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff}.field.full{grid-column:1 / -1}
-      .toggle-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.toggle-card,.session-item,.danger-zone{border:1px solid var(--line);border-radius:14px;background:#fff;padding:14px}
-      .toggle-row{display:flex;justify-content:space-between;align-items:center;gap:12px}.switch{width:50px;height:28px;border-radius:999px;border:1px solid #ccb89f;background:#efe4d6;position:relative}.switch::before{content:"";position:absolute;left:3px;top:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left .2s ease}.switch[aria-checked="true"]{background:#f4df9e;border-color:#d8ad47}.switch[aria-checked="true"]::before{left:25px}
-      .slider-wrap{display:grid;gap:10px;grid-column:1 / -1;border:1px solid var(--line);border-radius:14px;background:#fff;padding:14px}.slider-head{display:flex;justify-content:space-between;gap:12px;align-items:center}.slider-wrap input[type="range"]{width:100%}.font-size-value{font-weight:800;color:var(--maroon)}.font-size-presets{display:flex;gap:8px;flex-wrap:wrap}.font-size-presets button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 12px;font-weight:700;color:var(--text)}.font-size-presets button.active{background:var(--maroon);border-color:var(--maroon);color:#fff}
-      .privacy-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.privacy-card{border:1px solid var(--line);border-radius:14px;background:#fff;padding:15px;display:grid;gap:12px}.privacy-card.full{grid-column:1 / -1}.privacy-card h4{margin:0;color:var(--maroon)}.privacy-card p{margin:0;color:var(--muted);line-height:1.45}.privacy-meta{display:grid;gap:8px}.privacy-meta div{display:flex;justify-content:space-between;gap:12px;border:1px solid #eadfcc;border-radius:10px;background:#fffaf3;padding:10px}.privacy-meta span{color:var(--muted)}.privacy-meta strong{color:var(--text)}.segment-group{display:flex;gap:8px;flex-wrap:wrap}.segment-btn{border:1px solid var(--line);border-radius:999px;background:#fff;padding:8px 12px;font-weight:800;color:var(--muted)}.segment-btn.active{background:var(--maroon);border-color:var(--maroon);color:#fff}.privacy-select{border:1px solid var(--line);border-radius:10px;background:#fff;padding:10px 12px;min-width:210px}.storage-meter{height:12px;border-radius:999px;background:#efe4d6;overflow:hidden;border:1px solid #dcc8ad}.storage-fill{height:100%;width:24%;border-radius:inherit;background:linear-gradient(90deg,var(--gold),var(--maroon))}.policy-details{border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px}.policy-details summary{cursor:pointer;font-weight:800;color:var(--maroon)}.policy-details ul{margin:10px 0 0;padding-left:20px;color:var(--muted);line-height:1.55}.status-line{font-weight:700;color:var(--maroon)}
-      .action-row{display:flex;gap:10px;flex-wrap:wrap}.btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 12px;font-weight:700}.btn.primary{background:var(--maroon);border-color:var(--maroon);color:#fff}.btn.danger{background:#8f1f1d;border-color:#8f1f1d;color:#fff}
-      .danger-zone{border-color:#d79d9a;background:#fff6f5}.danger-zone h3{margin-top:0;color:var(--danger)}.setting-note{margin:6px 0 0;color:var(--muted);line-height:1.45}.danger-actions{display:grid;gap:12px;margin-top:14px}.danger-action{display:flex;justify-content:space-between;align-items:center;gap:14px;border:1px solid #e3b5af;border-radius:14px;background:#fff;padding:14px}.danger-action strong{display:block;color:var(--maroon)}.danger-action p{margin:6px 0 0;color:var(--muted);line-height:1.45}html[data-contrast="high"] body{background:#fff;color:#111}html[data-contrast="high"] .panel,html[data-contrast="high"] .toggle-card,html[data-contrast="high"] .session-item,html[data-contrast="high"] .danger-zone{background:#fff;border-color:#111}body.no-motion *,body.no-motion *::before,body.no-motion *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}body.dyslexia-font{font-family:Lexend,"Atkinson Hyperlegible","Trebuchet MS",Arial,sans-serif}body.focus-mode aside{display:none}body.focus-mode .layout{grid-template-columns:1fr}body.focus-mode header .header-copy p{display:none}
-      @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
-      .toast-wrap{position:fixed;right:14px;bottom:14px;display:grid;gap:10px;z-index:120}.toast{min-width:240px;max-width:320px;padding:12px 14px;border-radius:14px;color:#fff;box-shadow:var(--shadow)}.toast.success{background:#1f6a3b}.toast.error{background:#8f1f1d}
-      .modal{position:fixed;inset:0;background:rgba(21,13,13,.45);display:none;place-items:center;padding:20px;z-index:130}.modal.open{display:grid}.modal-card{width:min(420px,100%);padding:20px}.modal-card h3{margin-top:0;color:var(--maroon)}.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:16px}
-      @media (max-width: 920px){.layout{grid-template-columns:1fr}aside{border-right:0;border-bottom:1px solid rgba(216,173,71,.35)}.nav-list{grid-template-columns:repeat(3,minmax(0,1fr))}.settings-layout{grid-template-columns:1fr}}
-      @media (max-width: 760px){header{padding:18px 16px;flex-direction:column;align-items:stretch}.header-actions{justify-content:flex-end}main{padding:16px}.form-grid,.toggle-grid,.privacy-grid,.nav-list{grid-template-columns:1fr}.privacy-card.full{grid-column:auto}}
+      :root {
+        --primary: #800000;
+        --primary-deep: #5f0000;
+        --accent: #ffb800;
+        --bg-light: #f8f9fa;
+        --page-bg: #f6efe6;
+        --surface: #ffffff;
+        --surface-alt: #fff9f0;
+        --line: #e2d4c3;
+        --text: #1f2328;
+        --text-muted: #666;
+        --success: #4caf50;
+        --danger: #e53935;
+        --shadow: 0 18px 38px rgba(63, 18, 14, 0.12);
+        --shadow-strong: 0 24px 46px rgba(48, 8, 10, 0.18);
+        --font-size-base: 16px;
+        --card-padding: 18px;
+      }
+
+      html[data-theme="dark"] {
+        --page-bg: #1d1712;
+        --surface: #2a221b;
+        --surface-alt: #342a21;
+        --line: #4f4033;
+        --text: #f7f2ec;
+        --text-muted: #d0c4b7;
+        --bg-light: #221c17;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-size: var(--font-size-base);
+        background:
+          radial-gradient(circle at top left, rgba(255, 184, 0, 0.14), transparent 24%),
+          linear-gradient(180deg, #fbf5ec 0%, var(--page-bg) 100%);
+        color: var(--text);
+      }
+
+      body {
+        background-color: var(--page-bg);
+      }
+
+      body.compact-mode {
+        --card-padding: 14px;
+      }
+
+      body.no-motion *,
+      body.no-motion *::before,
+      body.no-motion *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+      }
+
+      a,
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+
+      button {
+        cursor: pointer;
+      }
+
+      .skip-link {
+        position: absolute;
+        left: 10px;
+        top: -42px;
+        background: #000;
+        color: #fff;
+        padding: 8px 12px;
+        border-radius: 8px;
+        z-index: 200;
+      }
+
+      .skip-link:focus {
+        top: 10px;
+      }
+
+      :focus-visible {
+        outline: 3px solid rgba(255, 184, 0, 0.56);
+        outline-offset: 2px;
+      }
+
+      .layout {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 292px minmax(0, 1fr);
+      }
+
+      aside {
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 18%),
+          linear-gradient(180deg, #7b1113 0%, #54090b 100%);
+        color: #fff8f0;
+        padding: 24px 18px;
+        border-right: 1px solid rgba(255, 184, 0, 0.35);
+      }
+
+      .brand {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        padding: 16px;
+        margin-bottom: 20px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 184, 0, 0.28);
+      }
+
+      .crest {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(180deg, #fff5d3 0%, var(--accent) 100%);
+        color: #4c0d0f;
+        font-weight: 800;
+        border: 2px solid rgba(255, 248, 230, 0.7);
+      }
+
+      .brand h1 {
+        margin: 0;
+        font-size: 1.16rem;
+      }
+
+      .brand p {
+        margin: 4px 0 0;
+        color: rgba(255, 248, 240, 0.88);
+        font-size: 0.96rem;
+      }
+
+      .nav-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 10px;
+      }
+
+      .nav-link {
+        display: block;
+        text-decoration: none;
+        color: #fff8f0;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 13px 15px;
+        font-weight: 700;
+        font-size: 1rem;
+        line-height: 1.25;
+      }
+
+      .nav-link:hover {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(255, 184, 0, 0.45);
+      }
+
+      .content {
+        min-width: 0;
+        display: grid;
+        grid-template-rows: auto 1fr;
+      }
+
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        padding: 20px 26px;
+        background: linear-gradient(90deg, var(--primary) 0%, #8d1719 60%, var(--primary) 100%);
+        color: #fff9f2;
+        border-bottom: 1px solid rgba(255, 184, 0, 0.34);
+        box-shadow: var(--shadow-strong);
+      }
+
+      .header-copy h2 {
+        margin: 0;
+        font-size: 1.5rem;
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        position: relative;
+      }
+
+      .icon-btn,
+      .avatar-btn {
+        position: relative;
+        min-width: 46px;
+        min-height: 46px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 184, 0, 0.38);
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff9f2;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .icon-btn svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .avatar-btn {
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        background: linear-gradient(180deg, #f1d68d 0%, var(--accent) 100%);
+        color: #4d0d0f;
+        font-weight: 800;
+      }
+
+      .badge {
+        position: absolute;
+        top: -6px;
+        right: -6px;
+        min-width: 22px;
+        height: 22px;
+        padding: 0 6px;
+        border-radius: 999px;
+        background: var(--accent);
+        color: #4d0d0f;
+        display: grid;
+        place-items: center;
+        font-size: 0.74rem;
+        font-weight: 800;
+        border: 1px solid #fff1c8;
+      }
+
+      .dropdown,
+      .notif-panel {
+        position: absolute;
+        right: 0;
+        top: 58px;
+        width: min(360px, calc(100vw - 24px));
+        background: linear-gradient(180deg, var(--surface) 0%, var(--surface-alt) 100%);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        box-shadow: var(--shadow);
+        display: none;
+        color: var(--text);
+        z-index: 40;
+      }
+
+      .dropdown.open,
+      .notif-panel.open {
+        display: block;
+      }
+
+      .dropdown {
+        width: 200px;
+        padding: 8px;
+      }
+
+      .dropdown button {
+        width: 100%;
+        text-align: left;
+        border: 0;
+        background: transparent;
+        border-radius: 10px;
+        padding: 10px 12px;
+        color: var(--text);
+      }
+
+      .dropdown button:hover {
+        background: rgba(128, 0, 0, 0.06);
+      }
+
+      .notif-head,
+      .notif-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 16px;
+      }
+
+      .notif-head {
+        border-bottom: 1px solid var(--line);
+      }
+
+      .notif-head h3 {
+        margin: 0;
+        font-size: 1rem;
+        color: var(--primary);
+      }
+
+      .notif-head p {
+        margin: 4px 0 0;
+        color: var(--text-muted);
+        font-size: 0.85rem;
+      }
+
+      .text-btn {
+        border: 0;
+        background: transparent;
+        color: var(--primary);
+        font-weight: 700;
+      }
+
+      .notif-list {
+        list-style: none;
+        margin: 0;
+        padding: 8px 12px 0;
+        max-height: 360px;
+        overflow: auto;
+        display: grid;
+        gap: 10px;
+      }
+
+      .notif-item {
+        display: grid;
+        gap: 6px;
+        padding: 12px;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        background: #fffdf9;
+        color: var(--text);
+      }
+
+      .notif-item.unread {
+        border-color: #dfbf72;
+        background: #fff7e5;
+      }
+
+      html[data-theme="dark"] .notif-item {
+        background: rgba(255, 255, 255, 0.02);
+      }
+
+      .notif-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        align-items: start;
+      }
+
+      .notif-tag {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        padding: 3px 8px;
+        font-size: 0.72rem;
+        font-weight: 800;
+        background: #f2e5c7;
+        color: #4d0d0f;
+      }
+
+      .notif-item p {
+        margin: 0;
+        line-height: 1.45;
+      }
+
+      .notif-item time {
+        margin: 0;
+        color: var(--text-muted);
+        font-size: 0.8rem;
+      }
+
+      .notif-actions {
+        border-top: 1px solid var(--line);
+      }
+
+      .notif-actions button {
+        border: 1px solid var(--line);
+        background: var(--surface);
+        color: var(--text);
+        border-radius: 10px;
+        padding: 8px 10px;
+        font-weight: 700;
+      }
+
+      main {
+        padding: 24px;
+        display: grid;
+      }
+
+      .settings-shell {
+        max-width: 1100px;
+        width: 100%;
+        margin: 40px auto;
+        background: linear-gradient(180deg, var(--surface) 0%, var(--surface-alt) 100%);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        display: grid;
+        grid-template-columns: 260px minmax(0, 1fr);
+        overflow: hidden;
+      }
+
+      .settings-nav {
+        padding: 22px 18px;
+        border-right: 1px solid var(--line);
+        background: rgba(128, 0, 0, 0.02);
+      }
+
+      .settings-nav-inner {
+        position: sticky;
+        top: 24px;
+        display: grid;
+        gap: 10px;
+      }
+
+      .settings-nav-copy {
+        display: grid;
+        gap: 6px;
+        margin-bottom: 8px;
+      }
+
+      .settings-nav-copy h3 {
+        margin: 0;
+        color: var(--primary);
+        font-size: 1.1rem;
+      }
+
+      .settings-nav-copy p {
+        margin: 0;
+        color: var(--text-muted);
+        line-height: 1.45;
+        font-size: 0.9rem;
+      }
+
+      .settings-tablist {
+        display: grid;
+        gap: 8px;
+      }
+
+      .settings-tab {
+        min-height: 46px;
+        border: 1px solid transparent;
+        border-left: 4px solid transparent;
+        border-radius: 10px;
+        background: transparent;
+        color: var(--text-muted);
+        font-weight: 800;
+        text-align: left;
+        padding: 12px 14px;
+      }
+
+      .settings-tab:hover {
+        background: rgba(255, 184, 0, 0.08);
+        color: var(--text);
+      }
+
+      .settings-tab.active {
+        background: rgba(128, 0, 0, 0.08);
+        border-color: rgba(128, 0, 0, 0.14);
+        border-left-color: var(--accent);
+        color: var(--primary);
+      }
+
+      .settings-content {
+        max-height: 75vh;
+        overflow-y: auto;
+        padding: 24px;
+      }
+
+      .settings-panel {
+        display: none;
+        gap: 20px;
+      }
+
+      .settings-panel.active {
+        display: grid;
+      }
+
+      .panel-header {
+        display: grid;
+        gap: 6px;
+      }
+
+      .panel-header h3 {
+        margin: 0;
+        color: var(--primary);
+        font-size: 1.3rem;
+      }
+
+      .panel-header p {
+        margin: 0;
+        color: var(--text-muted);
+        line-height: 1.5;
+      }
+
+      .account-summary {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 12px;
+      }
+
+      .summary-card,
+      .settings-card,
+      .toggle-card,
+      .danger-card,
+      .metric-card {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: var(--card-padding);
+      }
+
+      .summary-card strong,
+      .metric-card strong {
+        display: block;
+        margin-top: 6px;
+        color: var(--primary);
+        font-size: 1rem;
+      }
+
+      .summary-card span,
+      .metric-card span {
+        color: var(--text-muted);
+        font-size: 0.82rem;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .field {
+        display: grid;
+        gap: 6px;
+      }
+
+      .field.full {
+        grid-column: 1 / -1;
+      }
+
+      .field label,
+      .field-title {
+        font-weight: 700;
+        color: var(--text);
+      }
+
+      .field input,
+      .field select {
+        min-height: 46px;
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 10px 12px;
+        background: var(--surface);
+        color: var(--text);
+      }
+
+      .field input.invalid {
+        border-color: var(--danger);
+      }
+
+      .help-text,
+      .error-text,
+      .field-hint {
+        font-size: 0.84rem;
+        line-height: 1.35;
+      }
+
+      .help-text,
+      .field-hint {
+        color: var(--text-muted);
+      }
+
+      .error-text {
+        color: var(--danger);
+        min-height: 1.1em;
+      }
+
+      .action-row {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        min-height: 44px;
+        border-radius: 8px;
+        padding: 10px 14px;
+        font-weight: 800;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        color: var(--text);
+        transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+      }
+
+      .btn:hover {
+        transform: translateY(-1px);
+      }
+
+      .btn.primary {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: #fff;
+      }
+
+      .btn.primary:hover {
+        background: var(--primary-deep);
+        box-shadow: 0 10px 18px rgba(96, 0, 0, 0.16);
+      }
+
+      .btn.secondary {
+        border-color: rgba(255, 184, 0, 0.56);
+      }
+
+      .btn.danger {
+        background: #fff4f3;
+        border-color: rgba(229, 57, 53, 0.28);
+        color: var(--danger);
+      }
+
+      .btn:disabled {
+        cursor: not-allowed;
+        opacity: 0.56;
+        transform: none;
+        box-shadow: none;
+      }
+
+      .notification-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .toggle-card {
+        display: grid;
+        gap: 14px;
+      }
+
+      .toggle-card.active {
+        border-color: rgba(255, 184, 0, 0.72);
+        box-shadow: 0 0 0 1px rgba(255, 184, 0, 0.2) inset;
+        background: linear-gradient(180deg, rgba(255, 184, 0, 0.07) 0%, var(--surface) 100%);
+      }
+
+      .toggle-card h4,
+      .settings-card h4,
+      .danger-card h4 {
+        margin: 0;
+        color: var(--primary);
+        font-size: 1rem;
+      }
+
+      .toggle-card p,
+      .settings-card p,
+      .danger-card p {
+        margin: 0;
+        color: var(--text-muted);
+        line-height: 1.45;
+      }
+
+      .channel-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .channel-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 14px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 10px 12px;
+        background: rgba(255, 255, 255, 0.5);
+      }
+
+      .channel-row strong {
+        font-size: 0.95rem;
+      }
+
+      .switch {
+        width: 52px;
+        height: 30px;
+        border-radius: 999px;
+        border: 1px solid #d2c4b3;
+        background: #efe6da;
+        position: relative;
+        flex: 0 0 auto;
+      }
+
+      .switch::before {
+        content: "";
+        position: absolute;
+        left: 3px;
+        top: 3px;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: #fff;
+        transition: left 0.18s ease;
+      }
+
+      .switch[aria-checked="true"] {
+        background: #ffe3a0;
+        border-color: #f0b93a;
+      }
+
+      .switch[aria-checked="true"]::before {
+        left: 25px;
+      }
+
+      .display-grid,
+      .privacy-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .settings-card {
+        display: grid;
+        gap: 14px;
+      }
+
+      .settings-card.full {
+        grid-column: 1 / -1;
+      }
+
+      .settings-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .range-row {
+        display: grid;
+        gap: 10px;
+      }
+
+      .range-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .range-value {
+        color: var(--primary);
+        font-weight: 800;
+      }
+
+      input[type="range"] {
+        width: 100%;
+      }
+
+      .storage-meter {
+        height: 12px;
+        border-radius: 999px;
+        border: 1px solid #dbc8b0;
+        background: #efe4d6;
+        overflow: hidden;
+      }
+
+      .storage-fill {
+        height: 100%;
+        width: 24%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, var(--accent), var(--primary));
+      }
+
+      .accordion {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.45);
+        padding: 12px 14px;
+      }
+
+      .accordion summary {
+        cursor: pointer;
+        font-weight: 800;
+        color: var(--primary);
+      }
+
+      .accordion ul {
+        margin: 10px 0 0;
+        padding-left: 20px;
+        color: var(--text-muted);
+        line-height: 1.5;
+      }
+
+      .device-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .device-item {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.5);
+      }
+
+      .device-item strong {
+        display: block;
+        margin-bottom: 4px;
+      }
+
+      .danger-list {
+        display: grid;
+        gap: 14px;
+      }
+
+      .danger-card {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 18px;
+        border-color: rgba(229, 57, 53, 0.22);
+      }
+
+      .danger-copy {
+        display: grid;
+        gap: 6px;
+      }
+
+      .status-text {
+        color: var(--primary);
+        font-weight: 700;
+      }
+
+      .results-live {
+        color: var(--text-muted);
+        font-size: 0.85rem;
+      }
+
+      .toast-wrap {
+        position: fixed;
+        right: 14px;
+        bottom: 14px;
+        display: grid;
+        gap: 10px;
+        z-index: 120;
+      }
+
+      .toast {
+        min-width: 240px;
+        max-width: 320px;
+        padding: 12px 14px;
+        border-radius: 14px;
+        color: #fff;
+        box-shadow: var(--shadow);
+      }
+
+      .toast.success {
+        background: #1f6a3b;
+      }
+
+      .toast.error {
+        background: #8f1f1d;
+      }
+
+      .modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(21, 13, 13, 0.45);
+        display: none;
+        place-items: center;
+        padding: 20px;
+        z-index: 130;
+      }
+
+      .modal.open {
+        display: grid;
+      }
+
+      .modal-card {
+        width: min(420px, 100%);
+        background: linear-gradient(180deg, var(--surface) 0%, var(--surface-alt) 100%);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 20px;
+        box-shadow: var(--shadow);
+      }
+
+      .modal-card h3 {
+        margin: 0 0 8px;
+        color: var(--primary);
+      }
+
+      .modal-card p {
+        margin: 0;
+        color: var(--text-muted);
+        line-height: 1.5;
+      }
+
+      .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 18px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation: none !important;
+          transition: none !important;
+          scroll-behavior: auto !important;
+        }
+      }
+
+      @media (max-width: 920px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+
+        aside {
+          border-right: 0;
+          border-bottom: 1px solid rgba(255, 184, 0, 0.35);
+        }
+
+        .nav-list {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 768px) {
+        header {
+          padding: 18px 16px;
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .header-actions {
+          justify-content: flex-end;
+        }
+
+        main {
+          padding: 16px;
+        }
+
+        .settings-shell {
+          margin: 20px auto;
+          grid-template-columns: 1fr;
+        }
+
+        .settings-nav {
+          border-right: 0;
+          border-bottom: 1px solid var(--line);
+          overflow-x: auto;
+        }
+
+        .settings-nav-inner {
+          position: static;
+        }
+
+        .settings-tablist {
+          grid-auto-flow: column;
+          grid-auto-columns: minmax(180px, 1fr);
+          overflow-x: auto;
+        }
+
+        .settings-content {
+          max-height: none;
+          overflow: visible;
+          padding: 18px;
+        }
+
+        .form-grid,
+        .notification-grid,
+        .display-grid,
+        .privacy-grid,
+        .account-summary {
+          grid-template-columns: 1fr;
+        }
+
+        .danger-card,
+        .device-item,
+        .settings-row {
+          flex-direction: column;
+          align-items: stretch;
+        }
+      }
     </style>
   </head>
   <body>
     <a class="skip-link" href="#mainContent">Skip to main content</a>
     <div class="layout">
       <aside aria-label="Faculty navigation">
-        <div class="brand"><div class="crest" aria-hidden="true">UP</div><div><h1>UPHSD CCS</h1><p>Faculty Portal</p></div></div>
-        <nav><ul class="nav-list">
-          <li><a class="nav-link" href="dashboard.html">Dashboard</a></li>
-          <li><a class="nav-link" href="students.html">Students</a></li>
-          <li><a class="nav-link" href="classes.html">Classes</a></li>
-          <li><a class="nav-link" href="calendar.html">Calendar</a></li>
-        </ul></nav>
+        <div class="brand">
+          <div class="crest" aria-hidden="true">UP</div>
+          <div>
+            <h1>UPHSD CCS</h1>
+            <p>Faculty Portal</p>
+          </div>
+        </div>
+        <nav>
+          <ul class="nav-list">
+            <li><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+            <li><a class="nav-link" href="students.html">Students</a></li>
+            <li><a class="nav-link" href="classes.html">Classes</a></li>
+            <li><a class="nav-link" href="calendar.html">Calendar</a></li>
+          </ul>
+        </nav>
       </aside>
+
       <div class="content">
         <header>
-          <div class="header-copy"><h2>Settings</h2></div>
+          <div class="header-copy">
+            <h2>Settings</h2>
+          </div>
+
           <div class="header-actions">
             <button class="icon-btn" id="notifButton" aria-label="Open notifications" aria-expanded="false" aria-controls="notifPanel">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5"></path><path d="M9 17a3 3 0 0 0 6 0"></path></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5"></path>
+                <path d="M9 17a3 3 0 0 0 6 0"></path>
+              </svg>
               <span class="badge" id="notifBadge">0</span>
             </button>
+
             <section class="notif-panel" id="notifPanel" aria-label="Faculty notifications">
-              <div class="notif-head"><div><h3>Notifications</h3><p>Project-connected mock updates</p></div><button class="text-btn" type="button" id="markAllRead">Mark all read</button></div>
+              <div class="notif-head">
+                <div>
+                  <h3>Notifications</h3>
+                  <p>Project-connected mock updates</p>
+                </div>
+                <button class="text-btn" type="button" id="markAllRead">Mark all read</button>
+              </div>
               <ul class="notif-list" id="notifList"></ul>
-              <div class="notif-actions"><button type="button" id="seedNotifBtn">Reset feed</button><button type="button" id="closeNotifBtn">Close</button></div>
+              <div class="notif-actions">
+                <button type="button" id="seedNotifBtn">Reset feed</button>
+                <button type="button" id="closeNotifBtn">Close</button>
+              </div>
             </section>
-            <button class="avatar-btn" id="avatarButton" aria-haspopup="true" aria-expanded="false" aria-controls="profileMenu">F</button>
+
+            <button class="avatar-btn" id="avatarButton" aria-haspopup="true" aria-expanded="false" aria-controls="profileMenu">M</button>
             <div class="dropdown" id="profileMenu" role="menu" aria-label="Profile options">
               <button role="menuitem" type="button" id="profileAction">Profile</button>
               <button role="menuitem" type="button" id="settingsAction">Settings</button>
@@ -69,164 +1062,306 @@
         </header>
 
         <main id="mainContent" tabindex="-1">
-          <div class="settings-layout">
-            <nav class="tab-nav" aria-label="Settings sections">
-              <button class="tab-btn active" type="button" data-tab="account">Account Settings</button>
-              <button class="tab-btn" type="button" data-tab="notifications">Notification Preferences</button>
-              <button class="tab-btn" type="button" data-tab="display">Display & Accessibility</button>
-              <button class="tab-btn" type="button" data-tab="privacy">Privacy & Data</button>
-              <button class="tab-btn" type="button" data-tab="sessions">Session Management</button>
-              <button class="tab-btn" type="button" data-tab="danger">Danger Zone</button>
+          <!-- UX: Bounded content area prevents stretched layout -->
+          <div class="settings-shell">
+            <nav class="settings-nav" aria-label="Settings sections">
+              <div class="settings-nav-inner">
+                <div class="settings-nav-copy">
+                  <h3>Faculty Preferences</h3>
+                  <p>Compact account, display, privacy, and grading controls for Marian Rivera.</p>
+                </div>
+                <div class="settings-tablist" role="tablist" aria-label="Settings categories">
+                  <button class="settings-tab active" type="button" role="tab" aria-selected="true" aria-controls="panel-account" id="tab-account" data-panel="account">Account Settings</button>
+                  <button class="settings-tab" type="button" role="tab" aria-selected="false" aria-controls="panel-notifications" id="tab-notifications" data-panel="notifications">Notification Preferences</button>
+                  <button class="settings-tab" type="button" role="tab" aria-selected="false" aria-controls="panel-display" id="tab-display" data-panel="display">Display &amp; Accessibility</button>
+                  <button class="settings-tab" type="button" role="tab" aria-selected="false" aria-controls="panel-privacy" id="tab-privacy" data-panel="privacy">Privacy &amp; Data</button>
+                  <button class="settings-tab" type="button" role="tab" aria-selected="false" aria-controls="panel-danger" id="tab-danger" data-panel="danger">Danger Zone</button>
+                </div>
+              </div>
             </nav>
 
-            <section class="panel active" id="account">
-              <h3>Account Settings</h3>
-              <p>Update faculty account credentials and identity settings.</p>
-              <div class="form-grid">
-                <label class="field full">Email<input value="sterling.rivera@uphsd.edu.ph" readonly /></label>
-                <label class="field">Current Password<input id="currentPassword" type="password" /></label>
-                <label class="field">New Password<input id="newPassword" type="password" /></label>
-                <label class="field">Confirm Password<input id="confirmPassword" type="password" /></label>
-                <div class="toggle-card">
-                  <div class="toggle-row">
-                    <div><strong>Two-Factor Authentication</strong><p style="margin:6px 0 0;color:var(--muted)">Require extra verification on login.</p></div>
-                    <button class="switch" type="button" aria-checked="true"></button>
-                  </div>
+            <section class="settings-content">
+              <section class="settings-panel active" id="panel-account" role="tabpanel" aria-labelledby="tab-account">
+                <div class="panel-header">
+                  <h3>Account Settings</h3>
+                  <p>Manage faculty identity and credential details without leaving the grading portal.</p>
                 </div>
-              </div>
-              <div class="action-row"><button class="btn primary" type="button" id="savePasswordBtn">Update Password</button></div>
-            </section>
 
-            <section class="panel" id="notifications">
-              <h3>Notification Preferences</h3>
-              <p>Choose which faculty alerts should reach email, SMS, and in-app channels.</p>
-              <div class="toggle-grid" id="notifToggleGrid"></div>
-            </section>
-
-            <section class="panel" id="display">
-              <h3>Display & Accessibility</h3>
-              <div class="form-grid">
-                <div class="slider-wrap">
-                  <div class="slider-head">
-                    <strong>Portal Font Size</strong>
-                    <span class="font-size-value" id="fontSizeValue">16px</span>
-                  </div>
-                  <input id="fontSizeRange" type="range" min="14" max="22" value="16" aria-label="Portal font size in pixels" />
-                  <div class="font-size-presets" aria-label="Font size presets">
-                    <button type="button" data-font-size="16">Default</button>
-                    <button type="button" data-font-size="18">Large</button>
-                    <button type="button" data-font-size="20">Extra Large</button>
-                  </div>
-                  <p class="setting-note">Applies across faculty pages after reload or navigation.</p>
+                <div class="account-summary">
+                  <article class="summary-card">
+                    <span>Faculty Name</span>
+                    <strong>Dr. Marian Rivera</strong>
+                  </article>
+                  <article class="summary-card">
+                    <span>Employee ID</span>
+                    <strong>FAC-2026-014</strong>
+                  </article>
+                  <article class="summary-card">
+                    <span>Current Email</span>
+                    <strong data-faculty-email-display>marian.rivera@uphsd.edu.ph</strong>
+                  </article>
                 </div>
-                <div class="toggle-card"><div class="toggle-row"><div><strong>High Contrast Mode</strong><p class="setting-note">Improves readability in bright rooms and supports low-vision use.</p></div><button class="switch accessibility-switch" type="button" data-accessibility-key="facultyHighContrast" aria-checked="false"></button></div></div>
-                <div class="toggle-card"><div class="toggle-row"><div><strong>Reduced Motion</strong><p class="setting-note">Disables slide, fade, and toggle animations for vestibular comfort.</p></div><button class="switch accessibility-switch" type="button" data-accessibility-key="facultyReducedMotion" aria-checked="false"></button></div></div>
-                <div class="toggle-card"><div class="toggle-row"><div><strong>Colorblind-Safe Grade Indicators</strong><p class="setting-note">Adds icons and safer hues so status is not color-only.</p></div><button class="switch accessibility-switch" type="button" data-accessibility-key="facultyColorblindIndicators" aria-checked="false"></button></div></div>
-                <div class="toggle-card"><div class="toggle-row"><div><strong>Input vs. Computed Field Highlights</strong><p class="setting-note">Marks direct input fields and auto-computed grade fields differently.</p></div><button class="switch accessibility-switch" type="button" data-accessibility-key="facultyFieldHighlight" aria-checked="false"></button></div></div>
-                <div class="toggle-card"><div class="toggle-row"><div><strong>Dyslexia-Friendly Font</strong><p class="setting-note">Uses a more spaced, legible font stack for long grade sheets.</p></div><button class="switch accessibility-switch" type="button" data-accessibility-key="facultyDyslexiaFont" aria-checked="false"></button></div></div>
-                <div class="toggle-card"><div class="toggle-row"><div><strong>Table Focus Mode</strong><p class="setting-note">Collapses sidebar/header extras to maximize grade-entry width.</p></div><button class="switch accessibility-switch" type="button" data-accessibility-key="facultyTableFocusMode" aria-checked="false"></button></div></div>
-              </div>
-            </section>
 
-            <section class="panel" id="privacy">
-              <h3>Privacy & Data</h3>
-              <p>Manage faculty account records, draft continuity, export transparency, and local device data.</p>
-              <div class="privacy-grid">
-                <!-- HCI: Error Prevention via auto-save -->
-                <article class="privacy-card">
-                  <div class="toggle-row">
-                    <div>
-                      <h4>Auto-Save Drafts</h4>
-                      <p>Periodically saves mock grade-entry drafts to local storage.</p>
+                <!-- HCI: Error Prevention - Password validation & confirmation modals -->
+                <form id="accountForm" novalidate>
+                  <div class="form-grid">
+                    <div class="field full">
+                      <label for="accountEmail">Email</label>
+                      <input id="accountEmail" name="accountEmail" type="email" autocomplete="email" aria-describedby="accountEmailError" />
+                      <div class="error-text" id="accountEmailError" aria-live="polite"></div>
                     </div>
-                    <button class="switch" type="button" id="autoSaveToggle" role="switch" aria-checked="false" aria-label="Toggle auto-save drafts"></button>
-                  </div>
-                  <p class="status-line" id="autoSaveStatus" aria-live="polite">Last saved: Not enabled</p>
-                </article>
 
-                <article class="privacy-card">
-                  <h4>Export Faculty Data</h4>
-                  <p>Select a format and academic scope for a mock local export.</p>
-                  <div class="segment-group" role="group" aria-label="Export format">
-                    <button class="segment-btn active" type="button" data-export-format="json" aria-pressed="true">JSON</button>
-                    <button class="segment-btn" type="button" data-export-format="csv" aria-pressed="false">CSV</button>
-                    <button class="segment-btn" type="button" data-export-format="pdf" aria-pressed="false">PDF-Mock</button>
-                  </div>
-                  <select class="privacy-select" id="exportScope" aria-label="Export scope">
-                    <option value="current">Current Semester</option>
-                    <option value="all">All Semesters</option>
-                  </select>
-                  <div class="action-row"><button class="btn primary" type="button" id="mockExportBtn">Download Mock Export</button></div>
-                </article>
-
-                <article class="privacy-card">
-                  <h4>Session & Device Activity</h4>
-                  <p>Current browser session visibility for security awareness.</p>
-                  <div class="privacy-meta">
-                    <div><span>Device</span><strong>Desktop (Chrome)</strong></div>
-                    <div><span>Last Active</span><strong id="lastActiveText">Today, 10:32 AM</strong></div>
-                    <div><span>Active Session</span><strong id="activeSessionText">1</strong></div>
-                  </div>
-                  <div class="action-row"><button class="btn danger" type="button" id="clearSessionsBtn">Clear All Sessions</button></div>
-                </article>
-
-                <!-- HCI: Visibility of system status via storage health -->
-                <article class="privacy-card">
-                  <h4>Local Storage Health</h4>
-                  <p>Prototype cache estimate for local browser data.</p>
-                  <div class="storage-meter" aria-hidden="true"><div class="storage-fill" id="storageFill"></div></div>
-                  <p class="status-line" id="storageHealthText" aria-live="polite">1.2 MB / 5 MB used</p>
-                  <div class="action-row"><button class="btn" type="button" id="optimizeCacheBtn">Optimize Cache</button></div>
-                </article>
-
-                <article class="privacy-card">
-                  <div class="toggle-row">
-                    <div>
-                      <h4>Privacy Consent</h4>
-                      <p>Allow anonymous usage analytics for prototype evaluation.</p>
+                    <div class="field">
+                      <label for="currentPassword">Current Password</label>
+                      <input id="currentPassword" name="currentPassword" type="password" autocomplete="current-password" aria-describedby="currentPasswordError" />
+                      <div class="error-text" id="currentPasswordError" aria-live="polite"></div>
                     </div>
-                    <button class="switch" type="button" id="analyticsToggle" role="switch" aria-checked="false" aria-label="Allow anonymous usage analytics"></button>
+
+                    <div class="field">
+                      <label for="newPassword">New Password</label>
+                      <input id="newPassword" name="newPassword" type="password" autocomplete="new-password" aria-describedby="newPasswordError" />
+                      <div class="error-text" id="newPasswordError" aria-live="polite"></div>
+                    </div>
+
+                    <div class="field full">
+                      <label for="confirmPassword">Confirm Password</label>
+                      <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" aria-describedby="confirmPasswordError accountResultText" />
+                      <div class="error-text" id="confirmPasswordError" aria-live="polite"></div>
+                    </div>
                   </div>
-                  <p class="status-line" id="analyticsStatus" aria-live="polite">Anonymous analytics disabled.</p>
-                </article>
 
-                <article class="privacy-card">
-                  <h4>Data Retention Policy</h4>
-                  <details class="policy-details">
-                    <summary>View academic audit retention periods</summary>
-                    <ul>
-                      <li>Drafts: retained for 30 days to support faculty recovery.</li>
-                      <li>Submitted Grades: retained for 1 academic year for audit readiness.</li>
-                      <li>Activity Logs: retained for 90 days for accountability review.</li>
-                    </ul>
-                  </details>
-                </article>
-              </div>
-            </section>
+                  <div class="action-row">
+                    <button class="btn primary" type="submit" id="updateAccountBtn" disabled>Update Password</button>
+                  </div>
+                  <div class="results-live" id="accountResultText" aria-live="polite"></div>
+                </form>
+              </section>
 
-            <section class="panel" id="sessions">
-              <h3>Session Management</h3>
-              <p>Mock list of active faculty devices and sessions.</p>
-              <div class="session-list">
-                <article class="session-item"><strong>Windows Desktop - Molino Campus</strong><p style="margin:6px 0 0;color:var(--muted)">Current session • Chrome • Last active now</p></article>
-                <article class="session-item"><strong>Android Phone</strong><p style="margin:6px 0 0;color:var(--muted)">In-app access • Last active 2 hours ago</p></article>
-                <article class="session-item"><strong>Office Laptop</strong><p style="margin:6px 0 0;color:var(--muted)">Faculty portal • Last active yesterday</p></article>
-              </div>
-              <div class="action-row"><button class="btn danger" type="button" id="logoutAllBtn">Logout All</button></div>
-            </section>
-
-            <section class="panel" id="danger">
-              <div class="danger-zone">
-                <h3>Danger Zone</h3>
-                <p>Use these actions carefully. They trigger confirmation modals in this prototype.</p>
-                <div class="danger-actions">
-                  <article class="danger-action"><div><strong>Clear Draft Grades</strong><p>Resets mock grade inputs and marks the current draft as cleared.</p></div><button class="btn danger" type="button" id="clearDraftGradesBtn">Clear Draft Grades</button></article>
-                  <article class="danger-action"><div><strong>Reset Transmutation Table to Default</strong><p>Restores the institutional grading-scale reference used by the grade sheet.</p></div><button class="btn danger" type="button" id="resetTransmutationBtn">Reset Table</button></article>
-                  <article class="danger-action"><div><strong>Delete Local Session Data</strong><p>Clears role, theme, preferences, and local prototype cache.</p></div><button class="btn danger" type="button" id="deleteSessionDataBtn">Delete Session Data</button></article>
-                  <article class="danger-action"><div><strong>Lock Grade Sheet</strong><p>Simulates final submission and disables grade inputs.</p></div><button class="btn danger" type="button" id="lockGradeSheetBtn">Lock Grade Sheet</button></article>
-                  <article class="danger-action"><div><strong>Export Preferences</strong><p>Downloads a mock JSON file of the current display and accessibility settings.</p></div><button class="btn" type="button" id="exportPrefsBtn">Export Preferences</button></article>
+              <section class="settings-panel" id="panel-notifications" role="tabpanel" aria-labelledby="tab-notifications">
+                <div class="panel-header">
+                  <h3>Notification Preferences</h3>
+                  <p>Control how grading, attendance, and system reminders reach the faculty account.</p>
                 </div>
-              </div>
+
+                <div class="notification-grid" id="notificationGrid">
+                  <!-- LEADER UPDATE: Replace mock export/data with real endpoints when available -->
+                </div>
+              </section>
+
+              <section class="settings-panel" id="panel-display" role="tabpanel" aria-labelledby="tab-display">
+                <div class="panel-header">
+                  <h3>Display &amp; Accessibility</h3>
+                  <p>Adjust readability, spacing, motion, and theme options for grading workflows.</p>
+                </div>
+
+                <div class="display-grid">
+                  <article class="settings-card full">
+                    <div class="range-row">
+                      <div class="range-head">
+                        <h4>Font Size</h4>
+                        <span class="range-value" id="fontSizeValue">16px</span>
+                      </div>
+                      <input id="fontSizeRange" type="range" min="14" max="20" step="1" aria-label="Portal font size" />
+                      <p class="help-text">Applies to the settings interface immediately and persists for other faculty pages.</p>
+                    </div>
+                  </article>
+
+                  <article class="settings-card">
+                    <div class="settings-row">
+                      <div>
+                        <h4>Language</h4>
+                        <p>English is currently the only available portal language.</p>
+                      </div>
+                    </div>
+                    <select id="languageSelect" aria-label="Portal language">
+                      <option value="English">English</option>
+                    </select>
+                  </article>
+
+                  <article class="settings-card">
+                    <div class="settings-row">
+                      <div>
+                        <h4>Theme Preview</h4>
+                        <p>Switch between light and dark preview states.</p>
+                      </div>
+                      <button class="switch" id="themeToggle" type="button" role="switch" aria-checked="false" aria-label="Toggle dark theme"></button>
+                    </div>
+                  </article>
+
+                  <article class="settings-card">
+                    <div class="settings-row">
+                      <div>
+                        <h4>Compact Mode</h4>
+                        <p>Reduce spacing and card padding for a denser settings layout.</p>
+                      </div>
+                      <button class="switch" id="compactModeToggle" type="button" role="switch" aria-checked="false" aria-label="Toggle compact mode"></button>
+                    </div>
+                  </article>
+
+                  <article class="settings-card">
+                    <div class="settings-row">
+                      <div>
+                        <h4>Reduced Motion</h4>
+                        <p>Disable visual motion for a calmer interface and accessibility support.</p>
+                      </div>
+                      <button class="switch" id="reducedMotionToggle" type="button" role="switch" aria-checked="false" aria-label="Toggle reduced motion"></button>
+                    </div>
+                  </article>
+                </div>
+              </section>
+
+              <section class="settings-panel" id="panel-privacy" role="tabpanel" aria-labelledby="tab-privacy">
+                <div class="panel-header">
+                  <h3>Privacy &amp; Data</h3>
+                  <p>Manage draft continuity, exports, device sessions, and local storage behavior.</p>
+                </div>
+
+                <div class="privacy-grid">
+                  <article class="settings-card">
+                    <div class="settings-row">
+                      <div>
+                        <h4>Auto-Save Drafts</h4>
+                        <p>Save mock grade progress automatically to local storage.</p>
+                      </div>
+                      <button class="switch" id="autoSaveToggle" type="button" role="switch" aria-checked="false" aria-label="Toggle auto-save drafts"></button>
+                    </div>
+                    <div class="status-text" id="autoSaveStatus" aria-live="polite">Last saved: Not enabled</div>
+                  </article>
+
+                  <article class="settings-card">
+                    <h4>Export Faculty Data</h4>
+                    <p>Select a format and scope for a mock local download.</p>
+                    <div class="form-grid">
+                      <div class="field">
+                        <label for="exportFormat">Format</label>
+                        <select id="exportFormat" aria-label="Export format">
+                          <option value="json">JSON</option>
+                          <option value="csv">CSV</option>
+                          <option value="pdf">PDF-Mock</option>
+                        </select>
+                      </div>
+                      <div class="field">
+                        <label for="exportScope">Scope</label>
+                        <select id="exportScope" aria-label="Export scope">
+                          <option value="current">Current Semester</option>
+                          <option value="all">All Semesters</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="action-row">
+                      <button class="btn primary" type="button" id="exportDataBtn">Export Faculty Data</button>
+                    </div>
+                  </article>
+
+                  <article class="settings-card">
+                    <h4>Session &amp; Device Activity</h4>
+                    <p>Monitor mock faculty access points before clearing local sessions.</p>
+                    <div class="device-list">
+                      <div class="device-item">
+                        <div>
+                          <strong>Desktop Browser</strong>
+                          <p>Chrome on Windows • Molino Campus</p>
+                        </div>
+                        <div class="help-text">Active now</div>
+                      </div>
+                      <div class="device-item">
+                        <div>
+                          <strong>Mobile Browser</strong>
+                          <p>Android access • Saved portal session</p>
+                        </div>
+                        <div class="help-text">2 hours ago</div>
+                      </div>
+                    </div>
+                    <div class="action-row">
+                      <button class="btn danger" type="button" id="clearSessionsBtn">Clear All Sessions</button>
+                    </div>
+                  </article>
+
+                  <article class="settings-card">
+                    <h4>Local Storage Health</h4>
+                    <p>Estimate browser storage use for this static prototype.</p>
+                    <div class="storage-meter" aria-hidden="true">
+                      <div class="storage-fill" id="storageFill"></div>
+                    </div>
+                    <div class="status-text" id="storageText" aria-live="polite">1.2 MB / 5 MB used</div>
+                    <div class="action-row">
+                      <button class="btn secondary" type="button" id="optimizeCacheBtn">Optimize Cache</button>
+                    </div>
+                  </article>
+
+                  <article class="settings-card">
+                    <div class="settings-row">
+                      <div>
+                        <h4>Privacy Consent</h4>
+                        <p>Allow anonymous usage analytics for prototype review only.</p>
+                      </div>
+                      <button class="switch" id="privacyConsentToggle" type="button" role="switch" aria-checked="false" aria-label="Toggle privacy consent"></button>
+                    </div>
+                    <div class="status-text" id="privacyConsentStatus" aria-live="polite">Anonymous analytics disabled.</div>
+                  </article>
+
+                  <article class="settings-card">
+                    <h4>Data Retention Policy</h4>
+                    <details class="accordion">
+                      <summary>View data retention rules</summary>
+                      <ul>
+                        <li>Drafts are retained for 30 days for mock recovery.</li>
+                        <li>Submitted grade artifacts are retained for one academic year.</li>
+                        <li>Activity log entries are retained for 90 days.</li>
+                      </ul>
+                    </details>
+                  </article>
+                </div>
+              </section>
+
+              <section class="settings-panel" id="panel-danger" role="tabpanel" aria-labelledby="tab-danger">
+                <div class="panel-header">
+                  <h3>Danger Zone</h3>
+                  <p>Destructive mock actions stay behind confirmation to prevent accidental changes.</p>
+                </div>
+
+                <div class="danger-list">
+                  <article class="danger-card">
+                    <div class="danger-copy">
+                      <h4>Clear Draft Grades</h4>
+                      <p>Remove saved draft grade values and reset local grading progress.</p>
+                    </div>
+                    <button class="btn danger" type="button" id="clearDraftGradesBtn">Clear Draft Grades</button>
+                  </article>
+
+                  <article class="danger-card">
+                    <div class="danger-copy">
+                      <h4>Reset Transmutation Table</h4>
+                      <p>Restore the institutional grading reference to its default mock state.</p>
+                    </div>
+                    <button class="btn danger" type="button" id="resetTransmutationBtn">Reset Table</button>
+                  </article>
+
+                  <article class="danger-card">
+                    <div class="danger-copy">
+                      <h4>Delete Local Session Data</h4>
+                      <p>Clear the local portal session, cached preferences, and sign out.</p>
+                    </div>
+                    <button class="btn danger" type="button" id="deleteSessionDataBtn">Delete Session Data</button>
+                  </article>
+
+                  <article class="danger-card">
+                    <div class="danger-copy">
+                      <h4>Lock Grade Sheet</h4>
+                      <p>Simulate final submission and prevent further grade-entry edits.</p>
+                    </div>
+                    <button class="btn danger" type="button" id="lockGradeSheetBtn">Lock Grade Sheet</button>
+                  </article>
+
+                  <article class="danger-card">
+                    <div class="danger-copy">
+                      <h4>Export Preferences</h4>
+                      <p>Download the current display, privacy, and notification settings as JSON.</p>
+                    </div>
+                    <button class="btn secondary" type="button" id="exportPrefsBtn">Export Preferences</button>
+                  </article>
+                </div>
+              </section>
             </section>
           </div>
         </main>
@@ -248,423 +1383,824 @@
 
     <script>
       (function () {
-        var DEFAULT_NOTIFICATIONS = [
-          { id: "gs-review", tag: "Calendar", text: "Calendar items for BSCS-2B quizzes and deadlines need final review.", time: "5 minutes ago", unread: true },
-          { id: "attendance-alert", tag: "Attendance", text: "Three students in BSCS-2A have reached 3 absences.", time: "22 minutes ago", unread: true },
-          { id: "submission", tag: "Submissions", text: "New project proposal uploaded in HCI 402 section BSCS-2A.", time: "1 hour ago", unread: true },
-          { id: "class-summary", tag: "Classes", text: "Card and list views are synced for HCI 402 and Data Structures classes.", time: "Today", unread: false },
-          { id: "deadline", tag: "Deadline", text: "Midterm grade submission closes on May 02, 2026.", time: "Today", unread: false }
+        const FACULTY_EMAIL = "marian.rivera@uphsd.edu.ph";
+        const FACULTY_INITIAL = "M";
+        const FACULTY_NAME = "Dr. Marian Rivera";
+        const DEFAULT_PASSWORD = "faculty123";
+        const DEFAULT_NOTIFICATIONS = [
+          { id: "deadline", tag: "Deadline", text: "Midterm grade submission closes on May 02, 2026.", time: "Today", unread: true },
+          { id: "attendance", tag: "Attendance", text: "Attendance alerts are ready for BSCS-2A follow-up.", time: "18 minutes ago", unread: true },
+          { id: "system", tag: "System", text: "Local accessibility preferences were loaded successfully.", time: "Today", unread: false }
         ];
-        var NOTIF_SETTINGS = [
-          "Grade Submissions / Email",
-          "Grade Submissions / SMS",
-          "Attendance Alerts / In-App",
-          "Attendance Alerts / Email",
-          "Deadline Reminders / In-App",
-          "Deadline Reminders / SMS",
-          "System Updates / Email",
-          "System Updates / In-App"
+        const CHANNEL_LABELS = [
+          { key: "email", label: "Email" },
+          { key: "sms", label: "SMS" },
+          { key: "inApp", label: "In-App" }
         ];
-        var toastWrap = document.getElementById("toastWrap");
-        var avatarButton = document.getElementById("avatarButton");
-        var profileMenu = document.getElementById("profileMenu");
-        var profileAction = document.getElementById("profileAction");
-        var settingsAction = document.getElementById("settingsAction");
-        var logoutAction = document.getElementById("logoutAction");
-        var notifButton = document.getElementById("notifButton");
-        var notifBadge = document.getElementById("notifBadge");
-        var notifPanel = document.getElementById("notifPanel");
-        var notifList = document.getElementById("notifList");
-        var markAllRead = document.getElementById("markAllRead");
-        var closeNotifBtn = document.getElementById("closeNotifBtn");
-        var seedNotifBtn = document.getElementById("seedNotifBtn");
-        var tabButtons = Array.prototype.slice.call(document.querySelectorAll(".tab-btn"));
-        var panels = Array.prototype.slice.call(document.querySelectorAll(".panel"));
-        var notifToggleGrid = document.getElementById("notifToggleGrid");
-        var savePasswordBtn = document.getElementById("savePasswordBtn");
-        var currentPassword = document.getElementById("currentPassword");
-        var newPassword = document.getElementById("newPassword");
-        var confirmPassword = document.getElementById("confirmPassword");
-        var fontSizeRange = document.getElementById("fontSizeRange");
-        var fontSizeValue = document.getElementById("fontSizeValue");
-        var fontSizePresets = Array.prototype.slice.call(document.querySelectorAll("[data-font-size]"));
-        var accessibilityToggles = Array.prototype.slice.call(document.querySelectorAll("[data-accessibility-key]"));
-        var autoSaveToggle = document.getElementById("autoSaveToggle");
-        var autoSaveStatus = document.getElementById("autoSaveStatus");
-        var exportFormatButtons = Array.prototype.slice.call(document.querySelectorAll("[data-export-format]"));
-        var exportScope = document.getElementById("exportScope");
-        var mockExportBtn = document.getElementById("mockExportBtn");
-        var lastActiveText = document.getElementById("lastActiveText");
-        var activeSessionText = document.getElementById("activeSessionText");
-        var clearSessionsBtn = document.getElementById("clearSessionsBtn");
-        var storageFill = document.getElementById("storageFill");
-        var storageHealthText = document.getElementById("storageHealthText");
-        var optimizeCacheBtn = document.getElementById("optimizeCacheBtn");
-        var analyticsToggle = document.getElementById("analyticsToggle");
-        var analyticsStatus = document.getElementById("analyticsStatus");
-        var logoutAllBtn = document.getElementById("logoutAllBtn");
-        var clearDraftGradesBtn = document.getElementById("clearDraftGradesBtn");
-        var resetTransmutationBtn = document.getElementById("resetTransmutationBtn");
-        var deleteSessionDataBtn = document.getElementById("deleteSessionDataBtn");
-        var lockGradeSheetBtn = document.getElementById("lockGradeSheetBtn");
-        var exportPrefsBtn = document.getElementById("exportPrefsBtn");
-        var confirmModal = document.getElementById("confirmModal");
-        var confirmMessage = document.getElementById("confirmMessage");
-        var cancelConfirm = document.getElementById("cancelConfirm");
-        var confirmDanger = document.getElementById("confirmDanger");
-        var pendingDangerAction = null;
-        var selectedExportFormat = localStorage.getItem("facultyExportFormat") || "json";
-        var autoSaveTimer = null;
+        const DEFAULT_NOTIFICATION_MATRIX = {
+          gradeSubmissions: { label: "Grade Submissions", description: "Submission confirmations and grading status changes.", email: true, sms: false, inApp: true },
+          attendanceAlerts: { label: "Attendance Alerts", description: "Attendance risk and absence threshold updates.", email: true, sms: true, inApp: true },
+          deadlineReminders: { label: "Deadline Reminders", description: "Upcoming submission and review deadlines.", email: true, sms: false, inApp: true },
+          systemUpdates: { label: "System Updates", description: "Portal maintenance and grading tool changes.", email: true, sms: false, inApp: true }
+        };
+
+        const toastWrap = document.getElementById("toastWrap");
+        const avatarButton = document.getElementById("avatarButton");
+        const profileMenu = document.getElementById("profileMenu");
+        const profileAction = document.getElementById("profileAction");
+        const settingsAction = document.getElementById("settingsAction");
+        const logoutAction = document.getElementById("logoutAction");
+        const notifButton = document.getElementById("notifButton");
+        const notifBadge = document.getElementById("notifBadge");
+        const notifPanel = document.getElementById("notifPanel");
+        const notifList = document.getElementById("notifList");
+        const markAllRead = document.getElementById("markAllRead");
+        const closeNotifBtn = document.getElementById("closeNotifBtn");
+        const seedNotifBtn = document.getElementById("seedNotifBtn");
+        const tabs = Array.prototype.slice.call(document.querySelectorAll(".settings-tab"));
+        const panels = Array.prototype.slice.call(document.querySelectorAll(".settings-panel"));
+        const notificationGrid = document.getElementById("notificationGrid");
+        const accountForm = document.getElementById("accountForm");
+        const accountEmail = document.getElementById("accountEmail");
+        const currentPassword = document.getElementById("currentPassword");
+        const newPassword = document.getElementById("newPassword");
+        const confirmPassword = document.getElementById("confirmPassword");
+        const updateAccountBtn = document.getElementById("updateAccountBtn");
+        const accountResultText = document.getElementById("accountResultText");
+        const accountEmailError = document.getElementById("accountEmailError");
+        const currentPasswordError = document.getElementById("currentPasswordError");
+        const newPasswordError = document.getElementById("newPasswordError");
+        const confirmPasswordError = document.getElementById("confirmPasswordError");
+        const emailDisplays = Array.prototype.slice.call(document.querySelectorAll("[data-faculty-email-display]"));
+        const fontSizeRange = document.getElementById("fontSizeRange");
+        const fontSizeValue = document.getElementById("fontSizeValue");
+        const languageSelect = document.getElementById("languageSelect");
+        const themeToggle = document.getElementById("themeToggle");
+        const compactModeToggle = document.getElementById("compactModeToggle");
+        const reducedMotionToggle = document.getElementById("reducedMotionToggle");
+        const autoSaveToggle = document.getElementById("autoSaveToggle");
+        const autoSaveStatus = document.getElementById("autoSaveStatus");
+        const exportFormat = document.getElementById("exportFormat");
+        const exportScope = document.getElementById("exportScope");
+        const exportDataBtn = document.getElementById("exportDataBtn");
+        const clearSessionsBtn = document.getElementById("clearSessionsBtn");
+        const storageFill = document.getElementById("storageFill");
+        const storageText = document.getElementById("storageText");
+        const optimizeCacheBtn = document.getElementById("optimizeCacheBtn");
+        const privacyConsentToggle = document.getElementById("privacyConsentToggle");
+        const privacyConsentStatus = document.getElementById("privacyConsentStatus");
+        const clearDraftGradesBtn = document.getElementById("clearDraftGradesBtn");
+        const resetTransmutationBtn = document.getElementById("resetTransmutationBtn");
+        const deleteSessionDataBtn = document.getElementById("deleteSessionDataBtn");
+        const lockGradeSheetBtn = document.getElementById("lockGradeSheetBtn");
+        const exportPrefsBtn = document.getElementById("exportPrefsBtn");
+        const confirmModal = document.getElementById("confirmModal");
+        const confirmTitle = document.getElementById("confirmTitle");
+        const confirmMessage = document.getElementById("confirmMessage");
+        const cancelConfirm = document.getElementById("cancelConfirm");
+        const confirmDanger = document.getElementById("confirmDanger");
+
+        let confirmAction = null;
+        let previousFocus = null;
+        let autoSaveTimer = null;
 
         function guardFacultyRole() {
-          var role = localStorage.getItem("userRole");
-          if (!role) { window.location.href = "index.html"; return false; }
-          if (role !== "faculty") { window.location.href = role === "sysadmin" ? "admin.html" : "index.html"; return false; }
+          const role = localStorage.getItem("userRole");
+          if (!role) {
+            window.location.href = "index.html";
+            return false;
+          }
+          if (role !== "faculty") {
+            window.location.href = role === "sysadmin" ? "admin.html" : "index.html";
+            return false;
+          }
           return true;
         }
-        if (!guardFacultyRole()) { return; }
+
+        if (!guardFacultyRole()) {
+          return;
+        }
+
         function showToast(type, message) {
-          var toast = document.createElement("div");
+          const toast = document.createElement("div");
           toast.className = "toast " + type;
           toast.textContent = message;
           toastWrap.appendChild(toast);
-          window.setTimeout(function () { toast.remove(); }, 2600);
+          window.setTimeout(function () {
+            toast.remove();
+          }, 3000);
         }
-        function getNotifications() {
-          var raw = localStorage.getItem("facultyNotifications");
-          var stored = [];
-          try {
-            stored = raw ? JSON.parse(raw) : [];
-          } catch (error) {}
-          var merged = mergeNotifications(stored);
-          saveNotifications(merged);
-          return merged;
-        }
-        function saveNotifications(items) { localStorage.setItem("facultyNotifications", JSON.stringify(items)); }
-        function mergeNotifications(items) {
-          var stored = Array.isArray(items) ? items : [];
-          var defaults = DEFAULT_NOTIFICATIONS.map(function (item) {
-            var match = stored.filter(function (storedItem) { return storedItem && storedItem.id === item.id; })[0];
-            return {
-              id: item.id,
-              tag: match && match.tag ? match.tag : item.tag,
-              text: match && match.text ? match.text : item.text,
-              time: match && match.time ? match.time : item.time,
-              unread: match ? Boolean(match.unread) : Boolean(item.unread)
-            };
-          });
-          var extra = stored.filter(function (item) {
-            return item && item.id && item.text && DEFAULT_NOTIFICATIONS.every(function (defaultItem) { return defaultItem.id !== item.id; });
-          }).map(function (item) {
-            return {
-              id: item.id,
-              tag: item.tag || "Update",
-              text: item.text,
-              time: item.time || "Recently",
-              unread: Boolean(item.unread)
-            };
-          });
-          return extra.concat(defaults);
-        }
-        function syncBadge(items) { var unread = items.filter(function (item) { return item.unread; }).length; notifBadge.textContent = String(unread); localStorage.setItem("notifCount", String(unread)); }
-        function renderNotifications() {
-          var items = getNotifications();
-          notifList.innerHTML = "";
-          items.forEach(function (item) {
-            var li = document.createElement("li");
-            li.className = "notif-item" + (item.unread ? " unread" : "");
-            li.innerHTML = '<div class="notif-top"><span class="notif-tag">' + item.tag + "</span>" + (item.unread ? '<button class="text-btn" type="button" data-read="' + item.id + '">Mark read</button>' : "") + "</div><p>" + item.text + "</p><time>" + item.time + "</time>";
-            notifList.appendChild(li);
-          });
-          syncBadge(items);
-        }
-        function addNotification(tag, text) {
-          var items = getNotifications();
-          items.unshift({ id: "n-" + Date.now(), tag: tag, text: text, time: "Just now", unread: true });
-          saveNotifications(items); renderNotifications();
-        }
-        function settingEnabled(key) { return localStorage.getItem(key) === "true"; }
-        function getFacultyFontSize() {
-          var size = parseInt(localStorage.getItem("facultyFontSize"), 10);
-          return size >= 14 && size <= 22 ? size : 16;
-        }
-        function applyFacultyFontSize(size) {
-          var nextSize = parseInt(size, 10);
-          if (!(nextSize >= 14 && nextSize <= 22)) { nextSize = 16; }
-          localStorage.setItem("facultyFontSize", String(nextSize));
-          document.documentElement.style.fontSize = nextSize + "px";
-          fontSizeRange.value = String(nextSize);
-          fontSizeValue.textContent = nextSize + "px";
-          fontSizePresets.forEach(function (button) {
-            button.classList.toggle("active", button.getAttribute("data-font-size") === String(nextSize));
-          });
-        }
-        function setAccessibilityToggle(toggle) {
-          toggle.setAttribute("aria-checked", String(settingEnabled(toggle.getAttribute("data-accessibility-key"))));
-        }
-        function applyAccessibilityPreferences() {
-          if (settingEnabled("facultyHighContrast")) {
-            document.documentElement.setAttribute("data-contrast", "high");
-          } else {
-            document.documentElement.removeAttribute("data-contrast");
-          }
-          document.body.classList.toggle("no-motion", settingEnabled("facultyReducedMotion"));
-          document.body.classList.toggle("colorblind-safe", settingEnabled("facultyColorblindIndicators"));
-          document.body.classList.toggle("field-highlight", settingEnabled("facultyFieldHighlight"));
-          document.body.classList.toggle("dyslexia-font", settingEnabled("facultyDyslexiaFont"));
-          document.body.classList.toggle("focus-mode", settingEnabled("facultyTableFocusMode"));
-          accessibilityToggles.forEach(setAccessibilityToggle);
-        }
-        function exportPreferences() {
-          var payload = {
-            exportedAt: new Date().toISOString(),
-            highContrast: settingEnabled("facultyHighContrast"),
-            reducedMotion: settingEnabled("facultyReducedMotion"),
-            colorblindSafeGradeIndicators: settingEnabled("facultyColorblindIndicators"),
-            inputComputedFieldHighlights: settingEnabled("facultyFieldHighlight"),
-            dyslexiaFriendlyFont: settingEnabled("facultyDyslexiaFont"),
-            tableFocusMode: settingEnabled("facultyTableFocusMode"),
-            fontSize: getFacultyFontSize()
-          };
-          var blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
-          var link = document.createElement("a");
-          var objectUrl = URL.createObjectURL(blob);
-          link.href = objectUrl;
-          link.download = "faculty-preferences.json";
-          document.body.appendChild(link);
-          link.click();
-          link.remove();
-          window.setTimeout(function () { URL.revokeObjectURL(objectUrl); }, 1000);
-        }
+
         function setSwitchState(toggle, enabled) {
           toggle.setAttribute("aria-checked", String(Boolean(enabled)));
         }
-        function formatSavedTime(value) {
-          if (!value) { return "Last saved: Not yet saved"; }
-          return "Last saved: " + new Date(value).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+
+        function getFacultyEmail() {
+          return localStorage.getItem("facultyEmail") || FACULTY_EMAIL;
         }
-        function updateExportButtons() {
-          exportFormatButtons.forEach(function (button) {
-            var active = button.getAttribute("data-export-format") === selectedExportFormat;
-            button.classList.toggle("active", active);
-            button.setAttribute("aria-pressed", String(active));
+
+        function getStoredPassword() {
+          return localStorage.getItem("password") || DEFAULT_PASSWORD;
+        }
+
+        function updateDisplayedEmail(email) {
+          emailDisplays.forEach(function (node) {
+            node.textContent = email;
           });
-          localStorage.setItem("facultyExportFormat", selectedExportFormat);
-          localStorage.setItem("facultyExportScope", exportScope.value);
         }
-        function saveDraftSnapshot() {
-          var now = new Date().toISOString();
-          localStorage.setItem("facultyDraftSnapshot", JSON.stringify({ savedAt: now, source: "settings-auto-save", values: "mock grade inputs" }));
-          localStorage.setItem("facultyLastDraftAutoSave", now);
-          autoSaveStatus.textContent = formatSavedTime(now);
+
+        function getNotificationFeed() {
+          const raw = localStorage.getItem("facultyNotifications");
+          let parsed = [];
+          try {
+            parsed = raw ? JSON.parse(raw) : [];
+          } catch (error) {}
+          if (!Array.isArray(parsed) || !parsed.length) {
+            parsed = DEFAULT_NOTIFICATIONS.slice();
+            localStorage.setItem("facultyNotifications", JSON.stringify(parsed));
+          }
+          return parsed;
         }
-        function stopAutoSave() {
-          if (autoSaveTimer) { window.clearInterval(autoSaveTimer); }
-          autoSaveTimer = null;
+
+        function saveNotificationFeed(items) {
+          localStorage.setItem("facultyNotifications", JSON.stringify(items));
         }
-        function startAutoSave() {
-          stopAutoSave();
-          saveDraftSnapshot();
-          autoSaveTimer = window.setInterval(saveDraftSnapshot, 60000);
+
+        function renderNotificationFeed() {
+          const items = getNotificationFeed();
+          notifList.innerHTML = "";
+          items.forEach(function (item) {
+            const entry = document.createElement("li");
+            entry.className = "notif-item" + (item.unread ? " unread" : "");
+            entry.innerHTML = '<div class="notif-top"><span class="notif-tag">' + item.tag + "</span>" + (item.unread ? '<button class="text-btn" type="button" data-read="' + item.id + '">Mark read</button>' : "") + "</div><p>" + item.text + "</p><time>" + item.time + "</time>";
+            notifList.appendChild(entry);
+          });
+          const unread = items.filter(function (item) {
+            return item.unread;
+          }).length;
+          notifBadge.textContent = String(unread);
+          notifBadge.setAttribute("aria-label", unread + " unread notifications");
+          localStorage.setItem("notifCount", String(unread));
         }
-        function applyAutoSavePreference() {
-          var enabled = settingEnabled("facultyAutoSaveDrafts");
-          setSwitchState(autoSaveToggle, enabled);
-          if (enabled) {
-            autoSaveStatus.textContent = formatSavedTime(localStorage.getItem("facultyLastDraftAutoSave"));
-            startAutoSave();
-          } else {
-            stopAutoSave();
-            autoSaveStatus.textContent = "Last saved: Auto-save disabled";
+
+        function addNotification(tag, text) {
+          const items = getNotificationFeed();
+          items.unshift({
+            id: "notif-" + Date.now(),
+            tag: tag,
+            text: text,
+            time: "Just now",
+            unread: true
+          });
+          saveNotificationFeed(items);
+          renderNotificationFeed();
+        }
+
+        function closeMenu() {
+          profileMenu.classList.remove("open");
+          avatarButton.setAttribute("aria-expanded", "false");
+        }
+
+        function closeNotifications() {
+          notifPanel.classList.remove("open");
+          notifButton.setAttribute("aria-expanded", "false");
+        }
+
+        function openConfirm(title, message, callback) {
+          previousFocus = document.activeElement;
+          confirmAction = callback;
+          confirmTitle.textContent = title;
+          confirmMessage.textContent = message;
+          confirmModal.classList.add("open");
+          confirmModal.setAttribute("aria-hidden", "false");
+          confirmDanger.focus();
+        }
+
+        function closeConfirm() {
+          confirmModal.classList.remove("open");
+          confirmModal.setAttribute("aria-hidden", "true");
+          confirmAction = null;
+          if (previousFocus && typeof previousFocus.focus === "function") {
+            previousFocus.focus();
           }
         }
-        function estimateLocalStorageUsage() {
-          var bytes = 0;
+
+        function trapModalFocus(event) {
+          if (!confirmModal.classList.contains("open") || event.key !== "Tab") {
+            return;
+          }
+          const focusables = Array.prototype.slice.call(confirmModal.querySelectorAll("button"));
+          const first = focusables[0];
+          const last = focusables[focusables.length - 1];
+          if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+          } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
+          }
+        }
+
+        function activatePanel(panelKey) {
+          tabs.forEach(function (tab) {
+            const active = tab.getAttribute("data-panel") === panelKey;
+            tab.classList.toggle("active", active);
+            tab.setAttribute("aria-selected", String(active));
+          });
+          panels.forEach(function (panel) {
+            panel.classList.toggle("active", panel.id === "panel-" + panelKey);
+          });
+        }
+
+        function handleTabKeydown(event) {
+          const index = tabs.indexOf(event.currentTarget);
+          if (index === -1) {
+            return;
+          }
+          let nextIndex = index;
+          if (event.key === "ArrowDown" || event.key === "ArrowRight") {
+            nextIndex = (index + 1) % tabs.length;
+          } else if (event.key === "ArrowUp" || event.key === "ArrowLeft") {
+            nextIndex = (index - 1 + tabs.length) % tabs.length;
+          } else if (event.key === "Home") {
+            nextIndex = 0;
+          } else if (event.key === "End") {
+            nextIndex = tabs.length - 1;
+          } else {
+            return;
+          }
+          event.preventDefault();
+          tabs[nextIndex].focus();
+          activatePanel(tabs[nextIndex].getAttribute("data-panel"));
+        }
+
+        function readNotificationMatrix() {
+          const raw = localStorage.getItem("notifications");
+          let stored = {};
+          try {
+            stored = raw ? JSON.parse(raw) : {};
+          } catch (error) {
+            stored = {};
+          }
+          const merged = {};
+          Object.keys(DEFAULT_NOTIFICATION_MATRIX).forEach(function (key) {
+            merged[key] = Object.assign({}, DEFAULT_NOTIFICATION_MATRIX[key], stored[key] || {});
+          });
+          localStorage.setItem("notifications", JSON.stringify(merged));
+          return merged;
+        }
+
+        function saveNotificationMatrix(matrix) {
+          localStorage.setItem("notifications", JSON.stringify(matrix));
+        }
+
+        function updateToggleCardState(card) {
+          const toggles = Array.prototype.slice.call(card.querySelectorAll(".switch"));
+          const anyActive = toggles.some(function (toggle) {
+            return toggle.getAttribute("aria-checked") === "true";
+          });
+          card.classList.toggle("active", anyActive);
+        }
+
+        function renderNotificationMatrix() {
+          const matrix = readNotificationMatrix();
+          notificationGrid.innerHTML = "";
+          Object.keys(matrix).forEach(function (key) {
+            const item = matrix[key];
+            const card = document.createElement("article");
+            card.className = "toggle-card";
+            card.innerHTML = "<div><h4>" + item.label + "</h4><p>" + item.description + "</p></div>";
+            const channelList = document.createElement("div");
+            channelList.className = "channel-list";
+            CHANNEL_LABELS.forEach(function (channel) {
+              const row = document.createElement("div");
+              row.className = "channel-row";
+              row.innerHTML = "<strong>" + channel.label + "</strong>";
+              const toggle = document.createElement("button");
+              toggle.className = "switch";
+              toggle.type = "button";
+              toggle.setAttribute("role", "switch");
+              toggle.setAttribute("aria-label", item.label + " via " + channel.label);
+              setSwitchState(toggle, Boolean(item[channel.key]));
+              toggle.addEventListener("click", function () {
+                const next = toggle.getAttribute("aria-checked") !== "true";
+                setSwitchState(toggle, next);
+                const latest = readNotificationMatrix();
+                latest[key][channel.key] = next;
+                saveNotificationMatrix(latest);
+                updateToggleCardState(card);
+                addNotification("Settings", item.label + " " + channel.label + " was " + (next ? "enabled." : "disabled."));
+                showToast("success", "Notification preference updated.");
+              });
+              row.appendChild(toggle);
+              channelList.appendChild(row);
+            });
+            card.appendChild(channelList);
+            notificationGrid.appendChild(card);
+            updateToggleCardState(card);
+          });
+        }
+
+        function applyFontSize(size) {
+          let next = parseInt(size, 10);
+          if (!(next >= 14 && next <= 20)) {
+            next = 16;
+          }
+          localStorage.setItem("facultyFontSize", String(next));
+          document.documentElement.style.setProperty("--font-size-base", next + "px");
+          fontSizeRange.value = String(next);
+          fontSizeValue.textContent = next + "px";
+        }
+
+        function applyTheme(theme) {
+          const current = theme === "dark" ? "dark" : "light";
+          localStorage.setItem("facultyTheme", current);
+          document.documentElement.setAttribute("data-theme", current);
+          setSwitchState(themeToggle, current === "dark");
+        }
+
+        function applyCompactMode(enabled) {
+          localStorage.setItem("facultyCompactMode", String(Boolean(enabled)));
+          document.body.classList.toggle("compact-mode", Boolean(enabled));
+          setSwitchState(compactModeToggle, Boolean(enabled));
+        }
+
+        function applyReducedMotion(enabled) {
+          localStorage.setItem("facultyReducedMotion", String(Boolean(enabled)));
+          document.body.classList.toggle("no-motion", Boolean(enabled));
+          setSwitchState(reducedMotionToggle, Boolean(enabled));
+        }
+
+        function updatePrivacyConsent() {
+          const enabled = localStorage.getItem("facultyAnalyticsConsent") === "true";
+          setSwitchState(privacyConsentToggle, enabled);
+          privacyConsentStatus.textContent = enabled ? "Anonymous analytics enabled." : "Anonymous analytics disabled.";
+        }
+
+        function formatSavedTime(value) {
+          if (!value) {
+            return "Last saved: Not enabled";
+          }
+          const date = new Date(value);
+          return "Last saved: " + date.toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+        }
+
+        function stopAutoSave() {
+          if (autoSaveTimer) {
+            window.clearInterval(autoSaveTimer);
+          }
+          autoSaveTimer = null;
+        }
+
+        function writeDraftSnapshot() {
+          const now = new Date().toISOString();
+          localStorage.setItem("facultyLastDraftAutoSave", now);
+          localStorage.setItem("facultyDraftSnapshot", JSON.stringify({ savedAt: now, source: "settings", faculty: FACULTY_NAME }));
+          autoSaveStatus.textContent = formatSavedTime(now);
+        }
+
+        function applyAutoSave() {
+          const enabled = localStorage.getItem("facultyAutoSaveDrafts") === "true";
+          setSwitchState(autoSaveToggle, enabled);
+          stopAutoSave();
+          if (enabled) {
+            const existing = localStorage.getItem("facultyLastDraftAutoSave");
+            autoSaveStatus.textContent = formatSavedTime(existing);
+            writeDraftSnapshot();
+            autoSaveTimer = window.setInterval(writeDraftSnapshot, 60000);
+          } else {
+            autoSaveStatus.textContent = "Last saved: Not enabled";
+          }
+        }
+
+        function estimateStorageUsage() {
+          let bytes = 0;
           Object.keys(localStorage).forEach(function (key) {
-            bytes += key.length + String(localStorage.getItem(key)).length;
+            bytes += key.length;
+            bytes += String(localStorage.getItem(key)).length;
           });
           return Math.max(1.2, bytes / 1024 / 1024);
         }
+
         function refreshStorageHealth() {
-          var used = estimateLocalStorageUsage();
-          var percent = Math.min(100, Math.round((used / 5) * 100));
+          const used = estimateStorageUsage();
+          const percent = Math.min(100, Math.round((used / 5) * 100));
           storageFill.style.width = percent + "%";
-          storageHealthText.textContent = used.toFixed(1) + " MB / 5 MB used";
+          storageText.textContent = used.toFixed(1) + " MB / 5 MB used";
         }
-        function optimizeMockCache() {
-          localStorage.removeItem("facultyExpiredMockEntry");
-          localStorage.setItem("facultyCacheOptimizedAt", new Date().toISOString());
-          refreshStorageHealth();
-        }
-        function generateExportPayload() {
-          return {
-            exportedAt: new Date().toISOString(),
-            format: selectedExportFormat,
-            scope: exportScope.value === "all" ? "All Semesters" : "Current Semester",
-            faculty: localStorage.getItem("userName") || "Faculty",
-            autoSaveDrafts: settingEnabled("facultyAutoSaveDrafts"),
-            analyticsConsent: settingEnabled("facultyAnalyticsConsent"),
-            lastDraftAutoSave: localStorage.getItem("facultyLastDraftAutoSave") || "Not saved"
-          };
-        }
-        function downloadMockExport() {
-          var payload = generateExportPayload();
-          var content = "";
-          var type = "text/plain";
-          var extension = selectedExportFormat;
-          if (selectedExportFormat === "json") {
-            content = JSON.stringify(payload, null, 2);
-            type = "application/json";
-          } else if (selectedExportFormat === "csv") {
-            content = "Field,Value\n" + Object.keys(payload).map(function (key) { return key + "," + JSON.stringify(String(payload[key])); }).join("\n");
-            type = "text/csv";
-          } else {
-            content = "UPHSD Faculty Data Export (Mock PDF)\n\n" + Object.keys(payload).map(function (key) { return key + ": " + payload[key]; }).join("\n");
-            extension = "txt";
-          }
-          var blob = new Blob([content], { type: type });
-          var link = document.createElement("a");
-          var url = URL.createObjectURL(blob);
+
+        function downloadFile(content, type, filename) {
+          const blob = new Blob([content], { type: type });
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement("a");
           link.href = url;
-          link.download = "faculty-data-" + payload.format + "-" + payload.scope.toLowerCase().replace(/\s+/g, "-") + "." + extension;
+          link.download = filename;
           document.body.appendChild(link);
           link.click();
           link.remove();
-          window.setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+          window.setTimeout(function () {
+            URL.revokeObjectURL(url);
+          }, 1000);
         }
-        function updateAnalyticsPreference() {
-          var enabled = settingEnabled("facultyAnalyticsConsent");
-          setSwitchState(analyticsToggle, enabled);
-          analyticsStatus.textContent = enabled ? "Anonymous analytics enabled." : "Anonymous analytics disabled.";
+
+        function exportFacultyData() {
+          const format = exportFormat.value;
+          const scope = exportScope.value;
+          localStorage.setItem("facultyExportFormat", format);
+          localStorage.setItem("facultyExportScope", scope);
+          const payload = {
+            faculty: FACULTY_NAME,
+            email: getFacultyEmail(),
+            scope: scope === "all" ? "All Semesters" : "Current Semester",
+            submissions: 12,
+            pendingTasks: 3,
+            advisingFlags: 4,
+            exportedAt: new Date().toISOString()
+          };
+          if (format === "json") {
+            downloadFile(JSON.stringify(payload, null, 2), "application/json", "faculty-data.json");
+          } else if (format === "csv") {
+            const csv = "Field,Value\n" + Object.keys(payload).map(function (key) {
+              return key + "," + JSON.stringify(String(payload[key]));
+            }).join("\n");
+            downloadFile(csv, "text/csv", "faculty-data.csv");
+          } else {
+            const text = "UPHSD Faculty Data Export (Mock)\n\n" + Object.keys(payload).map(function (key) {
+              return key + ": " + payload[key];
+            }).join("\n");
+            downloadFile(text, "text/plain", "faculty-data.txt");
+          }
         }
-        function initPrivacyData() {
+
+        function exportPreferences() {
+          const payload = {
+            facultyEmail: getFacultyEmail(),
+            fontSize: localStorage.getItem("facultyFontSize") || "16",
+            theme: localStorage.getItem("facultyTheme") || "light",
+            compactMode: localStorage.getItem("facultyCompactMode") === "true",
+            reducedMotion: localStorage.getItem("facultyReducedMotion") === "true",
+            notifications: readNotificationMatrix(),
+            privacyConsent: localStorage.getItem("facultyAnalyticsConsent") === "true"
+          };
+          downloadFile(JSON.stringify(payload, null, 2), "application/json", "faculty-preferences.json");
+        }
+
+        function validateEmail(value) {
+          const regex = /^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+$/;
+          return regex.test(value);
+        }
+
+        function setFieldError(input, errorNode, message) {
+          errorNode.textContent = message;
+          input.classList.toggle("invalid", Boolean(message));
+        }
+
+        function validateAccountForm() {
+          const email = accountEmail.value.trim();
+          const current = currentPassword.value;
+          const next = newPassword.value;
+          const confirm = confirmPassword.value;
+          const storedPassword = getStoredPassword();
+          let valid = true;
+
+          if (!validateEmail(email)) {
+            setFieldError(accountEmail, accountEmailError, "Enter a valid faculty email address.");
+            valid = false;
+          } else {
+            setFieldError(accountEmail, accountEmailError, "");
+          }
+
+          if (!current) {
+            setFieldError(currentPassword, currentPasswordError, "Current password is required.");
+            valid = false;
+          } else if (current !== storedPassword) {
+            setFieldError(currentPassword, currentPasswordError, "Current password does not match the saved credential.");
+            valid = false;
+          } else {
+            setFieldError(currentPassword, currentPasswordError, "");
+          }
+
+          if (!next) {
+            setFieldError(newPassword, newPasswordError, "New password is required.");
+            valid = false;
+          } else if (next.length < 8) {
+            setFieldError(newPassword, newPasswordError, "New password must be at least 8 characters.");
+            valid = false;
+          } else {
+            setFieldError(newPassword, newPasswordError, "");
+          }
+
+          if (!confirm) {
+            setFieldError(confirmPassword, confirmPasswordError, "Confirm the new password.");
+            valid = false;
+          } else if (confirm !== next) {
+            setFieldError(confirmPassword, confirmPasswordError, "Confirmation does not match the new password.");
+            valid = false;
+          } else {
+            setFieldError(confirmPassword, confirmPasswordError, "");
+          }
+
+          updateAccountBtn.disabled = !valid;
+          return valid;
+        }
+
+        function initIdentity() {
+          avatarButton.textContent = FACULTY_INITIAL;
+          localStorage.setItem("userName", FACULTY_NAME);
+          if (!localStorage.getItem("facultyEmail")) {
+            localStorage.setItem("facultyEmail", FACULTY_EMAIL);
+          }
+          if (!localStorage.getItem("password")) {
+            localStorage.setItem("password", DEFAULT_PASSWORD);
+          }
+          accountEmail.value = getFacultyEmail();
+          updateDisplayedEmail(getFacultyEmail());
+        }
+
+        function initDisplayPreferences() {
+          applyFontSize(localStorage.getItem("facultyFontSize") || "16");
+          languageSelect.value = localStorage.getItem("facultyLanguage") || "English";
+          applyTheme(localStorage.getItem("facultyTheme") || "light");
+          applyCompactMode(localStorage.getItem("facultyCompactMode") === "true");
+          applyReducedMotion(localStorage.getItem("facultyReducedMotion") === "true");
+        }
+
+        function initPrivacyPreferences() {
+          exportFormat.value = localStorage.getItem("facultyExportFormat") || "json";
           exportScope.value = localStorage.getItem("facultyExportScope") || "current";
-          updateExportButtons();
-          lastActiveText.textContent = "Today, " + new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
-          activeSessionText.textContent = localStorage.getItem("facultyMockSessionsCleared") === "true" ? "0" : "1";
-          applyAutoSavePreference();
-          updateAnalyticsPreference();
+          applyAutoSave();
+          updatePrivacyConsent();
           refreshStorageHealth();
         }
-        function closeMenu() { profileMenu.classList.remove("open"); avatarButton.setAttribute("aria-expanded", "false"); }
-        function closeNotifications() { notifPanel.classList.remove("open"); notifButton.setAttribute("aria-expanded", "false"); }
-        function openConfirm(message, action) { pendingDangerAction = action; confirmMessage.textContent = message; confirmModal.classList.add("open"); confirmModal.setAttribute("aria-hidden", "false"); confirmDanger.focus(); }
-        function closeConfirm() { confirmModal.classList.remove("open"); confirmModal.setAttribute("aria-hidden", "true"); pendingDangerAction = null; }
-        function activateTab(id) {
-          tabButtons.forEach(function (button) { button.classList.toggle("active", button.getAttribute("data-tab") === id); });
-          panels.forEach(function (panel) { panel.classList.toggle("active", panel.id === id); panel.style.display = panel.id === id ? "grid" : "none"; });
-        }
 
-        avatarButton.textContent = (localStorage.getItem("userName") || "Faculty").charAt(0).toUpperCase();
-        applyFacultyFontSize(getFacultyFontSize());
-        applyAccessibilityPreferences();
-        renderNotifications();
-        activateTab("account");
-        initPrivacyData();
-
-        NOTIF_SETTINGS.forEach(function (label, index) {
-          var card = document.createElement("article");
-          card.className = "toggle-card";
-          card.innerHTML = '<div class="toggle-row"><div><strong>' + label + '</strong><p style="margin:6px 0 0;color:var(--muted)">Mock delivery toggle</p></div><button class="switch" type="button" aria-checked="' + (index % 2 === 0 ? "true" : "false") + '"></button></div>';
-          notifToggleGrid.appendChild(card);
+        tabs.forEach(function (tab) {
+          tab.addEventListener("click", function () {
+            activatePanel(tab.getAttribute("data-panel"));
+          });
+          tab.addEventListener("keydown", handleTabKeydown);
         });
 
-        tabButtons.forEach(function (button) {
-          button.addEventListener("click", function () { activateTab(button.getAttribute("data-tab")); });
-        });
-
-        document.querySelectorAll(".switch").forEach(function (toggle) {
-          toggle.addEventListener("click", function () {
-            if (toggle.hasAttribute("data-accessibility-key")) { return; }
-            if (toggle.id === "autoSaveToggle" || toggle.id === "analyticsToggle") { return; }
-            var next = toggle.getAttribute("aria-checked") !== "true";
-            toggle.setAttribute("aria-checked", String(next));
-            addNotification("Settings", "A faculty setting toggle was updated.");
-            showToast("success", "Preference updated.");
+        [accountEmail, currentPassword, newPassword, confirmPassword].forEach(function (input) {
+          input.addEventListener("input", function () {
+            accountResultText.textContent = "";
+            validateAccountForm();
           });
         });
 
-        accessibilityToggles.forEach(function (toggle) {
-          toggle.addEventListener("click", function () {
-            var key = toggle.getAttribute("data-accessibility-key");
-            var next = !settingEnabled(key);
-            localStorage.setItem(key, String(next));
-            applyAccessibilityPreferences();
-            addNotification("Accessibility", toggle.closest(".toggle-card").querySelector("strong").textContent + " was " + (next ? "enabled." : "disabled."));
-            showToast("success", "Accessibility preference updated.");
-          });
-        });
-
-        savePasswordBtn.addEventListener("click", function () {
-          if (!currentPassword.value || !newPassword.value || !confirmPassword.value) { showToast("error", "Complete all password fields."); return; }
-          if (newPassword.value.length < 8) { showToast("error", "New password must be at least 8 characters."); return; }
-          if (newPassword.value !== confirmPassword.value) { showToast("error", "New password and confirmation do not match."); return; }
-          addNotification("Settings", "Faculty password was updated in the mock settings page.");
-          showToast("success", "Password updated.");
-          currentPassword.value = ""; newPassword.value = ""; confirmPassword.value = "";
+        accountForm.addEventListener("submit", function (event) {
+          event.preventDefault();
+          if (!validateAccountForm()) {
+            showToast("error", "Resolve the highlighted account issues first.");
+            return;
+          }
+          const nextEmail = accountEmail.value.trim();
+          localStorage.setItem("facultyEmail", nextEmail);
+          localStorage.setItem("password", newPassword.value);
+          updateDisplayedEmail(nextEmail);
+          currentPassword.value = "";
+          newPassword.value = "";
+          confirmPassword.value = "";
+          updateAccountBtn.disabled = true;
+          accountResultText.textContent = "Account credentials updated successfully.";
+          addNotification("Settings", "Faculty account credentials were updated.");
+          showToast("success", "Account credentials updated successfully");
         });
 
         fontSizeRange.addEventListener("input", function () {
-          applyFacultyFontSize(fontSizeRange.value);
+          applyFontSize(fontSizeRange.value);
         });
-        fontSizeRange.addEventListener("change", function () {
-          addNotification("Accessibility", "Portal font size was changed to " + fontSizeRange.value + "px.");
-          showToast("success", "Font size saved.");
+
+        languageSelect.addEventListener("change", function () {
+          localStorage.setItem("facultyLanguage", languageSelect.value);
+          showToast("success", "Language preference saved.");
         });
-        fontSizePresets.forEach(function (button) {
-          button.addEventListener("click", function () {
-            applyFacultyFontSize(button.getAttribute("data-font-size"));
-            addNotification("Accessibility", "Portal font size was changed to " + fontSizeRange.value + "px.");
-            showToast("success", "Font size saved.");
-          });
+
+        themeToggle.addEventListener("click", function () {
+          const nextDark = themeToggle.getAttribute("aria-checked") !== "true";
+          applyTheme(nextDark ? "dark" : "light");
+          showToast("success", "Theme preference saved.");
         });
+
+        compactModeToggle.addEventListener("click", function () {
+          const next = compactModeToggle.getAttribute("aria-checked") !== "true";
+          applyCompactMode(next);
+          showToast("success", "Compact mode preference saved.");
+        });
+
+        reducedMotionToggle.addEventListener("click", function () {
+          const next = reducedMotionToggle.getAttribute("aria-checked") !== "true";
+          applyReducedMotion(next);
+          showToast("success", "Reduced motion preference saved.");
+        });
+
         autoSaveToggle.addEventListener("click", function () {
-          var next = !settingEnabled("facultyAutoSaveDrafts");
+          const next = autoSaveToggle.getAttribute("aria-checked") !== "true";
           localStorage.setItem("facultyAutoSaveDrafts", String(next));
-          applyAutoSavePreference();
+          applyAutoSave();
           addNotification("Privacy", "Auto-save drafts was " + (next ? "enabled." : "disabled."));
           showToast("success", next ? "Auto-save enabled." : "Auto-save disabled.");
         });
-        exportFormatButtons.forEach(function (button) {
-          button.addEventListener("click", function () {
-            selectedExportFormat = button.getAttribute("data-export-format");
-            updateExportButtons();
+
+        exportDataBtn.addEventListener("click", function () {
+          exportFacultyData();
+          addNotification("Privacy", "Faculty data export was downloaded.");
+          showToast("success", "Faculty data exported successfully.");
+        });
+
+        clearSessionsBtn.addEventListener("click", function () {
+          openConfirm("Clear All Sessions", "Clear all mock faculty sessions and return to the login screen?", function () {
+            localStorage.removeItem("userRole");
+            localStorage.removeItem("userName");
+            localStorage.removeItem("notifCount");
+            localStorage.setItem("facultySessionsClearedAt", new Date().toISOString());
+            window.location.href = "index.html";
           });
         });
-        exportScope.addEventListener("change", updateExportButtons);
-        mockExportBtn.addEventListener("click", function () { downloadMockExport(); addNotification("Privacy", "Faculty data export was downloaded."); showToast("success", "Mock export downloaded."); });
-        clearSessionsBtn.addEventListener("click", function () { openConfirm("Clear all active sessions and return to login?", function () { localStorage.removeItem("userRole"); localStorage.removeItem("userName"); localStorage.removeItem("notifCount"); localStorage.removeItem("isUnlocked"); localStorage.setItem("facultyMockSessionsCleared", "true"); window.location.href = "index.html"; }); });
-        optimizeCacheBtn.addEventListener("click", function () { openConfirm("Optimize local cache and remove expired mock entries?", function () { optimizeMockCache(); addNotification("Privacy", "Expired local mock cache entries were optimized."); showToast("success", "Cache optimized."); }); });
-        analyticsToggle.addEventListener("click", function () {
-          var next = !settingEnabled("facultyAnalyticsConsent");
-          localStorage.setItem("facultyAnalyticsConsent", String(next));
-          updateAnalyticsPreference();
-          addNotification("Privacy", "Anonymous usage analytics was " + (next ? "allowed." : "disabled."));
-          showToast("success", next ? "Analytics consent saved." : "Analytics disabled.");
-        });
-        logoutAllBtn.addEventListener("click", function () { openConfirm("Logout all active faculty sessions?", function () { addNotification("Security", "All active faculty sessions were logged out."); showToast("success", "All sessions logged out."); }); });
-        clearDraftGradesBtn.addEventListener("click", function () { openConfirm("Clear draft grade values on the grade sheet?", function () { localStorage.setItem("facultyDraftGradesCleared", "true"); localStorage.removeItem("facultyGradeSheetLocked"); addNotification("Grades", "Draft grade values were cleared from Settings."); showToast("success", "Draft grades cleared."); }); });
-        resetTransmutationBtn.addEventListener("click", function () { openConfirm("Reset the transmutation reference table to default values?", function () { localStorage.setItem("facultyTransmutationResetAt", new Date().toISOString()); addNotification("Grades", "Transmutation table was reset to default values."); showToast("success", "Transmutation table reset."); }); });
-        deleteSessionDataBtn.addEventListener("click", function () { openConfirm("Delete local session data and return to login?", function () { localStorage.clear(); window.location.href = "index.html"; }); });
-        lockGradeSheetBtn.addEventListener("click", function () { openConfirm("Lock the grade sheet and simulate final submission?", function () { localStorage.setItem("facultyGradeSheetLocked", "true"); addNotification("Grades", "Grade sheet was locked and marked as submitted."); showToast("success", "Grade sheet locked."); }); });
-        exportPrefsBtn.addEventListener("click", function () { exportPreferences(); addNotification("Privacy", "Faculty accessibility preferences were exported."); showToast("success", "Preferences exported."); });
-        cancelConfirm.addEventListener("click", closeConfirm);
-        confirmDanger.addEventListener("click", function () { if (pendingDangerAction) { pendingDangerAction(); } closeConfirm(); });
-        confirmModal.addEventListener("click", function (event) { if (event.target === confirmModal) { closeConfirm(); } });
 
-        avatarButton.addEventListener("click", function (event) { event.stopPropagation(); if (profileMenu.classList.contains("open")) { closeMenu(); } else { closeNotifications(); profileMenu.classList.add("open"); avatarButton.setAttribute("aria-expanded", "true"); } });
-        notifButton.addEventListener("click", function (event) { event.stopPropagation(); if (notifPanel.classList.contains("open")) { closeNotifications(); } else { closeMenu(); renderNotifications(); notifPanel.classList.add("open"); notifButton.setAttribute("aria-expanded", "true"); } });
-        markAllRead.addEventListener("click", function (event) { event.stopPropagation(); var items = getNotifications().map(function (item) { item.unread = false; return item; }); saveNotifications(items); renderNotifications(); showToast("success", "Notifications marked as read."); });
-        closeNotifBtn.addEventListener("click", function (event) { event.stopPropagation(); closeNotifications(); });
-        seedNotifBtn.addEventListener("click", function (event) { event.stopPropagation(); saveNotifications(DEFAULT_NOTIFICATIONS.slice()); renderNotifications(); showToast("success", "Notification feed reset."); });
-        profileMenu.addEventListener("click", function (event) { event.stopPropagation(); });
-        notifPanel.addEventListener("click", function (event) { event.stopPropagation(); });
-        notifList.addEventListener("click", function (event) { event.stopPropagation(); var id = event.target.getAttribute("data-read"); if (!id) { return; } var items = getNotifications().map(function (item) { if (item.id === id) { item.unread = false; } return item; }); saveNotifications(items); renderNotifications(); });
-        profileAction.addEventListener("click", function () { window.location.href = "profile.html"; });
+        optimizeCacheBtn.addEventListener("click", function () {
+          openConfirm("Optimize Cache", "Remove expired mock cache entries and refresh local storage health?", function () {
+            localStorage.removeItem("facultyExpiredMockEntry");
+            localStorage.setItem("facultyCacheOptimizedAt", new Date().toISOString());
+            refreshStorageHealth();
+            addNotification("Privacy", "Local cache was optimized.");
+            showToast("success", "Cache optimized successfully.");
+          });
+        });
+
+        privacyConsentToggle.addEventListener("click", function () {
+          const next = privacyConsentToggle.getAttribute("aria-checked") !== "true";
+          localStorage.setItem("facultyAnalyticsConsent", String(next));
+          updatePrivacyConsent();
+          showToast("success", "Privacy consent updated.");
+        });
+
+        clearDraftGradesBtn.addEventListener("click", function () {
+          openConfirm("Clear Draft Grades", "Delete saved draft grade values from this browser?", function () {
+            localStorage.setItem("facultyDraftGradesCleared", "true");
+            localStorage.removeItem("facultyDraftSnapshot");
+            localStorage.removeItem("facultyLastDraftAutoSave");
+            applyAutoSave();
+            addNotification("Grades", "Draft grades were cleared from settings.");
+            showToast("success", "Draft grades cleared.");
+          });
+        });
+
+        resetTransmutationBtn.addEventListener("click", function () {
+          openConfirm("Reset Transmutation Table", "Restore the default grading transmutation reference?", function () {
+            localStorage.setItem("facultyTransmutationResetAt", new Date().toISOString());
+            addNotification("Grades", "Transmutation table was reset to default values.");
+            showToast("success", "Transmutation table reset.");
+          });
+        });
+
+        deleteSessionDataBtn.addEventListener("click", function () {
+          openConfirm("Delete Local Session Data", "Clear local prototype data and return to the login screen?", function () {
+            localStorage.clear();
+            window.location.href = "index.html";
+          });
+        });
+
+        lockGradeSheetBtn.addEventListener("click", function () {
+          openConfirm("Lock Grade Sheet", "Simulate final submission and lock the grade sheet?", function () {
+            localStorage.setItem("facultyGradeSheetLocked", "true");
+            addNotification("Grades", "Grade sheet was locked and marked as submitted.");
+            showToast("success", "Grade sheet locked.");
+          });
+        });
+
+        exportPrefsBtn.addEventListener("click", function () {
+          exportPreferences();
+          addNotification("Privacy", "Faculty preferences were exported.");
+          showToast("success", "Preferences exported.");
+        });
+
+        cancelConfirm.addEventListener("click", closeConfirm);
+
+        confirmDanger.addEventListener("click", function () {
+          if (confirmAction) {
+            confirmAction();
+          }
+          closeConfirm();
+        });
+
+        confirmModal.addEventListener("click", function (event) {
+          if (event.target === confirmModal) {
+            closeConfirm();
+          }
+        });
+
+        avatarButton.addEventListener("click", function (event) {
+          event.stopPropagation();
+          if (profileMenu.classList.contains("open")) {
+            closeMenu();
+          } else {
+            closeNotifications();
+            profileMenu.classList.add("open");
+            avatarButton.setAttribute("aria-expanded", "true");
+          }
+        });
+
+        notifButton.addEventListener("click", function (event) {
+          event.stopPropagation();
+          if (notifPanel.classList.contains("open")) {
+            closeNotifications();
+          } else {
+            closeMenu();
+            renderNotificationFeed();
+            notifPanel.classList.add("open");
+            notifButton.setAttribute("aria-expanded", "true");
+          }
+        });
+
+        markAllRead.addEventListener("click", function (event) {
+          event.stopPropagation();
+          const items = getNotificationFeed().map(function (item) {
+            item.unread = false;
+            return item;
+          });
+          saveNotificationFeed(items);
+          renderNotificationFeed();
+          showToast("success", "Notifications marked as read.");
+        });
+
+        closeNotifBtn.addEventListener("click", function (event) {
+          event.stopPropagation();
+          closeNotifications();
+        });
+
+        seedNotifBtn.addEventListener("click", function (event) {
+          event.stopPropagation();
+          saveNotificationFeed(DEFAULT_NOTIFICATIONS.slice());
+          renderNotificationFeed();
+          showToast("success", "Notification feed reset.");
+        });
+
+        notifList.addEventListener("click", function (event) {
+          event.stopPropagation();
+          const id = event.target.getAttribute("data-read");
+          if (!id) {
+            return;
+          }
+          const items = getNotificationFeed().map(function (item) {
+            if (item.id === id) {
+              item.unread = false;
+            }
+            return item;
+          });
+          saveNotificationFeed(items);
+          renderNotificationFeed();
+        });
+
+        profileAction.addEventListener("click", function () {
+          window.location.href = "profile.html";
+        });
+
         settingsAction.addEventListener("click", closeMenu);
-        logoutAction.addEventListener("click", function () { localStorage.removeItem("userRole"); localStorage.removeItem("userName"); localStorage.removeItem("notifCount"); localStorage.removeItem("isUnlocked"); window.location.href = "index.html"; });
-        document.addEventListener("click", function (event) { if (!profileMenu.contains(event.target) && !avatarButton.contains(event.target)) { closeMenu(); } if (!notifPanel.contains(event.target) && !notifButton.contains(event.target)) { closeNotifications(); } });
-        document.addEventListener("keydown", function (event) { if (event.key === "Escape") { closeMenu(); closeNotifications(); if (confirmModal.classList.contains("open")) { closeConfirm(); } } });
+
+        logoutAction.addEventListener("click", function () {
+          openConfirm("Logout", "Sign out of the faculty portal on this device?", function () {
+            localStorage.removeItem("userRole");
+            localStorage.removeItem("userName");
+            localStorage.removeItem("notifCount");
+            window.location.href = "index.html";
+          });
+        });
+
+        profileMenu.addEventListener("click", function (event) {
+          event.stopPropagation();
+        });
+
+        notifPanel.addEventListener("click", function (event) {
+          event.stopPropagation();
+        });
+
+        document.addEventListener("click", function (event) {
+          if (!profileMenu.contains(event.target) && !avatarButton.contains(event.target)) {
+            closeMenu();
+          }
+          if (!notifPanel.contains(event.target) && !notifButton.contains(event.target)) {
+            closeNotifications();
+          }
+        });
+
+        document.addEventListener("keydown", function (event) {
+          if (event.key === "Escape") {
+            closeMenu();
+            closeNotifications();
+            if (confirmModal.classList.contains("open")) {
+              closeConfirm();
+            }
+          }
+          trapModalFocus(event);
+        });
+
+        initIdentity();
+        renderNotificationFeed();
+        renderNotificationMatrix();
+        initDisplayPreferences();
+        initPrivacyPreferences();
+        activatePanel("account");
+        validateAccountForm();
       })();
     </script>
   </body>

@@ -569,6 +569,14 @@
             return {};
           }
         }
+        function getRemovedClassKeys() {
+          try {
+            var parsed = JSON.parse(localStorage.getItem("removedClassKeys") || "[]");
+            return Array.isArray(parsed) ? parsed : [];
+          } catch (error) {
+            return [];
+          }
+        }
         function getClassSourceKey(item) {
           return item && (item.sourceKey || item.originalKey || (item.subject + "|" + item.section));
         }
@@ -585,7 +593,10 @@
           };
         }
         function getClassCatalog() {
-          return DEFAULT_CLASSES.map(function (item) {
+          var removed = getRemovedClassKeys();
+          return DEFAULT_CLASSES.filter(function (item) {
+            return removed.indexOf(item.subject + "|" + item.section) === -1;
+          }).map(function (item) {
             return applyClassOverrides({
               subject: item.subject,
               section: item.section,
@@ -594,7 +605,9 @@
               students: item.students,
               sourceKey: item.subject + "|" + item.section
             });
-          }).concat(getStoredClasses().map(applyClassOverrides));
+          }).concat(getStoredClasses().filter(function (item) {
+            return removed.indexOf(getClassSourceKey(item)) === -1;
+          }).map(applyClassOverrides));
         }
         function getEnrolledClassLabel(section) {
           if (!section) { return "Unassigned Class"; }
@@ -623,6 +636,14 @@
             return {};
           }
         }
+        function getRemovedStudentKeys() {
+          try {
+            var parsed = JSON.parse(localStorage.getItem("removedStudentKeys") || "[]");
+            return Array.isArray(parsed) ? parsed : [];
+          } catch (error) {
+            return [];
+          }
+        }
         function getStoredStudents() {
           try {
             var parsed = JSON.parse(localStorage.getItem("mockStudents") || "[]");
@@ -646,10 +667,16 @@
         }
         function refreshStudentData() {
           // LEADER UPDATE: Replace mock array with real data when available
+          var removed = getRemovedStudentKeys();
           addedStudents = getStoredStudents();
-          STUDENTS = DEFAULT_STUDENTS.map(function (student) {
+          STUDENTS = DEFAULT_STUDENTS.filter(function (student) {
+            return removed.indexOf(student.id) === -1;
+          }).map(function (student) {
             return enrichStudent(student, false);
-          }).concat(addedStudents.map(function (student) {
+          }).concat(addedStudents.filter(function (student) {
+            var sourceKey = student.sourceKey || student.recordKey || student.originalId || student.id;
+            return removed.indexOf(sourceKey) === -1 && removed.indexOf(student.id) === -1;
+          }).map(function (student) {
             return enrichStudent(student, true);
           }));
         }

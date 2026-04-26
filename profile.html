@@ -6,44 +6,560 @@
     <title>UPHSD Faculty Profile</title>
     <style>
       :root {
-        --maroon:#7b1113; --maroon-deep:#54090b; --gold:#d8ad47; --bg:#f6efe6; --surface:#fffdfa; --surface-alt:#f9f2e8;
-        --text:#211c1b; --muted:#6c5f59; --line:#e1d1bd; --ok:#21653a; --danger:#a12724; --shadow:0 18px 38px rgba(63,18,14,0.12); --shadow-strong:0 24px 46px rgba(48,8,10,0.18);
+        --primary: #800000;
+        --maroon: #7b1113;
+        --maroon-deep: #54090b;
+        --accent: #ffb800;
+        --gold: #d8ad47;
+        --bg-light: #f8f9fa;
+        --bg: #f6efe6;
+        --surface: #fffdfa;
+        --surface-alt: #f9f2e8;
+        --text: #211c1b;
+        --text-muted: #666;
+        --muted: #6c5f59;
+        --line: #e1d1bd;
+        --success: #2e7d32;
+        --danger: #a12724;
+        --shadow: 0 18px 38px rgba(63, 18, 14, 0.12);
+        --shadow-strong: 0 24px 46px rgba(48, 8, 10, 0.18);
       }
-      *{box-sizing:border-box} html,body{margin:0;min-height:100%;font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif;background:radial-gradient(circle at top left, rgba(216,173,71,.18), transparent 24%),linear-gradient(180deg,#faf3ea 0%,var(--bg) 100%);color:var(--text)}
-      a,button,input{font:inherit} button{cursor:pointer}
-      .skip-link{position:absolute;left:10px;top:-40px;background:#000;color:#fff;padding:8px 12px;border-radius:8px;z-index:200}.skip-link:focus{top:10px}:focus-visible{outline:3px solid rgba(216,173,71,.5);outline-offset:2px}
-      .layout{min-height:100vh;display:grid;grid-template-columns:292px minmax(0,1fr)} aside{background:linear-gradient(180deg,rgba(255,255,255,.05),transparent 18%),linear-gradient(180deg,var(--maroon) 0%,var(--maroon-deep) 100%);color:#fff8f0;padding:24px 18px;border-right:1px solid rgba(216,173,71,.35)}
-      .brand{display:flex;gap:14px;align-items:center;padding:16px;margin-bottom:20px;border-radius:22px;background:rgba(255,255,255,.08);border:1px solid rgba(216,173,71,.28)} .crest{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(180deg,#fff5d3 0%,var(--gold) 100%);color:var(--maroon-deep);font-weight:800;border:2px solid rgba(255,248,230,.7)} .brand h1{margin:0;font-size:1.16rem}.brand p{margin:4px 0 0;color:rgba(255,248,240,.88);font-size:.96rem}
-      .nav-list{list-style:none;padding:0;margin:0;display:grid;gap:10px}.nav-link{display:block;text-decoration:none;color:#fff8f0;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:13px 15px;font-weight:700;font-size:1rem;line-height:1.25}.nav-link:hover{background:rgba(255,255,255,.12);border-color:rgba(216,173,71,.45)}.nav-link.active{background:linear-gradient(90deg,rgba(216,173,71,.3),rgba(216,173,71,.1));color:#fffdf8;border-color:rgba(216,173,71,.76);box-shadow:inset 3px 0 0 var(--gold)}
-      .content{min-width:0;display:grid;grid-template-rows:auto 1fr} header{position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 26px;background:linear-gradient(90deg,var(--maroon) 0%,#8d1719 60%,var(--maroon) 100%);color:#fff9f2;border-bottom:1px solid rgba(216,173,71,.34);box-shadow:var(--shadow-strong)} .header-copy h2{margin:0;font-size:1.5rem}.header-copy p{margin:6px 0 0;color:rgba(255,247,236,.88);font-size:.95rem}
-      .header-actions{display:flex;align-items:center;gap:12px;position:relative}.icon-btn,.avatar-btn{position:relative;min-width:46px;min-height:46px;border-radius:14px;border:1px solid rgba(216,173,71,.38);background:rgba(255,255,255,.1);color:#fff9f2;display:inline-flex;align-items:center;justify-content:center}.icon-btn svg{width:20px;height:20px}.avatar-btn{width:46px;height:46px;border-radius:50%;background:linear-gradient(180deg,#f1d68d 0%,var(--gold) 100%);color:var(--maroon-deep);font-weight:800}.badge{position:absolute;top:-6px;right:-6px;min-width:22px;height:22px;padding:0 6px;border-radius:999px;background:var(--gold);color:var(--maroon-deep);display:grid;place-items:center;font-size:.74rem;font-weight:800;border:1px solid #fff1c8}
-      .dropdown,.notif-panel{position:absolute;right:0;top:58px;width:min(360px,calc(100vw - 24px));background:linear-gradient(180deg,var(--surface) 0%,var(--surface-alt) 100%);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);display:none;color:var(--text);z-index:40}.dropdown.open,.notif-panel.open{display:block}.dropdown{width:200px;padding:8px}.dropdown button{width:100%;text-align:left;border:0;background:transparent;border-radius:10px;padding:10px 12px;color:var(--text)}.dropdown button:hover{background:#f4ecdf}
-      .notif-head,.notif-actions{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px}.notif-head{border-bottom:1px solid var(--line)}.notif-head h3{margin:0;font-size:1rem;color:var(--maroon)}.notif-head p{margin:4px 0 0;color:var(--muted);font-size:.85rem}.text-btn{border:0;background:transparent;color:var(--maroon);font-weight:700}.notif-list{list-style:none;margin:0;padding:8px 12px 0;max-height:360px;overflow:auto;display:grid;gap:10px}.notif-item{display:grid;gap:6px;padding:12px;border-radius:14px;border:1px solid var(--line);background:#fffdf9;color:var(--text)}.notif-item.unread{border-color:#dfbf72;background:#fff7e5}.notif-top{display:flex;justify-content:space-between;gap:10px;align-items:start}.notif-tag{display:inline-flex;align-items:center;border-radius:999px;padding:3px 8px;font-size:.72rem;font-weight:800;background:#f2e5c7;color:var(--maroon-deep)}.notif-item p{margin:0;color:var(--text);line-height:1.45}.notif-item time{margin:0;color:var(--muted);font-size:.8rem}.notif-actions{border-top:1px solid var(--line)}.notif-actions button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 10px;font-weight:700;color:var(--text)}
-      main{padding:24px;display:grid;gap:18px;align-content:start}
-      .profile-hero,.card,.modal-card{background:linear-gradient(180deg,var(--surface) 0%,var(--surface-alt) 100%);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}
-      .profile-hero{padding:22px;display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center}.avatar-lg{width:88px;height:88px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(180deg,#f1d68d 0%,var(--gold) 100%);color:var(--maroon-deep);font-size:2rem;font-weight:800}.status-badge{display:inline-flex;align-items:center;border-radius:999px;padding:4px 10px;font-size:.78rem;font-weight:800;border:1px solid #b8d5b1;background:#edf6ea;color:var(--ok)}
-      .profile-hero h1{margin:0;color:var(--maroon)} .profile-hero p{margin:6px 0 0;color:var(--muted)} .hero-actions{display:flex;gap:10px;flex-wrap:wrap}.hero-actions button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 12px;font-weight:700}.hero-actions .primary{background:var(--maroon);border-color:var(--maroon);color:#fff}
-      .info-grid,.activity-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}.card{padding:16px}.card h3{margin:0 0 10px;color:var(--maroon)}.label{font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}.value{margin-top:6px;font-weight:700}
-      .two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px}.list{margin:0;padding-left:18px;color:var(--muted)} .list li{margin-bottom:8px}
-      .table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:16px;background:#fff}.table-wrap table{width:100%;min-width:620px;border-collapse:collapse}.table-wrap th,.table-wrap td{padding:12px 14px;text-align:left;border-bottom:1px solid #eee2d2}.table-wrap th{background:#f7efe3;color:var(--maroon)}
-      .metric{font-size:1.7rem;font-weight:800;color:var(--maroon)}
-      .modal{position:fixed;inset:0;background:rgba(21,13,13,.45);display:none;place-items:center;padding:20px;z-index:130}.modal.open{display:grid}.modal-card{width:min(520px,100%);padding:20px}.modal-card h3{margin-top:0;color:var(--maroon)}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:grid;gap:6px}.field input{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff}.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:16px}.btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 12px;font-weight:700}.btn.primary{background:var(--maroon);border-color:var(--maroon);color:#fff}
-      .toast-wrap{position:fixed;right:14px;bottom:14px;display:grid;gap:10px;z-index:120}.toast{min-width:240px;max-width:320px;padding:12px 14px;border-radius:14px;color:#fff;box-shadow:var(--shadow)}.toast.success{background:#1f6a3b}.toast.error{background:#8f1f1d}
-      @media (max-width: 1100px){.info-grid,.activity-grid{grid-template-columns:repeat(2,minmax(0,1fr))}} @media (max-width: 920px){.layout{grid-template-columns:1fr}aside{border-right:0;border-bottom:1px solid rgba(216,173,71,.35)}.nav-list{grid-template-columns:repeat(3,minmax(0,1fr))}} @media (max-width: 760px){header{padding:18px 16px;flex-direction:column;align-items:stretch}.header-actions{justify-content:flex-end}main{padding:16px}.profile-hero,.two-col,.form-grid,.nav-list,.info-grid,.activity-grid{grid-template-columns:1fr}}
+
+      * { box-sizing: border-box; }
+      html, body {
+        margin: 0;
+        min-height: 100%;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background:
+          radial-gradient(circle at top left, rgba(216, 173, 71, 0.18), transparent 24%),
+          linear-gradient(180deg, #faf3ea 0%, var(--bg) 100%);
+        color: var(--text);
+      }
+      a, button, input { font: inherit; }
+      button { cursor: pointer; min-height: 44px; }
+      :focus-visible { outline: 3px solid rgba(216, 173, 71, 0.55); outline-offset: 2px; }
+      .skip-link {
+        position: absolute;
+        left: 10px;
+        top: -42px;
+        background: #000;
+        color: #fff;
+        padding: 8px 12px;
+        border-radius: 8px;
+        z-index: 200;
+      }
+      .skip-link:focus { top: 10px; }
+
+      .layout {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 292px minmax(0, 1fr);
+      }
+      aside {
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 18%),
+          linear-gradient(180deg, var(--maroon) 0%, var(--maroon-deep) 100%);
+        color: #fff8f0;
+        padding: 24px 18px;
+        border-right: 1px solid rgba(216, 173, 71, 0.35);
+      }
+      .brand {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        padding: 16px;
+        margin-bottom: 20px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(216, 173, 71, 0.28);
+      }
+      .crest {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(180deg, #fff5d3 0%, var(--gold) 100%);
+        color: var(--maroon-deep);
+        font-weight: 800;
+        border: 2px solid rgba(255, 248, 230, 0.7);
+      }
+      .brand h1 { margin: 0; font-size: 1.16rem; }
+      .brand p { margin: 4px 0 0; color: rgba(255, 248, 240, 0.88); font-size: 0.96rem; }
+      .nav-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 10px;
+      }
+      .nav-link {
+        display: block;
+        text-decoration: none;
+        color: #fff8f0;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 13px 15px;
+        font-weight: 700;
+        font-size: 1rem;
+        line-height: 1.25;
+      }
+      .nav-link:hover { background: rgba(255, 255, 255, 0.12); border-color: rgba(216, 173, 71, 0.45); }
+      .nav-link.active {
+        background: linear-gradient(90deg, rgba(216, 173, 71, 0.3), rgba(216, 173, 71, 0.1));
+        color: #fffdf8;
+        border-color: rgba(216, 173, 71, 0.76);
+        box-shadow: inset 3px 0 0 var(--gold);
+      }
+
+      .content {
+        min-width: 0;
+        display: grid;
+        grid-template-rows: auto 1fr;
+      }
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        padding: 20px 26px;
+        background: linear-gradient(90deg, var(--maroon) 0%, #8d1719 60%, var(--maroon) 100%);
+        color: #fff9f2;
+        border-bottom: 1px solid rgba(216, 173, 71, 0.34);
+        box-shadow: var(--shadow-strong);
+      }
+      .header-copy h2 { margin: 0; font-size: 1.5rem; }
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        position: relative;
+      }
+      .icon-btn, .avatar-btn {
+        position: relative;
+        min-width: 46px;
+        min-height: 46px;
+        border-radius: 12px;
+        border: 1px solid rgba(216, 173, 71, 0.38);
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff9f2;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .icon-btn svg { width: 20px; height: 20px; }
+      .avatar-btn {
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        background: linear-gradient(180deg, #f1d68d 0%, var(--gold) 100%);
+        color: var(--maroon-deep);
+        font-weight: 800;
+      }
+      .badge {
+        position: absolute;
+        top: -6px;
+        right: -6px;
+        min-width: 22px;
+        height: 22px;
+        padding: 0 6px;
+        border-radius: 999px;
+        background: var(--gold);
+        color: var(--maroon-deep);
+        display: grid;
+        place-items: center;
+        font-size: 0.74rem;
+        font-weight: 800;
+        border: 1px solid #fff1c8;
+      }
+      .dropdown, .notif-panel {
+        position: absolute;
+        right: 0;
+        top: 58px;
+        width: min(360px, calc(100vw - 24px));
+        background: linear-gradient(180deg, var(--surface) 0%, var(--surface-alt) 100%);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        box-shadow: var(--shadow);
+        display: none;
+        color: var(--text);
+        z-index: 40;
+      }
+      .dropdown.open, .notif-panel.open { display: block; }
+      .dropdown { width: 200px; padding: 8px; }
+      .dropdown button {
+        width: 100%;
+        text-align: left;
+        border: 0;
+        background: transparent;
+        border-radius: 10px;
+        padding: 10px 12px;
+        color: var(--text);
+      }
+      .dropdown button:hover { background: #f4ecdf; }
+      .notif-head, .notif-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 16px;
+      }
+      .notif-head { border-bottom: 1px solid var(--line); }
+      .notif-head h3 { margin: 0; font-size: 1rem; color: var(--maroon); }
+      .notif-head p { margin: 4px 0 0; color: var(--muted); font-size: 0.85rem; }
+      .text-btn { border: 0; background: transparent; color: var(--maroon); font-weight: 700; }
+      .notif-list {
+        list-style: none;
+        margin: 0;
+        padding: 8px 12px 0;
+        max-height: 360px;
+        overflow: auto;
+        display: grid;
+        gap: 10px;
+      }
+      .notif-item {
+        display: grid;
+        gap: 6px;
+        padding: 12px;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        background: #fffdf9;
+        color: var(--text);
+      }
+      .notif-item.unread { border-color: #dfbf72; background: #fff7e5; }
+      .notif-top { display: flex; justify-content: space-between; gap: 10px; align-items: start; }
+      .notif-tag {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        padding: 3px 8px;
+        font-size: 0.72rem;
+        font-weight: 800;
+        background: #f2e5c7;
+        color: var(--maroon-deep);
+      }
+      .notif-item p { margin: 0; color: var(--text); line-height: 1.45; }
+      .notif-item time { margin: 0; color: var(--muted); font-size: 0.8rem; }
+      .notif-actions { border-top: 1px solid var(--line); }
+      .notif-actions button {
+        border: 1px solid var(--line);
+        background: #fff;
+        border-radius: 10px;
+        padding: 8px 10px;
+        font-weight: 700;
+        color: var(--text);
+      }
+
+      main {
+        padding: 24px;
+        display: grid;
+        gap: 18px;
+        align-content: start;
+      }
+      .profile-hero, .card, .modal-card, .schedule-drawer {
+        background: linear-gradient(180deg, var(--surface) 0%, var(--surface-alt) 100%);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+      }
+      .profile-hero {
+        padding: 22px;
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        gap: 18px;
+        align-items: center;
+      }
+      .avatar-lg {
+        width: 88px;
+        height: 88px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(180deg, #f1d68d 0%, var(--gold) 100%);
+        color: var(--maroon-deep);
+        font-size: 2rem;
+        font-weight: 800;
+      }
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        border-radius: 999px;
+        padding: 4px 10px;
+        font-size: 0.78rem;
+        font-weight: 800;
+        border: 1px solid #b8d5b1;
+        background: #edf6ea;
+        color: var(--success);
+      }
+      .status-badge::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: currentColor;
+      }
+      .profile-hero h1 { margin: 0; color: var(--maroon); }
+      .profile-hero p { margin: 6px 0 0; color: var(--muted); }
+      .hero-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+      .btn, .hero-actions button {
+        border: 1px solid var(--line);
+        background: #fff;
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-weight: 800;
+        color: var(--text);
+      }
+      .btn.primary, .hero-actions .primary {
+        background: var(--maroon);
+        border-color: var(--maroon);
+        color: #fff;
+      }
+      .btn.gold, .hero-actions .gold-outline {
+        border-color: var(--gold);
+        color: var(--maroon);
+      }
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 14px;
+      }
+      .card { padding: 16px; }
+      .card h3 { margin: 0 0 10px; color: var(--maroon); }
+      .label {
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0;
+        color: var(--text-muted);
+      }
+      .value { margin-top: 6px; font-weight: 700; }
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+      }
+      .list {
+        margin: 0;
+        padding-left: 18px;
+        color: var(--muted);
+        font-size: 1.02rem;
+      }
+      .list li { margin-bottom: 8px; line-height: 1.45; }
+      .background-copy {
+        margin-top: 16px;
+        color: var(--muted);
+        font-size: 0.98rem;
+        line-height: 1.65;
+      }
+      /* HCI: Visibility - Activity metric cards with clear hierarchy */
+      .activity-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px;
+      }
+      .metric-card {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fffdf9;
+        padding: 14px;
+      }
+      .metric-card .value {
+        color: var(--primary);
+        font-size: 1.35rem;
+        font-weight: 900;
+      }
+      .table-wrap {
+        overflow-x: auto;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+      }
+      table {
+        width: 100%;
+        min-width: 620px;
+        border-collapse: collapse;
+      }
+      th, td {
+        padding: 12px 14px;
+        text-align: left;
+        border-bottom: 1px solid #eee2d2;
+      }
+      th { background: #f7efe3; color: var(--maroon); }
+      tbody tr.clickable-row { cursor: pointer; }
+      tbody tr.clickable-row:hover { background: #fff7e5; }
+
+      .modal, .drawer-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(21, 13, 13, 0.45);
+        display: none;
+        z-index: 130;
+      }
+      .modal.open, .drawer-overlay.open { display: grid; }
+      .modal {
+        place-items: center;
+        padding: 20px;
+      }
+      .modal-card {
+        width: min(560px, 100%);
+        padding: 20px;
+      }
+      .modal-card h3 { margin-top: 0; color: var(--maroon); }
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .field {
+        display: grid;
+        gap: 6px;
+      }
+      .field.full { grid-column: 1 / -1; }
+      .field label, .field span {
+        color: var(--maroon);
+        font-size: 0.86rem;
+        font-weight: 800;
+      }
+      .field input {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 10px 12px;
+        background: #fff;
+      }
+      .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 16px;
+      }
+      .drawer-overlay {
+        justify-items: end;
+      }
+      .schedule-drawer {
+        width: min(620px, 100%);
+        height: 100vh;
+        border-radius: 8px 0 0 8px;
+        padding: 20px;
+        overflow: auto;
+        transform: translateX(100%);
+        transition: transform 0.24s ease;
+      }
+      .drawer-overlay.open .schedule-drawer { transform: translateX(0); }
+      .drawer-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+      .drawer-head h3 {
+        margin: 0;
+        color: var(--maroon);
+      }
+      .schedule-grid {
+        display: grid;
+        grid-template-columns: 90px repeat(5, minmax(120px, 1fr));
+        gap: 8px;
+        min-width: 760px;
+      }
+      .schedule-cell {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fffdf9;
+        color: #111;
+        padding: 10px;
+        min-height: 58px;
+      }
+      .schedule-cell.head {
+        background: #f7efe3;
+        color: var(--maroon);
+        font-weight: 900;
+      }
+      .schedule-cell.busy {
+        border-color: #dfbf72;
+        background: #fff7e5;
+        color: #111;
+        font-weight: 800;
+      }
+      .drawer-scroll { overflow-x: auto; }
+      .toast-wrap {
+        position: fixed;
+        right: 14px;
+        bottom: 14px;
+        display: grid;
+        gap: 10px;
+        z-index: 150;
+      }
+      .toast {
+        min-width: 240px;
+        max-width: 340px;
+        padding: 12px 14px;
+        border-radius: 8px;
+        color: #fff;
+        box-shadow: var(--shadow);
+        background: #1f6a3b;
+      }
+
+      @media (max-width: 1100px) {
+        .info-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      }
+      @media (max-width: 920px) {
+        .layout { grid-template-columns: 1fr; }
+        aside { border-right: 0; border-bottom: 1px solid rgba(216, 173, 71, 0.35); }
+        .nav-list { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      }
+      @media (max-width: 760px) {
+        header {
+          padding: 18px 16px;
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .header-actions { justify-content: flex-end; }
+        main { padding: 16px; }
+        .profile-hero, .two-col, .form-grid, .nav-list, .info-grid { grid-template-columns: 1fr; }
+        .hero-actions { justify-content: stretch; }
+        .hero-actions button { width: 100%; }
+        .modal-actions { flex-direction: column-reverse; }
+        .modal-actions button { width: 100%; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          transition-duration: 0.001ms !important;
+          animation-duration: 0.001ms !important;
+        }
+      }
     </style>
   </head>
   <body>
     <a class="skip-link" href="#mainContent">Skip to main content</a>
     <div class="layout">
       <aside aria-label="Faculty navigation">
-        <div class="brand"><div class="crest" aria-hidden="true">UP</div><div><h1>UPHSD CCS</h1><p>Faculty Portal</p></div></div>
-        <nav><ul class="nav-list">
-          <li><a class="nav-link" href="dashboard.html">Dashboard</a></li>
-          <li><a class="nav-link" href="students.html">Students</a></li>
-          <li><a class="nav-link" href="classes.html">Classes</a></li>
-          <li><a class="nav-link" href="calendar.html">Calendar</a></li>
-        </ul></nav>
+        <div class="brand">
+          <div class="crest" aria-hidden="true">UP</div>
+          <div>
+            <h1>UPHSD CCS</h1>
+            <p>Faculty Portal</p>
+          </div>
+        </div>
+        <nav>
+          <ul class="nav-list">
+            <li><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+            <li><a class="nav-link" href="students.html">Students</a></li>
+            <li><a class="nav-link" href="classes.html">Classes</a></li>
+            <li><a class="nav-link" href="calendar.html">Calendar</a></li>
+          </ul>
+        </nav>
       </aside>
+
       <div class="content">
         <header>
           <div class="header-copy"><h2>Profile</h2></div>
@@ -67,25 +583,25 @@
         </header>
 
         <main id="mainContent" tabindex="-1">
-          <section class="profile-hero">
+          <section class="profile-hero" aria-labelledby="profileName">
             <div class="avatar-lg" id="profileAvatar">F</div>
             <div>
-              <h1 id="profileName">Dr. Sterling Rivera</h1>
-              <p>Associate Professor • College of Computer Studies</p>
-              <p>Employee ID: FAC-2026-014 • Department: CCS</p>
+              <h1 id="profileName">Dr. Marian Rivera</h1>
+              <p>Associate Professor &bull; College of Computer Studies</p>
+              <p>Employee ID: FAC-2026-014 &bull; Department: CCS</p>
               <p><span class="status-badge">Active</span></p>
             </div>
             <div class="hero-actions">
               <button class="primary" type="button" id="editProfileBtn">Edit Profile</button>
-              <button type="button" id="scheduleBtn">View Full Schedule</button>
-              <button type="button" id="downloadCvBtn">Download CV</button>
+              <button class="gold-outline" type="button" id="scheduleBtn">View Full Schedule</button>
+              <button class="gold-outline" type="button" id="facultyReportBtn">View Faculty Report</button>
             </div>
           </section>
 
-          <section class="info-grid">
-            <article class="card"><div class="label">Email</div><div class="value" id="emailValue">sterling.rivera@uphsd.edu.ph</div></article>
+          <section class="info-grid" aria-label="Faculty contact information">
+            <article class="card"><div class="label">Email</div><div class="value" id="emailValue">marian.rivera@uphsd.edu.ph</div></article>
             <article class="card"><div class="label">Phone</div><div class="value" id="phoneValue">+63 917 555 1824</div></article>
-            <article class="card"><div class="label">Office Location</div><div class="value">CCS Faculty Room 3</div></article>
+            <article class="card"><div class="label">Office Location</div><div class="value" id="officeValue">CCS Faculty Room 3</div></article>
             <article class="card"><div class="label">Office Hours</div><div class="value" id="hoursValue">Tue/Thu 2:30 PM - 4:00 PM</div></article>
             <article class="card"><div class="label">Hire Date</div><div class="value">June 12, 2019</div></article>
           </section>
@@ -94,21 +610,24 @@
             <article class="card">
               <h3>Academic Background</h3>
               <ul class="list">
-                <li>PhD in Information Technology, Mapúa University</li>
+                <li>PhD in Information Technology, Mapua University</li>
                 <li>MS in Computer Science, De La Salle University</li>
                 <li>BS in Computer Science, UPHSD Molino</li>
                 <li>Certifications: UX Foundations, Data Analytics, Outcome-Based Education</li>
                 <li>Research Interests: HCI, accessibility, learning analytics, academic dashboards</li>
               </ul>
+              <p class="background-copy">
+                Dr. Marian Rivera currently handles faculty-led HCI instruction, assessment review, and student advising across sophomore CCS sections, with teaching practice centered on usability, accessibility, and academic workflow clarity.
+              </p>
             </article>
             <article class="card">
               <h3>Activity Summary</h3>
               <div class="activity-grid">
-                <div><div class="label">Last Login</div><div class="value">April 25, 2026 • 8:12 AM</div></div>
-                <div><div class="label">Grade Submissions</div><div class="metric">12</div></div>
-                <div><div class="label">Pending Tasks</div><div class="metric">3</div></div>
-                <div><div class="label">Current Advising Flags</div><div class="metric">4</div></div>
-                <div><div class="label">Calendar Reviews</div><div class="metric">7</div></div>
+                <article class="metric-card" aria-label="Last login April 25 2026 at 8:12 AM"><div class="label">Last Login</div><div class="value">Apr 25, 2026 &bull; 8:12 AM</div></article>
+                <article class="metric-card" aria-label="Grade submissions 12"><div class="label">Grade Submissions</div><div class="value">12</div></article>
+                <article class="metric-card" aria-label="Pending tasks 3"><div class="label">Pending Tasks</div><div class="value">3</div></article>
+                <article class="metric-card" aria-label="Current advising flags 4"><div class="label">Current Advising</div><div class="value">Flags: 4</div></article>
+                <article class="metric-card" aria-label="Calendar reviews 7"><div class="label">Calendar Reviews</div><div class="value">Reviews: 7</div></article>
               </div>
             </article>
           </section>
@@ -119,9 +638,10 @@
               <table>
                 <thead><tr><th>Course Code</th><th>Section</th><th>Schedule</th><th>Student Count</th></tr></thead>
                 <tbody>
-                  <tr><td>HCI 402</td><td>BSCS-2A</td><td>Mon/Wed 9:00-10:30 AM</td><td>42</td></tr>
-                  <tr><td>HCI 402</td><td>BSCS-2B</td><td>Tue/Fri 10:00-11:30 AM</td><td>38</td></tr>
-                  <tr><td>CS 221</td><td>BSIT-2A</td><td>Thu/Sat 1:00-2:30 PM</td><td>35</td></tr>
+                  <!-- LEADER UPDATE: Replace mock teaching load rows with real CSV when available -->
+                  <tr class="clickable-row" tabindex="0" data-section="BSCS-2A" data-student="2026-FAC-244"><td>HCI 402</td><td>BSCS-2A</td><td>Mon/Wed 9:00-10:30 AM</td><td>42</td></tr>
+                  <tr class="clickable-row" tabindex="0" data-section="BSCS-2B" data-student="2026-FAC-252"><td>HCI 402</td><td>BSCS-2B</td><td>Tue/Fri 10:00-11:30 AM</td><td>38</td></tr>
+                  <tr class="clickable-row" tabindex="0" data-section="BSIT-2A" data-student="2026-FAC-254"><td>CS 221</td><td>BSIT-2A</td><td>Thu/Sat 1:00-2:30 PM</td><td>35</td></tr>
                 </tbody>
               </table>
             </div>
@@ -133,11 +653,13 @@
     <section class="modal" id="editModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="editTitle">
       <div class="modal-card">
         <h3 id="editTitle">Edit Profile</h3>
+        <!-- HCI: User Control - Profile edit modal with state sync -->
         <div class="form-grid">
-          <label class="field">Full Name<input id="editName" value="Dr. Sterling Rivera" /></label>
-          <label class="field">Email<input id="editEmail" value="sterling.rivera@uphsd.edu.ph" /></label>
-          <label class="field">Phone<input id="editPhone" value="+63 917 555 1824" /></label>
-          <label class="field">Office Hours<input id="editHours" value="Tue/Thu 2:30 PM - 4:00 PM" /></label>
+          <label class="field"><span>Full Name</span><input id="editName" value="Dr. Marian Rivera" /></label>
+          <label class="field"><span>Email</span><input id="editEmail" value="marian.rivera@uphsd.edu.ph" /></label>
+          <label class="field"><span>Phone</span><input id="editPhone" value="+63 917 555 1824" /></label>
+          <label class="field"><span>Office Location</span><input id="editOffice" value="CCS Faculty Room 3" /></label>
+          <label class="field full"><span>Office Hours</span><input id="editHours" value="Tue/Thu 2:30 PM - 4:00 PM" /></label>
         </div>
         <div class="modal-actions">
           <button class="btn" type="button" id="cancelEdit">Cancel</button>
@@ -146,10 +668,31 @@
       </div>
     </section>
 
+    <section class="drawer-overlay" id="scheduleOverlay" aria-hidden="true">
+      <aside class="schedule-drawer" role="dialog" aria-modal="true" aria-labelledby="scheduleTitle">
+        <div class="drawer-head">
+          <div>
+            <h3 id="scheduleTitle">Weekly Schedule</h3>
+          </div>
+          <button class="btn" type="button" id="closeScheduleBtn">Close</button>
+        </div>
+        <div class="drawer-scroll">
+          <div class="schedule-grid">
+            <div class="schedule-cell head">Time</div><div class="schedule-cell head">Mon</div><div class="schedule-cell head">Tue</div><div class="schedule-cell head">Wed</div><div class="schedule-cell head">Thu</div><div class="schedule-cell head">Fri</div>
+            <div class="schedule-cell head">9:00</div><div class="schedule-cell busy">HCI 402<br />BSCS-2A</div><div class="schedule-cell">Consultation</div><div class="schedule-cell busy">HCI 402<br />BSCS-2A</div><div class="schedule-cell">Advising</div><div class="schedule-cell">Reports</div>
+            <div class="schedule-cell head">10:30</div><div class="schedule-cell">Prep</div><div class="schedule-cell busy">HCI 402<br />BSCS-2B</div><div class="schedule-cell">Faculty Meeting</div><div class="schedule-cell">Research</div><div class="schedule-cell busy">HCI 402<br />BSCS-2B</div>
+            <div class="schedule-cell head">1:00</div><div class="schedule-cell">Encoding</div><div class="schedule-cell">Advising</div><div class="schedule-cell">Consultation</div><div class="schedule-cell busy">CS 221<br />BSIT-2A</div><div class="schedule-cell">Rubric Review</div>
+            <div class="schedule-cell head">2:30</div><div class="schedule-cell">Office Hours</div><div class="schedule-cell busy">Office Hours</div><div class="schedule-cell">Assessment</div><div class="schedule-cell busy">Office Hours</div><div class="schedule-cell">Calendar Review</div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
     <div class="toast-wrap" id="toastWrap" aria-live="polite" aria-atomic="true"></div>
 
     <script>
       (function () {
+        const facultyName = "Dr. Marian Rivera";
         var DEFAULT_NOTIFICATIONS = [
           { id: "gs-review", tag: "Calendar", text: "Calendar items for BSCS-2B quizzes and deadlines need final review.", time: "5 minutes ago", unread: true },
           { id: "attendance-alert", tag: "Attendance", text: "Three students in BSCS-2A have reached 3 absences.", time: "22 minutes ago", unread: true },
@@ -178,13 +721,18 @@
         var profileName = document.getElementById("profileName");
         var emailValue = document.getElementById("emailValue");
         var phoneValue = document.getElementById("phoneValue");
+        var officeValue = document.getElementById("officeValue");
         var hoursValue = document.getElementById("hoursValue");
         var editName = document.getElementById("editName");
         var editEmail = document.getElementById("editEmail");
         var editPhone = document.getElementById("editPhone");
+        var editOffice = document.getElementById("editOffice");
         var editHours = document.getElementById("editHours");
         var scheduleBtn = document.getElementById("scheduleBtn");
-        var downloadCvBtn = document.getElementById("downloadCvBtn");
+        var scheduleOverlay = document.getElementById("scheduleOverlay");
+        var closeScheduleBtn = document.getElementById("closeScheduleBtn");
+        var facultyReportBtn = document.getElementById("facultyReportBtn");
+        var activeModal = null;
 
         function guardFacultyRole() {
           var role = localStorage.getItem("userRole");
@@ -198,9 +746,10 @@
         }
         if (!guardFacultyRole()) { return; }
         applyFacultyFontSize();
-        function showToast(type, message) {
+
+        function showToast(message) {
           var toast = document.createElement("div");
-          toast.className = "toast " + type;
+          toast.className = "toast";
           toast.textContent = message;
           toastWrap.appendChild(toast);
           window.setTimeout(function () { toast.remove(); }, 2600);
@@ -208,9 +757,7 @@
         function getNotifications() {
           var raw = localStorage.getItem("facultyNotifications");
           var stored = [];
-          try {
-            stored = raw ? JSON.parse(raw) : [];
-          } catch (error) {}
+          try { stored = raw ? JSON.parse(raw) : []; } catch (error) {}
           var merged = mergeNotifications(stored);
           saveNotifications(merged);
           return merged;
@@ -231,17 +778,15 @@
           var extra = stored.filter(function (item) {
             return item && item.id && item.text && DEFAULT_NOTIFICATIONS.every(function (defaultItem) { return defaultItem.id !== item.id; });
           }).map(function (item) {
-            return {
-              id: item.id,
-              tag: item.tag || "Update",
-              text: item.text,
-              time: item.time || "Recently",
-              unread: Boolean(item.unread)
-            };
+            return { id: item.id, tag: item.tag || "Update", text: item.text, time: item.time || "Recently", unread: Boolean(item.unread) };
           });
           return extra.concat(defaults);
         }
-        function syncBadge(items) { var unread = items.filter(function (item) { return item.unread; }).length; notifBadge.textContent = String(unread); localStorage.setItem("notifCount", String(unread)); }
+        function syncBadge(items) {
+          var unread = items.filter(function (item) { return item.unread; }).length;
+          notifBadge.textContent = String(unread);
+          localStorage.setItem("notifCount", String(unread));
+        }
         function renderNotifications() {
           var items = getNotifications();
           notifList.innerHTML = "";
@@ -256,50 +801,131 @@
         function addNotification(tag, text) {
           var items = getNotifications();
           items.unshift({ id: "n-" + Date.now(), tag: tag, text: text, time: "Just now", unread: true });
-          saveNotifications(items); renderNotifications();
+          saveNotifications(items);
+          renderNotifications();
         }
         function closeMenu() { profileMenu.classList.remove("open"); avatarButton.setAttribute("aria-expanded", "false"); }
         function closeNotifications() { notifPanel.classList.remove("open"); notifButton.setAttribute("aria-expanded", "false"); }
-        function openEdit() { editModal.classList.add("open"); editModal.setAttribute("aria-hidden", "false"); editName.focus(); }
-        function closeEdit() { editModal.classList.remove("open"); editModal.setAttribute("aria-hidden", "true"); editProfileBtn.focus(); }
+        function openDialog(element, focusTarget) {
+          activeModal = element;
+          element.classList.add("open");
+          element.setAttribute("aria-hidden", "false");
+          if (focusTarget) { focusTarget.focus(); }
+        }
+        function closeDialog(element, returnFocus) {
+          if (activeModal === element) { activeModal = null; }
+          element.classList.remove("open");
+          element.setAttribute("aria-hidden", "true");
+          if (returnFocus) { returnFocus.focus(); }
+        }
+        function trapFocus(event) {
+          if (!activeModal || event.key !== "Tab") { return; }
+          var focusable = Array.prototype.slice.call(activeModal.querySelectorAll("button, [href], input, select, textarea, [tabindex]:not([tabindex='-1'])")).filter(function (item) {
+            return !item.disabled && item.offsetParent !== null;
+          });
+          if (!focusable.length) { return; }
+          var first = focusable[0];
+          var last = focusable[focusable.length - 1];
+          if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+          } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
+          }
+        }
+        function openEdit() {
+          editName.value = profileName.textContent;
+          editEmail.value = emailValue.textContent;
+          editPhone.value = phoneValue.textContent;
+          editOffice.value = officeValue.textContent;
+          editHours.value = hoursValue.textContent;
+          openDialog(editModal, editName);
+        }
+        function closeEdit() { closeDialog(editModal, editProfileBtn); }
+        function openSchedule() { openDialog(scheduleOverlay, closeScheduleBtn); }
+        function closeSchedule() { closeDialog(scheduleOverlay, scheduleBtn); }
+        function downloadFacultyReport() {
+          var content = [
+            "Faculty: " + facultyName,
+            "Grade Submissions: 12",
+            "Pending: 3",
+            "Advising Flags: 4",
+            "Calendar Reviews: 7"
+          ].join("\n");
+          var blob = new Blob([content], { type: "text/plain" });
+          var url = URL.createObjectURL(blob);
+          var link = document.createElement("a");
+          link.href = url;
+          link.download = "Faculty_Report.txt";
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+          URL.revokeObjectURL(url);
+          addNotification("Profile", "Faculty report export was generated.");
+          showToast("Report downloaded successfully");
+        }
 
-        var displayName = localStorage.getItem("userName") || "Faculty";
-        avatarButton.textContent = displayName.charAt(0).toUpperCase();
-        profileAvatar.textContent = displayName.charAt(0).toUpperCase();
+        localStorage.setItem("userName", facultyName);
+        avatarButton.textContent = "F";
+        profileAvatar.textContent = "F";
         renderNotifications();
 
         editProfileBtn.addEventListener("click", openEdit);
         cancelEdit.addEventListener("click", closeEdit);
         editModal.addEventListener("click", function (event) { if (event.target === editModal) { closeEdit(); } });
         saveEdit.addEventListener("click", function () {
-          profileName.textContent = editName.value.trim() || "Dr. Sterling Rivera";
+          profileName.textContent = editName.value.trim() || facultyName;
           emailValue.textContent = editEmail.value.trim();
           phoneValue.textContent = editPhone.value.trim();
+          officeValue.textContent = editOffice.value.trim();
           hoursValue.textContent = editHours.value.trim();
+          localStorage.setItem("userName", profileName.textContent);
           addNotification("Profile", "Faculty profile information was updated.");
-          showToast("success", "Profile saved.");
+          showToast("Profile updated successfully");
           closeEdit();
         });
-        scheduleBtn.addEventListener("click", function () { window.location.href = "classes.html"; });
-        downloadCvBtn.addEventListener("click", function () {
-          addNotification("Profile", "Curriculum vitae download was requested.");
-          showToast("success", "CV download started.");
+        scheduleBtn.addEventListener("click", openSchedule);
+        closeScheduleBtn.addEventListener("click", closeSchedule);
+        scheduleOverlay.addEventListener("click", function (event) { if (event.target === scheduleOverlay) { closeSchedule(); } });
+        facultyReportBtn.addEventListener("click", downloadFacultyReport);
+        document.querySelectorAll(".clickable-row").forEach(function (row) {
+          function openStudentDetail() {
+            localStorage.setItem("activeSection", row.getAttribute("data-section"));
+            window.location.href = "student-detail.html?id=" + encodeURIComponent(row.getAttribute("data-student"));
+          }
+          row.addEventListener("click", openStudentDetail);
+          row.addEventListener("keydown", function (event) {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              openStudentDetail();
+            }
+          });
         });
         avatarButton.addEventListener("click", function (event) {
           event.stopPropagation();
-          if (profileMenu.classList.contains("open")) { closeMenu(); } else { closeNotifications(); profileMenu.classList.add("open"); avatarButton.setAttribute("aria-expanded", "true"); }
+          if (profileMenu.classList.contains("open")) { closeMenu(); }
+          else { closeNotifications(); profileMenu.classList.add("open"); avatarButton.setAttribute("aria-expanded", "true"); }
         });
         notifButton.addEventListener("click", function (event) {
           event.stopPropagation();
-          if (notifPanel.classList.contains("open")) { closeNotifications(); } else { closeMenu(); renderNotifications(); notifPanel.classList.add("open"); notifButton.setAttribute("aria-expanded", "true"); }
+          if (notifPanel.classList.contains("open")) { closeNotifications(); }
+          else { closeMenu(); renderNotifications(); notifPanel.classList.add("open"); notifButton.setAttribute("aria-expanded", "true"); }
         });
         markAllRead.addEventListener("click", function (event) {
           event.stopPropagation();
           var items = getNotifications().map(function (item) { item.unread = false; return item; });
-          saveNotifications(items); renderNotifications(); showToast("success", "Notifications marked as read.");
+          saveNotifications(items);
+          renderNotifications();
+          showToast("Notifications marked as read.");
         });
         closeNotifBtn.addEventListener("click", function (event) { event.stopPropagation(); closeNotifications(); });
-        seedNotifBtn.addEventListener("click", function (event) { event.stopPropagation(); saveNotifications(DEFAULT_NOTIFICATIONS.slice()); renderNotifications(); showToast("success", "Notification feed reset."); });
+        seedNotifBtn.addEventListener("click", function (event) {
+          event.stopPropagation();
+          saveNotifications(DEFAULT_NOTIFICATIONS.slice());
+          renderNotifications();
+          showToast("Notification feed reset.");
+        });
         profileMenu.addEventListener("click", function (event) { event.stopPropagation(); });
         notifPanel.addEventListener("click", function (event) { event.stopPropagation(); });
         notifList.addEventListener("click", function (event) {
@@ -307,19 +933,29 @@
           var id = event.target.getAttribute("data-read");
           if (!id) { return; }
           var items = getNotifications().map(function (item) { if (item.id === id) { item.unread = false; } return item; });
-          saveNotifications(items); renderNotifications();
+          saveNotifications(items);
+          renderNotifications();
         });
         profileAction.addEventListener("click", closeMenu);
         settingsAction.addEventListener("click", function () { window.location.href = "settings.html"; });
-        logoutAction.addEventListener("click", function () { localStorage.removeItem("userRole"); localStorage.removeItem("userName"); localStorage.removeItem("notifCount"); localStorage.removeItem("isUnlocked"); window.location.href = "index.html"; });
+        logoutAction.addEventListener("click", function () {
+          localStorage.removeItem("userRole");
+          localStorage.removeItem("userName");
+          localStorage.removeItem("notifCount");
+          localStorage.removeItem("isUnlocked");
+          window.location.href = "index.html";
+        });
         document.addEventListener("click", function (event) {
           if (!profileMenu.contains(event.target) && !avatarButton.contains(event.target)) { closeMenu(); }
           if (!notifPanel.contains(event.target) && !notifButton.contains(event.target)) { closeNotifications(); }
         });
         document.addEventListener("keydown", function (event) {
+          trapFocus(event);
           if (event.key === "Escape") {
-            closeMenu(); closeNotifications();
+            closeMenu();
+            closeNotifications();
             if (editModal.classList.contains("open")) { closeEdit(); }
+            if (scheduleOverlay.classList.contains("open")) { closeSchedule(); }
           }
         });
       })();

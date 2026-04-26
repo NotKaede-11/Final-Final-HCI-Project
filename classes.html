@@ -176,6 +176,7 @@
       .btn.accent { background:var(--accent); border-color:var(--accent); color:#2b1f05; }
       .btn:disabled { opacity:0.55; cursor:not-allowed; }
       .btn.ghost-primary { border-color:rgba(123,17,19,0.16); color:var(--maroon); }
+      .btn.danger { border-color:var(--danger); background:#fff0eb; color:var(--danger); }
       .modal-actions { display:flex; justify-content:flex-end; gap:10px; margin-top:16px; }
       .btn { border:1px solid var(--line); background:#fff; border-radius:10px; padding:10px 12px; font-weight:700; }
       .btn.primary { background:var(--maroon); border-color:var(--maroon); color:#fff; }
@@ -241,7 +242,7 @@
 
         <main id="mainContent" tabindex="-1">
           <!-- HCI: Visual Hierarchy - Primary action separated from filter controls -->
-          <section class="toolbar">
+          <section class="toolbar" id="classToolbar">
             <div class="toolbar-row">
               <div><h3>Classes</h3><p>Based on the same classes summarized on the dashboard.</p></div>
               <div class="toolbar-actions">
@@ -291,6 +292,7 @@
                 </div>
                 <div class="detail-actions">
                   <button class="btn ghost-primary" type="button" id="editClassBtn">Edit Class Details</button>
+                  <button class="btn danger" type="button" id="removeClassBtn">Remove Class</button>
                   <div class="detail-count">
                     <span>Enrolled Students</span>
                     <strong id="detailStudentCount">0</strong>
@@ -429,6 +431,17 @@
         </form>
       </div>
     </section>
+
+    <section class="modal" id="removeClassModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="removeClassTitle">
+      <div class="modal-card">
+        <h3 id="removeClassTitle">Remove Class?</h3>
+        <p id="removeClassMessage">This class will be removed from the mock class list for this browser session.</p>
+        <div class="modal-actions">
+          <button class="btn" type="button" id="cancelRemoveClass">Cancel</button>
+          <button class="btn primary" type="button" id="confirmRemoveClass">Remove Class</button>
+        </div>
+      </div>
+    </section>
     <div class="toast-wrap" id="toastWrap" aria-live="polite" aria-atomic="true"></div>
 
     <script>
@@ -460,6 +473,7 @@
         var listView = document.getElementById("listView");
         var overviewView = document.getElementById("overviewView");
         var classDetailView = document.getElementById("classDetailView");
+        var classToolbar = document.getElementById("classToolbar");
         var detailBackButton = document.getElementById("detailBackButton");
         var detailClassTitle = document.getElementById("detailClassTitle");
         var detailClassSubtitle = document.getElementById("detailClassSubtitle");
@@ -475,6 +489,7 @@
         var detailStudentsTableWrap = document.getElementById("detailStudentsTableWrap");
         var detailStudentsEmpty = document.getElementById("detailStudentsEmpty");
         var editClassBtn = document.getElementById("editClassBtn");
+        var removeClassBtn = document.getElementById("removeClassBtn");
         var addClassBtn = document.getElementById("addClassBtn");
         var searchInput = document.getElementById("searchInput");
         var resultsCount = document.getElementById("resultsCount");
@@ -519,6 +534,10 @@
         var editClassScheduleError = document.getElementById("editClassScheduleError");
         var editClassRoomError = document.getElementById("editClassRoomError");
         var editClassStudentsError = document.getElementById("editClassStudentsError");
+        var removeClassModal = document.getElementById("removeClassModal");
+        var removeClassMessage = document.getElementById("removeClassMessage");
+        var cancelRemoveClass = document.getElementById("cancelRemoveClass");
+        var confirmRemoveClass = document.getElementById("confirmRemoveClass");
         var notifButton = document.getElementById("notifButton");
         var notifBadge = document.getElementById("notifBadge");
         var notifPanel = document.getElementById("notifPanel");
@@ -582,6 +601,17 @@
         function saveClassOverrides(overrides) {
           localStorage.setItem("classDetailOverrides", JSON.stringify(overrides));
         }
+        function getRemovedClassKeys() {
+          try {
+            var parsed = JSON.parse(localStorage.getItem("removedClassKeys") || "[]");
+            return Array.isArray(parsed) ? parsed : [];
+          } catch (error) {
+            return [];
+          }
+        }
+        function saveRemovedClassKeys(keys) {
+          localStorage.setItem("removedClassKeys", JSON.stringify(keys));
+        }
         function getClassSourceKey(item) {
           return item && (item.sourceKey || item.originalKey || (item.subject + "|" + item.section));
         }
@@ -602,12 +632,25 @@
           localStorage.setItem("mockClasses", JSON.stringify(addedClasses));
         }
         function refreshClassData() {
+          var removed = getRemovedClassKeys();
           addedClasses = getStoredClasses();
-          CLASSES = DEFAULT_STUDENTS && CLASSES ? [
+          CLASSES = [
             applyClassOverrides({ subject: "HCI 402", section: "BSCS-2A", schedule: "Mon/Wed 9:00-10:30 AM", room: "Comp Lab 2", students: 42, sourceKey: "HCI 402|BSCS-2A", fromStorage: false }),
             applyClassOverrides({ subject: "HCI 402", section: "BSCS-2B", schedule: "Tue/Fri 10:00-11:30 AM", room: "Room 405", students: 38, sourceKey: "HCI 402|BSCS-2B", fromStorage: false }),
             applyClassOverrides({ subject: "Data Structures", section: "BSIT-2A", schedule: "Thu/Sat 1:00-2:30 PM", room: "Comp Lab 1", students: 35, sourceKey: "Data Structures|BSIT-2A", fromStorage: false })
-          ].concat(addedClasses.map(applyClassOverrides)) : [];
+          ].filter(function (item) {
+            return removed.indexOf(getClassSourceKey(item)) === -1;
+          }).concat(addedClasses.filter(function (item) {
+            return removed.indexOf(getClassSourceKey(item)) === -1;
+          }).map(applyClassOverrides));
+        }
+        function getRemovedStudentKeys() {
+          try {
+            var parsed = JSON.parse(localStorage.getItem("removedStudentKeys") || "[]");
+            return Array.isArray(parsed) ? parsed : [];
+          } catch (error) {
+            return [];
+          }
         }
         function getStoredStudents() {
           try {
@@ -638,7 +681,10 @@
         }
         function getAllStudents() {
           var overrides = getStudentOverrides();
-          return DEFAULT_STUDENTS.map(function (student) {
+          var removed = getRemovedStudentKeys();
+          return DEFAULT_STUDENTS.filter(function (student) {
+            return removed.indexOf(student.id) === -1;
+          }).map(function (student) {
             var sourceKey = student.sourceKey || student.id;
             var override = overrides[sourceKey] || {};
             return {
@@ -649,7 +695,10 @@
               flag: student.flag || "Clear",
               sourceKey: sourceKey
             };
-          }).concat(getStoredStudents().map(function (student) {
+          }).concat(getStoredStudents().filter(function (student) {
+            var sourceKey = student.sourceKey || student.id;
+            return removed.indexOf(sourceKey) === -1 && removed.indexOf(student.id) === -1;
+          }).map(function (student) {
             var override = overrides[student.sourceKey] || {};
             return {
               name: override.name || student.name,
@@ -883,6 +932,7 @@
             detailStudentsTableWrap.hidden = true;
             detailStudentsEmpty.hidden = false;
           }
+          classToolbar.style.display = "none";
           overviewView.style.display = "none";
           classDetailView.classList.add("active");
           detailBackButton.focus();
@@ -890,6 +940,7 @@
         function closeClassDetailView() {
           activeClassSourceKey = null;
           classDetailView.classList.remove("active");
+          classToolbar.style.display = "flex";
           overviewView.style.display = "block";
           addClassBtn.focus();
         }
@@ -1001,6 +1052,35 @@
         function closeEditClassModal() {
           clearEditClassErrors();
           closeModal(editClassModal);
+        }
+        function openRemoveClassModal() {
+          var item = findClassBySourceKey(activeClassSourceKey);
+          if (!item) { return; }
+          removeClassMessage.textContent = item.subject + " - " + item.section + " will be removed from the mock class list for this browser session.";
+          openModal(removeClassModal, cancelRemoveClass);
+        }
+        function closeRemoveClassModal() {
+          closeModal(removeClassModal);
+        }
+        function removeCurrentClass() {
+          var item = findClassBySourceKey(activeClassSourceKey);
+          if (!item) { return; }
+          var sourceKey = getClassSourceKey(item);
+          var removed = getRemovedClassKeys();
+          if (removed.indexOf(sourceKey) === -1) { removed.push(sourceKey); }
+          saveRemovedClassKeys(removed);
+          addedClasses = getStoredClasses().filter(function (stored) {
+            return getClassSourceKey(stored) !== sourceKey;
+          });
+          saveStoredClasses();
+          var overrides = getClassOverrides();
+          delete overrides[sourceKey];
+          saveClassOverrides(overrides);
+          closeRemoveClassModal();
+          closeClassDetailView();
+          refreshClassData();
+          applyView(localStorage.getItem("classViewMode") || "list");
+          showToast("success", "Class removed from mock list.");
         }
         function getFilteredClasses() {
           var search = searchInput.value.trim().toLowerCase();
@@ -1116,6 +1196,7 @@
         cancelAddClass.addEventListener("click", closeAddClassModal);
         addClassModal.addEventListener("click", function (event) { if (event.target === addClassModal) { closeAddClassModal(); } });
         editClassBtn.addEventListener("click", openEditClassModal);
+        removeClassBtn.addEventListener("click", openRemoveClassModal);
         [editClassSubjectInput, editClassSectionInput, editClassScheduleInput, editClassRoomInput, editClassStudentsInput].forEach(function (input) {
           input.addEventListener("input", function () { validateEditClassForm(false); });
           input.addEventListener("change", function () { validateEditClassForm(false); });
@@ -1143,6 +1224,9 @@
         });
         cancelEditClass.addEventListener("click", closeEditClassModal);
         editClassModal.addEventListener("click", function (event) { if (event.target === editClassModal) { closeEditClassModal(); } });
+        cancelRemoveClass.addEventListener("click", closeRemoveClassModal);
+        confirmRemoveClass.addEventListener("click", removeCurrentClass);
+        removeClassModal.addEventListener("click", function (event) { if (event.target === removeClassModal) { closeRemoveClassModal(); } });
         searchInput.addEventListener("input", function () { applyView(localStorage.getItem("classViewMode") || "list"); });
         classBody.addEventListener("click", function (event) {
           var row = event.target.closest("[data-class-id]");
@@ -1231,6 +1315,7 @@
             if (classDetailView.classList.contains("active")) { closeClassDetailView(); }
             if (addClassModal.classList.contains("open")) { closeAddClassModal(); }
             if (editClassModal.classList.contains("open")) { closeEditClassModal(); }
+            if (removeClassModal.classList.contains("open")) { closeRemoveClassModal(); }
           } else {
             trapFocus(event);
           }

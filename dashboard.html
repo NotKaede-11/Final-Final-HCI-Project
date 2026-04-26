@@ -789,7 +789,7 @@
 
         <main id="mainContent" tabindex="-1">
           <section class="hero" aria-labelledby="welcomeTitle">
-            <h1 id="welcomeTitle">Welcome, <span id="welcomeName">Faculty</span></h1>
+            <h1 id="welcomeTitle">Good day, <span id="welcomeName">Dr. Marian Rivera</span>!</h1>
             <p>2nd Semester AY 2025-2026 • College of Computer Studies • Academic workload summary</p>
           </section>
 
@@ -864,6 +864,7 @@
 
     <script>
       (function () {
+        const facultyName = "Dr. Marian Rivera";
         var FACULTY_CLASSES = [
           { section: "BSCS-2A", subject: "HCI 402", schedule: "Mon/Wed 9:00-10:30 AM", students: 42, status: "On Track" },
           { section: "BSCS-2B", subject: "HCI 402", schedule: "Tue/Fri 10:00-11:30 AM", students: 38, status: "Needs Review" },
@@ -1097,7 +1098,8 @@
           });
         }
 
-        var name = localStorage.getItem("userName") || "Faculty";
+        var name = facultyName;
+        localStorage.setItem("userName", facultyName);
         welcomeName.textContent = name;
         avatarButton.textContent = name.charAt(0).toUpperCase();
 
