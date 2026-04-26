@@ -1,0 +1,1285 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>UPHSD Class Performance & Compliance Report</title>
+    <style>
+      :root {
+        --primary: #800000;
+        --maroon: #7b1113;
+        --maroon-deep: #54090b;
+        --accent: #ffb800;
+        --gold: #d8ad47;
+        --bg-light: #f8f9fa;
+        --bg: #f6efe6;
+        --surface: #fffdfa;
+        --surface-alt: #f9f2e8;
+        --text: #211c1b;
+        --muted: #6c5f59;
+        --line: #e1d1bd;
+        --success: #2e7d32;
+        --warning: #f57f17;
+        --danger: #c62828;
+        --shadow: 0 18px 38px rgba(63, 18, 14, 0.12);
+        --shadow-strong: 0 24px 46px rgba(48, 8, 10, 0.18);
+        --radius: 18px;
+        --radius-sm: 12px;
+      }
+
+      * { box-sizing: border-box; }
+
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background:
+          radial-gradient(circle at top left, rgba(255, 184, 0, 0.14), transparent 24%),
+          linear-gradient(180deg, #fbf4eb 0%, var(--bg) 100%);
+        color: var(--text);
+      }
+
+      a,
+      button,
+      input,
+      select,
+      summary {
+        font: inherit;
+      }
+
+      button { cursor: pointer; }
+
+      :focus-visible {
+        outline: 3px solid rgba(255, 184, 0, 0.52);
+        outline-offset: 2px;
+      }
+
+      .skip-link {
+        position: absolute;
+        left: 10px;
+        top: -40px;
+        z-index: 200;
+        background: #000;
+        color: #fff;
+        padding: 8px 12px;
+        border-radius: 8px;
+      }
+
+      .skip-link:focus { top: 10px; }
+
+      .layout {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 292px minmax(0, 1fr);
+      }
+
+      aside {
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 18%),
+          linear-gradient(180deg, var(--maroon) 0%, var(--maroon-deep) 100%);
+        color: #fff8f0;
+        padding: 24px 18px;
+        border-right: 1px solid rgba(216, 173, 71, 0.35);
+      }
+
+      .brand {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        padding: 16px;
+        margin-bottom: 20px;
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(216, 173, 71, 0.28);
+      }
+
+      .crest {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(180deg, #fff5d3 0%, var(--gold) 100%);
+        color: var(--maroon-deep);
+        font-weight: 800;
+        border: 2px solid rgba(255, 248, 230, 0.7);
+      }
+
+      .brand h1 {
+        margin: 0;
+        font-size: 1.16rem;
+        line-height: 1.2;
+      }
+
+      .brand p {
+        margin: 4px 0 0;
+        color: rgba(255, 248, 240, 0.88);
+        font-size: 0.96rem;
+      }
+
+      .nav-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 10px;
+      }
+
+      .nav-link {
+        display: block;
+        text-decoration: none;
+        color: #fff8f0;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        padding: 13px 15px;
+        font-weight: 700;
+        font-size: 1rem;
+        line-height: 1.25;
+      }
+
+      .nav-link:hover {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(216, 173, 71, 0.45);
+      }
+
+      .content {
+        min-width: 0;
+        display: grid;
+        grid-template-rows: auto 1fr;
+      }
+
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        padding: 20px 26px;
+        background: linear-gradient(90deg, var(--maroon) 0%, #8d1719 60%, var(--maroon) 100%);
+        color: #fff9f2;
+        border-bottom: 1px solid rgba(216, 173, 71, 0.34);
+        box-shadow: var(--shadow-strong);
+      }
+
+      .header-copy h2 {
+        margin: 0;
+        font-size: 1.5rem;
+        line-height: 1.1;
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        position: relative;
+      }
+
+      .icon-btn,
+      .avatar-btn {
+        position: relative;
+        min-width: 46px;
+        min-height: 46px;
+        border-radius: 14px;
+        border: 1px solid rgba(216, 173, 71, 0.38);
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff9f2;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .icon-btn svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .avatar-btn {
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        background: linear-gradient(180deg, #f1d68d 0%, var(--gold) 100%);
+        color: var(--maroon-deep);
+        font-weight: 800;
+      }
+
+      .badge {
+        position: absolute;
+        top: -6px;
+        right: -6px;
+        min-width: 22px;
+        height: 22px;
+        padding: 0 6px;
+        border-radius: 999px;
+        background: var(--gold);
+        color: var(--maroon-deep);
+        display: grid;
+        place-items: center;
+        font-size: 0.74rem;
+        font-weight: 800;
+        border: 1px solid #fff1c8;
+      }
+
+      .notif-panel,
+      .dropdown {
+        position: absolute;
+        right: 0;
+        top: 56px;
+        display: none;
+        background: linear-gradient(180deg, var(--surface) 0%, var(--surface-alt) 100%);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        box-shadow: var(--shadow);
+        color: var(--text);
+      }
+
+      .notif-panel.open,
+      .dropdown.open { display: block; }
+
+      .notif-panel {
+        width: min(370px, calc(100vw - 24px));
+        padding: 14px;
+      }
+
+      .notif-panel h2 {
+        margin: 0 0 4px;
+        color: var(--primary);
+        font-size: 1rem;
+      }
+
+      .notif-panel p {
+        margin: 0 0 12px;
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
+      .notif-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 10px;
+      }
+
+      .notif-list li {
+        border: 1px solid #dfbf72;
+        background: #fff7e5;
+        border-radius: 12px;
+        padding: 11px 12px;
+        line-height: 1.45;
+        color: var(--text);
+      }
+
+      .dropdown {
+        width: 210px;
+        padding: 8px;
+      }
+
+      .dropdown button {
+        width: 100%;
+        text-align: left;
+        border: 0;
+        background: transparent;
+        border-radius: 10px;
+        padding: 10px 12px;
+        color: var(--text);
+      }
+
+      .dropdown button:hover { background: #f4ecdf; }
+
+      main {
+        width: min(1480px, 100%);
+        margin: 0 auto;
+        padding: 24px;
+        display: grid;
+        gap: 18px;
+      }
+
+      .action-bar,
+      .section-card,
+      .summary-card {
+        background: linear-gradient(180deg, var(--surface) 0%, var(--surface-alt) 100%);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+      }
+
+      .hero {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 18px;
+        flex-wrap: wrap;
+      }
+
+      .hero h1 {
+        margin: 0;
+        color: var(--primary);
+        font-size: 1.75rem;
+      }
+
+      .hero p {
+        margin: 8px 0 0;
+        color: var(--muted);
+        max-width: 760px;
+        line-height: 1.55;
+      }
+
+      .action-bar {
+        padding: 16px 18px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .action-copy {
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        min-height: 44px;
+        border-radius: 12px;
+        border: 1px solid transparent;
+        padding: 0 16px;
+        font-weight: 800;
+      }
+
+      .btn-primary {
+        background: var(--primary);
+        color: #fff9f2;
+      }
+
+      .btn-accent {
+        background: var(--accent);
+        color: #311109;
+      }
+
+      .btn-secondary {
+        background: #fff;
+        color: var(--primary);
+        border-color: rgba(123, 17, 19, 0.18);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.9fr);
+        gap: 18px;
+      }
+
+      .stack {
+        display: grid;
+        gap: 18px;
+      }
+
+      .section-card {
+        padding: 18px;
+      }
+
+      .section-card.fill-space {
+        min-height: 380px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .section-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 14px;
+        margin-bottom: 16px;
+      }
+
+      .section-head h2,
+      .section-head h3 {
+        margin: 0;
+        color: var(--primary);
+      }
+
+      .section-head p,
+      .metric-note,
+      .last-updated {
+        margin: 6px 0 0;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      .distribution-list {
+        display: grid;
+        gap: 12px;
+      }
+
+      .distribution-shell {
+        display: grid;
+        gap: 18px;
+        flex: 1;
+      }
+
+      .distribution-row {
+        display: grid;
+        grid-template-columns: 86px minmax(0, 1fr) 72px;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .distribution-label,
+      .distribution-value {
+        font-weight: 700;
+      }
+
+      .bar-track {
+        width: 100%;
+        min-height: 16px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: #efe5d7;
+        border: 1px solid rgba(123, 17, 19, 0.08);
+      }
+
+      .bar-fill {
+        height: 100%;
+        min-height: 16px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+      }
+
+      .distribution-meta-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .distribution-meta-card {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: #fff;
+        padding: 14px;
+      }
+
+      .distribution-meta-card span {
+        display: block;
+        color: var(--muted);
+        font-size: 0.84rem;
+        margin-bottom: 6px;
+      }
+
+      .distribution-meta-card strong {
+        display: block;
+        color: var(--primary);
+        font-size: 1.34rem;
+      }
+
+      .tracker-grid,
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .summary-card {
+        padding: 16px;
+      }
+
+      .summary-card h3 {
+        margin: 0 0 4px;
+        color: var(--primary);
+        font-size: 1rem;
+      }
+
+      .summary-card strong {
+        display: block;
+        font-size: 1.6rem;
+        color: var(--text);
+      }
+
+      .progress-wrap {
+        margin-top: 14px;
+        display: grid;
+        gap: 8px;
+      }
+
+      .progress-track {
+        width: 100%;
+        height: 14px;
+        border-radius: 999px;
+        background: #ebdfcf;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+        transition: width 180ms ease;
+      }
+
+      .pill-groups {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .pill-group h3 {
+        margin: 0 0 12px;
+        color: var(--primary);
+        font-size: 1.04rem;
+      }
+
+      .pill-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .summary-panels {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .summary-panel {
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: #fff;
+        padding: 16px;
+        min-height: 320px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .summary-panel h3 {
+        margin: 0 0 12px;
+        color: var(--primary);
+        font-size: 1.04rem;
+      }
+
+      .summary-panel-list {
+        display: grid;
+        gap: 10px;
+        flex: 1;
+        align-content: start;
+      }
+
+      .summary-stat {
+        padding: 14px 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        min-height: 58px;
+      }
+
+      .summary-stat span {
+        font-weight: 700;
+      }
+
+      .summary-stat strong {
+        font-size: 1.28rem;
+        color: var(--text);
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 40px;
+        border-radius: 999px;
+        padding: 0 14px;
+        border: 1px solid transparent;
+        font-weight: 700;
+      }
+
+      .pill.success {
+        background: rgba(46, 125, 50, 0.12);
+        color: var(--success);
+        border-color: rgba(46, 125, 50, 0.24);
+      }
+
+      .pill.warning {
+        background: rgba(245, 127, 23, 0.12);
+        color: #9a5600;
+        border-color: rgba(245, 127, 23, 0.24);
+      }
+
+      .pill.danger {
+        background: rgba(198, 40, 40, 0.12);
+        color: var(--danger);
+        border-color: rgba(198, 40, 40, 0.24);
+      }
+
+      .pill.neutral {
+        background: rgba(123, 17, 19, 0.08);
+        color: var(--primary);
+        border-color: rgba(123, 17, 19, 0.14);
+      }
+
+      .summary-panel-note {
+        margin-top: 14px;
+        padding-top: 12px;
+        border-top: 1px solid #eadbc8;
+        color: var(--muted);
+        font-size: 0.9rem;
+        line-height: 1.5;
+      }
+
+      .table-wrap {
+        margin-top: 16px;
+        overflow-x: auto;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 560px;
+      }
+
+      th,
+      td {
+        padding: 12px 14px;
+        border-bottom: 1px solid #eadbc8;
+        text-align: left;
+      }
+
+      th {
+        background: #f5ead8;
+        color: var(--primary);
+        font-size: 0.94rem;
+      }
+
+      tr:last-child td { border-bottom: 0; }
+
+      .toast-wrap {
+        position: fixed;
+        right: 18px;
+        bottom: 18px;
+        z-index: 120;
+        display: grid;
+        gap: 10px;
+      }
+
+      .toast {
+        min-width: 240px;
+        max-width: 360px;
+        padding: 12px 14px;
+        border-radius: 12px;
+        background: #fff8ee;
+        color: var(--text);
+        border: 1px solid rgba(123, 17, 19, 0.14);
+        box-shadow: var(--shadow);
+      }
+
+      .modal {
+        position: fixed;
+        inset: 0;
+        z-index: 130;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 18px;
+        background: rgba(40, 18, 14, 0.48);
+      }
+
+      .modal.open { display: flex; }
+
+      .modal-card {
+        width: min(420px, 100%);
+        background: linear-gradient(180deg, var(--surface) 0%, var(--surface-alt) 100%);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        box-shadow: var(--shadow-strong);
+        padding: 20px;
+      }
+
+      .modal-card h3 {
+        margin: 0 0 10px;
+        color: var(--primary);
+      }
+
+      .modal-card p {
+        margin: 0 0 18px;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          animation: none !important;
+          transition: none !important;
+        }
+      }
+
+      @media (max-width: 1180px) {
+        .layout { grid-template-columns: 250px minmax(0, 1fr); }
+        .grid,
+        .pill-groups,
+        .summary-panels,
+        .distribution-meta-grid,
+        .tracker-grid,
+        .summary-grid { grid-template-columns: 1fr; }
+      }
+
+      @media (max-width: 860px) {
+        .layout { grid-template-columns: 1fr; }
+        aside { border-right: 0; border-bottom: 1px solid rgba(216, 173, 71, 0.3); }
+        header {
+          position: static;
+          padding: 18px;
+          align-items: flex-start;
+          flex-wrap: wrap;
+        }
+        .header-actions { width: 100%; justify-content: flex-end; }
+        main { padding: 18px; }
+        .distribution-row {
+          grid-template-columns: 70px minmax(0, 1fr) 62px;
+          gap: 10px;
+        }
+      }
+
+      @media (max-width: 620px) {
+        .action-bar,
+        .hero { align-items: stretch; }
+        .action-buttons { width: 100%; }
+        .action-buttons .btn { flex: 1 1 100%; }
+      }
+
+      @media print {
+        body {
+          background: #fff;
+          color: #000;
+        }
+
+        .layout {
+          display: block;
+        }
+
+        aside,
+        header,
+        .toast-wrap,
+        .action-buttons button:not(.print-only),
+        .icon-btn,
+        .avatar-btn,
+        .dropdown,
+        .notif-panel,
+        .modal {
+          display: none !important;
+        }
+
+        main {
+          width: 100%;
+          padding: 0;
+          margin: 0;
+        }
+
+        .section-card,
+        .summary-card,
+        .action-bar {
+          box-shadow: none;
+          border: 1px solid #ccc;
+          break-inside: avoid;
+        }
+
+        .bar-track,
+        .progress-track {
+          border: 1px solid #999;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#mainContent">Skip to main content</a>
+    <div class="layout">
+      <aside aria-label="Faculty navigation">
+        <div class="brand">
+          <div class="crest" aria-hidden="true">UP</div>
+          <div>
+            <h1>UPHSD CCS</h1>
+            <p>Faculty Portal</p>
+          </div>
+        </div>
+        <nav>
+          <ul class="nav-list">
+            <li><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+            <li><a class="nav-link" href="students.html">Students</a></li>
+            <li><a class="nav-link" href="classes.html">Classes</a></li>
+            <li><a class="nav-link" href="calendar.html">Calendar</a></li>
+          </ul>
+        </nav>
+      </aside>
+
+      <div class="content">
+        <header>
+          <div class="header-copy">
+            <h2>Class Performance &amp; Compliance Report</h2>
+          </div>
+          <div class="header-actions">
+            <button class="icon-btn" id="notifButton" type="button" aria-label="Open notifications" aria-expanded="false" aria-controls="notifPanel">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5" />
+                <path d="M9.5 17a2.5 2.5 0 0 0 5 0" />
+              </svg>
+              <span class="badge" aria-label="3 notifications">3</span>
+            </button>
+            <section class="notif-panel" id="notifPanel" aria-label="Faculty notifications">
+              <h2>Notifications</h2>
+              <p>Institution-wide reminders</p>
+              <ul class="notif-list">
+                <li>Academic Year 2025-2026 Grading Guidelines Updated</li>
+                <li>Final Grade Submission Deadline: May 15, 2026</li>
+                <li>System Maintenance Scheduled: Week 6</li>
+              </ul>
+            </section>
+            <button class="avatar-btn" id="avatarButton" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="profileMenu">F</button>
+            <div class="dropdown" id="profileMenu" role="menu" aria-label="Profile options">
+              <button role="menuitem" type="button" id="profileAction">Profile</button>
+              <button role="menuitem" type="button" id="settingsAction">Settings</button>
+              <button role="menuitem" type="button" id="logoutAction">Logout</button>
+            </div>
+          </div>
+        </header>
+
+        <main id="mainContent">
+          <section class="hero" aria-labelledby="reportTitle">
+            <div>
+              <h1 id="reportTitle">Class Performance &amp; Compliance Report</h1>
+              <p>Aggregated class-wide analytics for faculty review, grade visibility tracking, academic standing, and institutional transmutation reference.</p>
+            </div>
+          </section>
+
+          <section class="action-bar" aria-label="Report actions">
+            <div class="action-copy">
+              Current section snapshot for faculty analytics, compliance checks, and print-ready academic reference.
+            </div>
+            <div class="action-buttons">
+              <button class="btn btn-secondary" id="exportButton" type="button" aria-label="Export class performance report as CSV">Export Report (CSV)</button>
+              <button class="btn btn-accent" id="printButton" type="button" aria-label="Print class performance report">Print View</button>
+              <button class="btn btn-primary" id="refreshDataButton" type="button" aria-label="Refresh report data">Refresh Data</button>
+            </div>
+          </section>
+
+          <div class="grid">
+            <div class="stack">
+              <!-- TOR: Data Visualization - Class-wide grade distribution -->
+              <section class="section-card fill-space" aria-labelledby="distributionTitle">
+                <div class="section-head">
+                  <div>
+                    <h2 id="distributionTitle">Grade Distribution (N=45)</h2>
+                    <p>Institutional grade equivalents rendered from aggregate class metrics.</p>
+                  </div>
+                </div>
+                <div class="distribution-shell">
+                  <div class="distribution-list" id="distributionList" aria-live="polite"></div>
+                  <div class="distribution-meta-grid" id="distributionMetaGrid" aria-label="Distribution support metrics"></div>
+                </div>
+              </section>
+
+              <section class="section-card fill-space" aria-labelledby="summaryTitle">
+                <div class="section-head">
+                  <div>
+                    <h2 id="summaryTitle">Advisory &amp; Standing Summary</h2>
+                    <p>Class standing and advising indicators aligned to current faculty review categories.</p>
+                  </div>
+                </div>
+                <div class="summary-panels">
+                  <article class="summary-panel" aria-labelledby="standingTitle">
+                    <h3 id="standingTitle">Class Standing</h3>
+                    <div class="summary-panel-list" id="standingList"></div>
+                    <div class="summary-panel-note">Standing totals reflect the current faculty monitoring snapshot for the selected class roster.</div>
+                  </article>
+                  <article class="summary-panel" aria-labelledby="flagsTitle">
+                    <h3 id="flagsTitle">Advisory Flags</h3>
+                    <div class="summary-panel-list" id="flagsList"></div>
+                    <div class="summary-panel-note">Advisory flags surface students needing follow-up for monitoring, direct advising, or attendance review.</div>
+                  </article>
+                </div>
+              </section>
+            </div>
+
+            <div class="stack">
+              <!-- HCI: Visibility of System Status - Progress bar & refresh feedback -->
+              <section class="section-card" aria-labelledby="trackerTitle">
+                <div class="section-head">
+                  <div>
+                    <h2 id="trackerTitle">Grades Seen Tracker</h2>
+                    <p>Visibility status for the current class roster.</p>
+                  </div>
+                </div>
+                <div class="tracker-grid">
+                  <article class="summary-card">
+                    <h3>Grades Seen</h3>
+                    <strong id="gradesSeenValue">42/45 Students (93%)</strong>
+                    <div class="progress-wrap">
+                      <div class="progress-track" aria-hidden="true">
+                        <div class="progress-fill" id="gradesSeenFill" style="width: 0%;"></div>
+                      </div>
+                      <div class="metric-note" id="gradesSeenNote" aria-live="polite"></div>
+                    </div>
+                  </article>
+                  <article class="summary-card">
+                    <h3>Status Snapshot</h3>
+                    <strong id="completionValue">93%</strong>
+                    <div class="last-updated" id="lastUpdatedText">Last Updated: Today, 10:15 AM</div>
+                  </article>
+                </div>
+              </section>
+
+              <section class="section-card" aria-labelledby="referenceTitle">
+                <div class="section-head">
+                  <div>
+                    <h2 id="referenceTitle">UPHSD Grading Scale &amp; Transmutation Table</h2>
+                    <p class="metric-note">Institutional reference for raw score to grade equivalent mapping.</p>
+                  </div>
+                </div>
+                <div class="table-wrap" id="referenceTableWrap">
+                  <table aria-label="UPHSD transmutation reference table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Raw Score Range</th>
+                        <th scope="col">Transmuted Grade</th>
+                        <th scope="col">Interpretation</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>97 - 100</td><td>1.0</td><td>Excellent</td></tr>
+                      <tr><td>93 - 96</td><td>1.25</td><td>Superior</td></tr>
+                      <tr><td>90 - 92</td><td>1.5</td><td>Very Good</td></tr>
+                      <tr><td>87 - 89</td><td>1.75</td><td>Good</td></tr>
+                      <tr><td>83 - 86</td><td>2.0</td><td>Satisfactory</td></tr>
+                      <tr><td>80 - 82</td><td>2.25</td><td>Fair</td></tr>
+                      <tr><td>77 - 79</td><td>2.5</td><td>Passed</td></tr>
+                      <tr><td>75</td><td>3.0</td><td>Conditional Pass</td></tr>
+                      <tr><td>Below 75</td><td>5.0</td><td>Failed</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <section class="modal" id="logoutModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="logoutTitle">
+      <div class="modal-card">
+        <h3 id="logoutTitle">Confirm Logout</h3>
+        <p>Are you sure you want to logout from the grading system?</p>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" id="cancelLogoutButton" type="button">Cancel</button>
+          <button class="btn btn-primary" id="confirmLogoutButton" type="button">Logout</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="toast-wrap" id="toastWrap" aria-live="polite" aria-atomic="true"></div>
+
+    <script>
+      (function () {
+        "use strict";
+
+        var notifButton = document.getElementById("notifButton");
+        var notifPanel = document.getElementById("notifPanel");
+        var avatarButton = document.getElementById("avatarButton");
+        var profileMenu = document.getElementById("profileMenu");
+        var logoutModal = document.getElementById("logoutModal");
+        var cancelLogoutButton = document.getElementById("cancelLogoutButton");
+        var confirmLogoutButton = document.getElementById("confirmLogoutButton");
+        var toastWrap = document.getElementById("toastWrap");
+        var distributionList = document.getElementById("distributionList");
+        var gradesSeenValue = document.getElementById("gradesSeenValue");
+        var gradesSeenFill = document.getElementById("gradesSeenFill");
+        var gradesSeenNote = document.getElementById("gradesSeenNote");
+        var completionValue = document.getElementById("completionValue");
+        var lastUpdatedText = document.getElementById("lastUpdatedText");
+        var distributionMetaGrid = document.getElementById("distributionMetaGrid");
+        var standingList = document.getElementById("standingList");
+        var flagsList = document.getElementById("flagsList");
+        var refreshDataButton = document.getElementById("refreshDataButton");
+        var exportButton = document.getElementById("exportButton");
+        var printButton = document.getElementById("printButton");
+        var activeModal = null;
+        var trackerTimestamp = "Today, 10:15 AM";
+
+        /* LEADER UPDATE: Replace mockMetrics with actual class data */
+        var classMetrics = {
+          totalStudents: 45,
+          gradesSeen: 42,
+          distribution: { "1.0": 12, "1.25": 15, "1.5": 8, "2.0": 5, "3.0": 3, "5.0": 2, "Incomplete": 0 },
+          standing: { active: 28, atRisk: 12, probation: 5 },
+          flags: { clear: 30, monitoring: 8, advising: 5, attendance: 2 }
+        };
+
+        var distributionOrder = ["1.0", "1.25", "1.5", "2.0", "3.0", "5.0", "Incomplete"];
+
+        function showToast(message) {
+          var toast = document.createElement("div");
+          toast.className = "toast";
+          toast.textContent = message;
+          toastWrap.appendChild(toast);
+          window.setTimeout(function () {
+            toast.remove();
+          }, 2400);
+        }
+
+        function formatTimestamp(date) {
+          return date.toLocaleString("en-US", {
+            hour: "numeric",
+            minute: "2-digit",
+            hour12: true,
+            month: "long",
+            day: "numeric",
+            year: "numeric"
+          });
+        }
+
+        function getSeenPercent() {
+          return Math.round((classMetrics.gradesSeen / classMetrics.totalStudents) * 100);
+        }
+
+        function renderDistribution() {
+          distributionList.innerHTML = "";
+          distributionOrder.forEach(function (gradeKey) {
+            var count = classMetrics.distribution[gradeKey] || 0;
+            var percent = classMetrics.totalStudents ? Math.round((count / classMetrics.totalStudents) * 100) : 0;
+            var row = document.createElement("div");
+            row.className = "distribution-row";
+            row.innerHTML =
+              '<div class="distribution-label">' + gradeKey + '</div>' +
+              '<div class="bar-track" aria-hidden="true"><div class="bar-fill" style="width:' + percent + '%;"></div></div>' +
+              '<div class="distribution-value">' + percent + '%</div>';
+            distributionList.appendChild(row);
+          });
+
+          var failedCount = classMetrics.distribution["5.0"] || 0;
+          var incompleteCount = classMetrics.distribution.Incomplete || 0;
+          var passingShare = classMetrics.totalStudents ? Math.round(((classMetrics.totalStudents - failedCount - incompleteCount) / classMetrics.totalStudents) * 100) : 0;
+          var followUpCount = classMetrics.standing.atRisk + classMetrics.standing.probation;
+          var recordedShare = classMetrics.totalStudents ? Math.round((classMetrics.gradesSeen / classMetrics.totalStudents) * 100) : 0;
+
+          distributionMetaGrid.innerHTML = "";
+          [
+            { label: "Recorded Grades", value: classMetrics.gradesSeen + "/" + classMetrics.totalStudents },
+            { label: "Passing Share", value: passingShare + "%" },
+            { label: "Priority Follow-up", value: String(followUpCount) }
+          ].forEach(function (item) {
+            var card = document.createElement("div");
+            card.className = "distribution-meta-card";
+            card.innerHTML = "<span>" + item.label + "</span><strong>" + item.value + "</strong>";
+            distributionMetaGrid.appendChild(card);
+          });
+        }
+
+        function renderTracker() {
+          var percent = getSeenPercent();
+          gradesSeenValue.textContent = classMetrics.gradesSeen + "/" + classMetrics.totalStudents + " Students (" + percent + "%)";
+          gradesSeenFill.style.width = percent + "%";
+          gradesSeenNote.textContent = percent + "% of the class has recorded visible grades.";
+          completionValue.textContent = percent + "%";
+          lastUpdatedText.textContent = "Last Updated: " + trackerTimestamp;
+        }
+
+        function buildPill(label, value, tone, hint) {
+          var stat = document.createElement("div");
+          stat.className = "summary-card summary-stat " + tone;
+          stat.title = hint;
+          stat.setAttribute("aria-label", label + ": " + value + ". " + hint);
+          stat.innerHTML = "<span>" + label + "</span><strong>" + value + "</strong>";
+          return stat;
+        }
+
+        function renderSummary() {
+          standingList.innerHTML = "";
+          flagsList.innerHTML = "";
+
+          standingList.appendChild(buildPill("Active", classMetrics.standing.active, "success", "Students currently in good standing."));
+          standingList.appendChild(buildPill("At Risk", classMetrics.standing.atRisk, "warning", "Students requiring close academic monitoring."));
+          standingList.appendChild(buildPill("Probation", classMetrics.standing.probation, "danger", "Students with urgent academic intervention needs."));
+
+          flagsList.appendChild(buildPill("Clear", classMetrics.flags.clear, "success", "No current advising concern recorded."));
+          flagsList.appendChild(buildPill("Monitoring", classMetrics.flags.monitoring, "warning", "Students being watched for performance changes."));
+          flagsList.appendChild(buildPill("Needs Advising", classMetrics.flags.advising, "danger", "Students requiring direct advising follow-up."));
+          flagsList.appendChild(buildPill("Attendance", classMetrics.flags.attendance, "neutral", "Students with attendance-related faculty attention."));
+        }
+
+        function renderAll() {
+          renderDistribution();
+          renderTracker();
+          renderSummary();
+        }
+
+        function closeMenu() {
+          profileMenu.classList.remove("open");
+          avatarButton.setAttribute("aria-expanded", "false");
+        }
+
+        function closeNotifications() {
+          notifPanel.classList.remove("open");
+          notifButton.setAttribute("aria-expanded", "false");
+        }
+
+        function openLogoutModal() {
+          activeModal = logoutModal;
+          logoutModal.classList.add("open");
+          logoutModal.setAttribute("aria-hidden", "false");
+          cancelLogoutButton.focus();
+        }
+
+        function closeLogoutModal() {
+          logoutModal.classList.remove("open");
+          logoutModal.setAttribute("aria-hidden", "true");
+          activeModal = null;
+        }
+
+        function exportCsv() {
+          var rows = [
+            ["Metric", "Value"],
+            ["Total Students", classMetrics.totalStudents],
+            ["Grades Seen", classMetrics.gradesSeen],
+            ["Completion Rate", getSeenPercent() + "%"],
+            [""],
+            ["Grade Distribution", "Count"]
+          ];
+
+          distributionOrder.forEach(function (key) {
+            rows.push([key, classMetrics.distribution[key] || 0]);
+          });
+
+          rows.push([""]);
+          rows.push(["Standing", "Count"]);
+          rows.push(["Active", classMetrics.standing.active]);
+          rows.push(["At Risk", classMetrics.standing.atRisk]);
+          rows.push(["Probation", classMetrics.standing.probation]);
+          rows.push([""]);
+          rows.push(["Advisory Flags", "Count"]);
+          rows.push(["Clear", classMetrics.flags.clear]);
+          rows.push(["Monitoring", classMetrics.flags.monitoring]);
+          rows.push(["Needs Advising", classMetrics.flags.advising]);
+          rows.push(["Attendance", classMetrics.flags.attendance]);
+
+          var csv = rows
+            .map(function (row) {
+              return row
+                .map(function (cell) {
+                  var value = cell == null ? "" : String(cell);
+                  return '"' + value.replace(/"/g, '""') + '"';
+                })
+                .join(",");
+            })
+            .join("\n");
+
+          var blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+          var url = URL.createObjectURL(blob);
+          var link = document.createElement("a");
+          link.href = url;
+          link.download = "class-performance-report.csv";
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+          URL.revokeObjectURL(url);
+          showToast("Report exported successfully");
+        }
+
+        renderAll();
+
+        notifButton.addEventListener("click", function (event) {
+          event.stopPropagation();
+          closeMenu();
+          var open = !notifPanel.classList.contains("open");
+          notifPanel.classList.toggle("open", open);
+          notifButton.setAttribute("aria-expanded", String(open));
+        });
+
+        notifPanel.addEventListener("click", function (event) {
+          event.stopPropagation();
+        });
+
+        avatarButton.addEventListener("click", function (event) {
+          event.stopPropagation();
+          closeNotifications();
+          var open = !profileMenu.classList.contains("open");
+          profileMenu.classList.toggle("open", open);
+          avatarButton.setAttribute("aria-expanded", String(open));
+        });
+
+        profileMenu.addEventListener("click", function (event) {
+          event.stopPropagation();
+        });
+
+        document.getElementById("profileAction").addEventListener("click", function () {
+          window.location.href = "profile.html";
+        });
+
+        document.getElementById("settingsAction").addEventListener("click", function () {
+          window.location.href = "settings.html";
+        });
+
+        document.getElementById("logoutAction").addEventListener("click", function () {
+          closeMenu();
+          openLogoutModal();
+        });
+
+        refreshDataButton.addEventListener("click", function () {
+          trackerTimestamp = formatTimestamp(new Date());
+          renderAll();
+          showToast("Report data refreshed successfully");
+        });
+
+        exportButton.addEventListener("click", exportCsv);
+
+        printButton.addEventListener("click", function () {
+          showToast("Preparing print view");
+          window.print();
+        });
+
+        cancelLogoutButton.addEventListener("click", closeLogoutModal);
+
+        confirmLogoutButton.addEventListener("click", function () {
+          window.location.href = "index.html";
+        });
+
+        logoutModal.addEventListener("click", function (event) {
+          if (event.target === logoutModal) {
+            closeLogoutModal();
+          }
+        });
+
+        document.addEventListener("click", function (event) {
+          if (!notifPanel.contains(event.target) && !notifButton.contains(event.target)) {
+            closeNotifications();
+          }
+          if (!profileMenu.contains(event.target) && !avatarButton.contains(event.target)) {
+            closeMenu();
+          }
+        });
+
+        document.addEventListener("keydown", function (event) {
+          if (event.key === "Escape") {
+            closeNotifications();
+            closeMenu();
+            if (activeModal === logoutModal) {
+              closeLogoutModal();
+            }
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>

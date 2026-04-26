@@ -524,7 +524,7 @@
 
       .shortcuts {
         display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
+        grid-template-columns: repeat(5, minmax(0, 1fr));
         gap: 14px;
       }
 
@@ -533,18 +533,20 @@
         border-left: 4px solid var(--gold);
         border-radius: 16px;
         background: #fff;
-        padding: 16px;
+        padding: 14px;
       }
 
       .shortcut h4 {
-        margin: 0 0 8px;
+        margin: 0 0 7px;
         color: var(--maroon);
+        font-size: 0.96rem;
       }
 
       .shortcut p {
-        margin: 0 0 14px;
+        margin: 0 0 12px;
         color: var(--muted);
-        font-size: 0.9rem;
+        font-size: 0.86rem;
+        line-height: 1.45;
       }
 
       .shortcut button {
@@ -552,8 +554,9 @@
         background: var(--maroon);
         color: #fff;
         border-radius: 10px;
-        padding: 9px 12px;
+        padding: 8px 11px;
         font-weight: 700;
+        font-size: 0.9rem;
       }
 
       .feed-list li {
@@ -670,6 +673,10 @@
           grid-template-columns: repeat(2, minmax(0, 1fr));
         }
 
+        .shortcuts {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
         .section-row {
           grid-template-columns: 1fr;
         }
@@ -745,7 +752,6 @@
         <header>
           <div class="header-copy">
             <h2>Faculty Dashboard</h2>
-            <p>Overview of active classes, reviews, and academic deadlines.</p>
           </div>
 
           <div class="header-actions">
@@ -807,13 +813,18 @@
               </article>
               <article class="shortcut">
                 <h4>Quizzes</h4>
-                <p>Open the students quiz placeholder for upcoming assessment tracking.</p>
-                <button type="button" data-target="students.html#quizzes" data-label="Quizzes">Open Quizzes</button>
+                <p>Open the selected student detail workspace directly in the quizzes tab.</p>
+                <button type="button" data-target="student-detail.html?id=2026-FAC-244#quizzes" data-label="Quizzes">Open Quizzes</button>
               </article>
               <article class="shortcut">
                 <h4>Go to Calendar</h4>
                 <p>Open the faculty calendar for quizzes, deadlines, consultations, and class activities.</p>
                 <button type="button" data-target="calendar.html" data-label="Calendar">Open Calendar</button>
+              </article>
+              <article class="shortcut">
+                <h4>Reports</h4>
+                <p>Open the class-wide analytics and compliance report view.</p>
+                <button type="button" data-target="reports.html" data-label="Reports">Open Reports</button>
               </article>
             </div>
           </section>

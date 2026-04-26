@@ -178,20 +178,6 @@
         padding: 18px; display: none; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px;
       }
       .kanban-board.active { display: grid; }
-      .quizzes-view { display: none; }
-      .quizzes-view.active { display: block; }
-      .quiz-placeholder-grid {
-        display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 14px;
-      }
-      .quiz-card {
-        border: 1px solid var(--line); border-radius: 14px; background: #fffdf9; padding: 15px;
-      }
-      .quiz-card h4 { margin: 0 0 7px; color: var(--maroon); font-size: 1rem; }
-      .quiz-card p { margin: 0; color: var(--muted); font-size: 0.96rem; line-height: 1.45; }
-      .quiz-empty {
-        margin-top: 14px; border: 1px dashed #ccb79a; border-radius: 14px; background: #fffaf0; padding: 14px;
-        color: var(--muted); line-height: 1.5;
-      }
       .student-card {
         border: 1px solid var(--line); border-radius: 14px; background: #fffdf9; padding: 14px;
       }
@@ -263,7 +249,7 @@
         header { padding: 18px 16px; flex-direction: column; align-items: stretch; }
         .header-actions { justify-content: flex-end; }
         main { padding: 16px; }
-        .form-grid, .kanban-board, .quiz-placeholder-grid, .nav-list { grid-template-columns: 1fr; }
+        .form-grid, .kanban-board, .nav-list { grid-template-columns: 1fr; }
       }
     </style>
   </head>
@@ -292,7 +278,6 @@
         <header>
           <div class="header-copy">
             <h2>Students</h2>
-            <p>Switch between list, card, and quiz placeholder views for faster roster scanning.</p>
           </div>
           <div class="header-actions">
             <button class="icon-btn" id="notifButton" aria-label="Open notifications" aria-expanded="false" aria-controls="notifPanel">
@@ -334,7 +319,6 @@
                 <div class="view-toggle" role="tablist" aria-label="Student views">
                   <button type="button" class="active" id="listViewBtn" aria-pressed="true">List View</button>
                   <button type="button" id="kanbanViewBtn" aria-pressed="false">Card View</button>
-                  <button type="button" id="quizzesViewBtn" aria-pressed="false">Quizzes</button>
                 </div>
               </div>
             </div>
@@ -368,26 +352,6 @@
           </section>
 
           <section class="kanban-board" id="kanbanView" aria-label="Student card grid view"></section>
-
-          <section class="panel quizzes-view" id="quizzesView" aria-label="Student quizzes placeholder view">
-            <h3>Quizzes</h3>
-            <p>Placeholder workspace for student quiz requirements and assessment tracking.</p>
-            <div class="quiz-placeholder-grid">
-              <article class="quiz-card">
-                <h4>Quiz Planner</h4>
-                <p>Reserved area for quiz titles, coverage, due dates, and section assignment details.</p>
-              </article>
-              <article class="quiz-card">
-                <h4>Upcoming Draft</h4>
-                <p>Mock slot for the next HCI 402 quiz once actual requirements are provided.</p>
-              </article>
-              <article class="quiz-card">
-                <h4>Student Results</h4>
-                <p>Future summary space for score status, completion counts, and review notes.</p>
-              </article>
-            </div>
-            <div class="quiz-empty">No quiz management content has been finalized yet. This tab is ready for the actual quiz requirements later.</div>
-          </section>
         </main>
       </div>
     </div>
@@ -399,17 +363,6 @@
         <div class="modal-actions">
           <button class="btn" type="button" id="cancelLogout">Cancel</button>
           <button class="btn primary" type="button" id="confirmLogout">Confirm</button>
-        </div>
-      </div>
-    </section>
-
-    <section class="modal" id="studentDetailModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="studentDetailTitle">
-      <div class="modal-card detail-card">
-        <h3 id="studentDetailTitle">Student Details</h3>
-        <p id="studentDetailSummary">Current roster information.</p>
-        <div class="detail-grid" id="studentDetailBody"></div>
-        <div class="modal-actions">
-          <button class="btn primary" type="button" id="closeStudentDetail">Close</button>
         </div>
       </div>
     </section>
@@ -493,13 +446,11 @@
         var studentBody = document.getElementById("studentBody");
         var kanbanView = document.getElementById("kanbanView");
         var listView = document.getElementById("listView");
-        var quizzesView = document.getElementById("quizzesView");
         var addStudentBtn = document.getElementById("addStudentBtn");
         var searchInput = document.getElementById("searchInput");
         var sectionFilter = document.getElementById("sectionFilter");
         var listViewBtn = document.getElementById("listViewBtn");
         var kanbanViewBtn = document.getElementById("kanbanViewBtn");
-        var quizzesViewBtn = document.getElementById("quizzesViewBtn");
         var avatarButton = document.getElementById("avatarButton");
         var profileMenu = document.getElementById("profileMenu");
         var profileAction = document.getElementById("profileAction");
@@ -508,11 +459,6 @@
         var logoutModal = document.getElementById("logoutModal");
         var cancelLogout = document.getElementById("cancelLogout");
         var confirmLogout = document.getElementById("confirmLogout");
-        var studentDetailModal = document.getElementById("studentDetailModal");
-        var studentDetailTitle = document.getElementById("studentDetailTitle");
-        var studentDetailSummary = document.getElementById("studentDetailSummary");
-        var studentDetailBody = document.getElementById("studentDetailBody");
-        var closeStudentDetail = document.getElementById("closeStudentDetail");
         var addStudentModal = document.getElementById("addStudentModal");
         var addStudentForm = document.getElementById("addStudentForm");
         var cancelAddStudent = document.getElementById("cancelAddStudent");
@@ -744,18 +690,7 @@
         }
         function openStudentDetail(student) {
           if (!student) { return; }
-          studentDetailTitle.textContent = student.name;
-          studentDetailSummary.textContent = student.id + " • " + student.section + " • " + student.enrolledClass;
-          studentDetailBody.innerHTML =
-            '<div class="detail-item"><span>Student ID</span><strong>' + student.id + "</strong></div>" +
-            '<div class="detail-item"><span>Section</span><strong>' + student.section + "</strong></div>" +
-            '<div class="detail-item"><span>Enrolled Class</span><strong>' + student.enrolledClass + "</strong></div>" +
-            '<div class="detail-item"><span>Status</span><strong>' + student.status + "</strong></div>" +
-            '<div class="detail-item"><span>Roster Source</span><strong>' + (student.fromStorage ? "Added locally" : "Default mock data") + "</strong></div>";
-          openModal(studentDetailModal, closeStudentDetail);
-        }
-        function closeStudentDetailModal() {
-          closeModal(studentDetailModal);
+          window.location.href = "student-detail.html?id=" + encodeURIComponent(student.id);
         }
         function getStudentFormData() {
           return {
@@ -869,40 +804,24 @@
           });
         }
         function applyView(view) {
-          if (view !== "kanban" && view !== "quizzes") {
+          if (view !== "kanban") {
             view = "list";
           }
           localStorage.setItem("studentViewMode", view);
           if (view === "kanban") {
             listView.style.display = "none";
             kanbanView.classList.add("active");
-            quizzesView.classList.remove("active");
             listViewBtn.classList.remove("active");
             kanbanViewBtn.classList.add("active");
-            quizzesViewBtn.classList.remove("active");
             listViewBtn.setAttribute("aria-pressed", "false");
             kanbanViewBtn.setAttribute("aria-pressed", "true");
-            quizzesViewBtn.setAttribute("aria-pressed", "false");
-          } else if (view === "quizzes") {
-            listView.style.display = "none";
-            kanbanView.classList.remove("active");
-            quizzesView.classList.add("active");
-            listViewBtn.classList.remove("active");
-            kanbanViewBtn.classList.remove("active");
-            quizzesViewBtn.classList.add("active");
-            listViewBtn.setAttribute("aria-pressed", "false");
-            kanbanViewBtn.setAttribute("aria-pressed", "false");
-            quizzesViewBtn.setAttribute("aria-pressed", "true");
           } else {
             listView.style.display = "block";
             kanbanView.classList.remove("active");
-            quizzesView.classList.remove("active");
             listViewBtn.classList.add("active");
             kanbanViewBtn.classList.remove("active");
-            quizzesViewBtn.classList.remove("active");
             listViewBtn.setAttribute("aria-pressed", "true");
             kanbanViewBtn.setAttribute("aria-pressed", "false");
-            quizzesViewBtn.setAttribute("aria-pressed", "false");
           }
         }
 
@@ -911,7 +830,7 @@
         renderNotifications();
         renderList();
         renderKanban();
-        applyView(window.location.hash === "#quizzes" ? "quizzes" : (localStorage.getItem("studentViewMode") || "list"));
+        applyView(localStorage.getItem("studentViewMode") || "list");
 
         addStudentBtn.addEventListener("click", openAddStudentModal);
         [studentNameInput, studentIdInput, studentSectionInput, studentStatusInput].forEach(function (input) {
@@ -960,24 +879,12 @@
           var card = event.target.closest("[data-student-id]");
           if (card) { event.preventDefault(); openStudentDetail(findStudent(card.getAttribute("data-student-id"))); }
         });
-        function clearStudentHash() {
-          if (window.location.hash) {
-            history.replaceState(null, "", window.location.pathname + window.location.search);
-          }
-        }
         listViewBtn.addEventListener("click", function () {
-          clearStudentHash();
           applyView("list");
         });
         kanbanViewBtn.addEventListener("click", function () {
-          clearStudentHash();
           applyView("kanban");
           addNotification("Students", "Student roster switched to kanban view.");
-        });
-        quizzesViewBtn.addEventListener("click", function () {
-          applyView("quizzes");
-          window.location.hash = "quizzes";
-          addNotification("Students", "Quizzes placeholder opened from the student roster.");
         });
         avatarButton.addEventListener("click", function (event) {
           event.stopPropagation();
@@ -1014,8 +921,6 @@
         logoutAction.addEventListener("click", function () { closeMenu(); openLogoutModal(); });
         cancelLogout.addEventListener("click", closeLogoutModal);
         logoutModal.addEventListener("click", function (event) { if (event.target === logoutModal) { closeLogoutModal(); } });
-        closeStudentDetail.addEventListener("click", closeStudentDetailModal);
-        studentDetailModal.addEventListener("click", function (event) { if (event.target === studentDetailModal) { closeStudentDetailModal(); } });
         confirmLogout.addEventListener("click", function () {
           localStorage.removeItem("userRole"); localStorage.removeItem("userName");
           localStorage.removeItem("notifCount"); localStorage.removeItem("isUnlocked");
@@ -1029,7 +934,6 @@
           if (event.key === "Escape") {
             closeMenu(); closeNotifications();
             if (logoutModal.classList.contains("open")) { closeLogoutModal(); }
-            if (studentDetailModal.classList.contains("open")) { closeStudentDetailModal(); }
             if (addStudentModal.classList.contains("open")) { closeAddStudentModal(); }
           } else {
             trapFocus(event);

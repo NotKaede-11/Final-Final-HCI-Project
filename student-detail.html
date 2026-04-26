@@ -1,0 +1,1421 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>UPHSD Student Detail</title>
+    <style>
+      :root {
+        --primary: #800000;
+        --maroon: #7b1113;
+        --maroon-deep: #54090b;
+        --accent: #ffb800;
+        --gold: #d8ad47;
+        --bg-light: #f8f9fa;
+        --bg: #f6efe6;
+        --surface: #fffdfa;
+        --surface-alt: #f9f2e8;
+        --text: #211c1b;
+        --muted: #6c5f59;
+        --line: #e1d1bd;
+        --ok: #21653a;
+        --danger: #a12724;
+        --warning: #8a4f00;
+        --shadow: 0 18px 38px rgba(63, 18, 14, 0.12);
+        --shadow-strong: 0 24px 46px rgba(48, 8, 10, 0.18);
+      }
+
+      * { box-sizing: border-box; }
+      html, body {
+        margin: 0;
+        min-height: 100%;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background:
+          radial-gradient(circle at top left, rgba(255, 184, 0, 0.14), transparent 25%),
+          linear-gradient(180deg, #fbf4eb 0%, var(--bg) 100%);
+        color: var(--text);
+      }
+      a, button, input, select { font: inherit; }
+      button { cursor: pointer; }
+      :focus-visible { outline: 3px solid rgba(255, 184, 0, 0.55); outline-offset: 2px; }
+      .skip-link {
+        position: absolute;
+        top: -42px;
+        left: 12px;
+        z-index: 200;
+        background: #000;
+        color: #fff;
+        padding: 8px 12px;
+        border-radius: 8px;
+      }
+      .skip-link:focus { top: 12px; }
+      .page {
+        min-height: 100vh;
+        display: grid;
+        grid-template-rows: auto 1fr;
+      }
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 18px;
+        padding: 18px 24px;
+        background: linear-gradient(90deg, var(--primary) 0%, #8d1719 62%, var(--primary) 100%);
+        color: #fff9f2;
+        border-bottom: 1px solid rgba(255, 184, 0, 0.34);
+        box-shadow: var(--shadow-strong);
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        min-width: 0;
+      }
+      .crest {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        flex: 0 0 auto;
+        background: linear-gradient(180deg, #fff5d3 0%, var(--accent) 100%);
+        color: var(--maroon-deep);
+        font-weight: 900;
+        border: 2px solid rgba(255, 248, 230, 0.72);
+      }
+      .brand h1 {
+        margin: 0;
+        font-size: 1.12rem;
+        line-height: 1.2;
+      }
+      .brand p {
+        margin: 4px 0 0;
+        color: rgba(255, 247, 236, 0.86);
+        font-size: 0.92rem;
+      }
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        position: relative;
+      }
+      .back-link, .icon-btn, .avatar-btn {
+        border: 1px solid rgba(255, 184, 0, 0.42);
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff9f2;
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+      }
+      .back-link {
+        border-radius: 12px;
+        padding: 0 12px;
+        font-weight: 800;
+      }
+      .icon-btn {
+        position: relative;
+        width: 46px;
+        border-radius: 14px;
+      }
+      .icon-btn svg { width: 20px; height: 20px; }
+      .avatar-btn {
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        background: linear-gradient(180deg, #f1d68d 0%, var(--accent) 100%);
+        color: var(--maroon-deep);
+        font-weight: 900;
+      }
+      .badge {
+        position: absolute;
+        top: -6px;
+        right: -6px;
+        min-width: 22px;
+        height: 22px;
+        padding: 0 6px;
+        display: grid;
+        place-items: center;
+        border-radius: 999px;
+        background: var(--accent);
+        color: var(--maroon-deep);
+        font-size: 0.72rem;
+        font-weight: 900;
+        border: 1px solid #fff1c8;
+      }
+      .dropdown, .notif-panel {
+        position: absolute;
+        right: 0;
+        top: 56px;
+        display: none;
+        width: min(370px, calc(100vw - 24px));
+        background: linear-gradient(180deg, var(--surface) 0%, var(--surface-alt) 100%);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        box-shadow: var(--shadow);
+        color: var(--text);
+      }
+      .dropdown.open, .notif-panel.open { display: block; }
+      .dropdown {
+        width: 210px;
+        padding: 8px;
+      }
+      .dropdown button {
+        width: 100%;
+        text-align: left;
+        border: 0;
+        background: transparent;
+        border-radius: 10px;
+        padding: 10px 12px;
+        color: var(--text);
+      }
+      .dropdown button:hover { background: #f4ecdf; }
+      .notif-panel { padding: 14px; }
+      .notif-panel h2 {
+        margin: 0 0 4px;
+        color: var(--primary);
+        font-size: 1rem;
+      }
+      .notif-panel p {
+        margin: 0 0 12px;
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+      .notif-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 10px;
+      }
+      .notif-list li {
+        border: 1px solid #dfbf72;
+        background: #fff7e5;
+        border-radius: 12px;
+        padding: 11px 12px;
+        line-height: 1.45;
+        color: var(--text);
+      }
+      main {
+        width: min(1480px, 100%);
+        margin: 0 auto;
+        padding: 24px;
+        display: grid;
+        gap: 18px;
+      }
+      .student-banner, .panel, .grade-card {
+        background: linear-gradient(180deg, var(--surface) 0%, var(--surface-alt) 100%);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        box-shadow: var(--shadow);
+      }
+      .student-banner {
+        padding: 18px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 18px;
+        flex-wrap: wrap;
+      }
+      .profile-main { display: flex; align-items: center; gap: 16px; min-width: 260px; }
+      .photo-placeholder {
+        width: 88px; height: 88px; border-radius: 50%; flex: 0 0 auto; display: grid; place-items: center;
+        background: linear-gradient(180deg, #fff7d7 0%, #f0c95e 100%);
+        border: 2px solid rgba(128, 0, 0, 0.25); color: var(--primary); font-weight: 900; font-size: 1.55rem;
+      }
+      .banner-primary h2 {
+        margin: 0;
+        color: var(--primary);
+        font-size: 1.45rem;
+      }
+      .banner-primary p, .banner-item span {
+        margin: 5px 0 0;
+        color: var(--muted);
+      }
+      .profile-meta {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 16px 22px;
+        flex-wrap: wrap;
+        text-align: right;
+      }
+      .banner-item {
+        border: 0;
+        border-left: 1px solid var(--line);
+        border-radius: 0;
+        background: transparent;
+        padding: 2px 0 2px 16px;
+        min-width: 120px;
+      }
+      .banner-item span {
+        display: block;
+        margin: 0 0 6px;
+        font-size: 0.78rem;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+      .banner-item strong {
+        display: block;
+        color: var(--text);
+        line-height: 1.35;
+      }
+      .fallback-note {
+        display: none;
+        margin-top: 10px;
+        border: 1px dashed #c9b188;
+        background: #fffaf0;
+        color: var(--warning);
+        border-radius: 10px;
+        padding: 9px 10px;
+        font-size: 0.9rem;
+        font-weight: 700;
+      }
+      .fallback-note.active { display: block; }
+      .tabs-shell {
+        display: grid;
+        gap: 0;
+      }
+      .tab-nav {
+        display: flex;
+        gap: 22px;
+        overflow-x: auto;
+        padding: 0 18px;
+        border: 1px solid var(--line);
+        border-bottom: 0;
+        border-radius: 14px 14px 0 0;
+        background: #fffdf9;
+      }
+      .tab-btn {
+        flex: 0 0 auto;
+        border: 0;
+        border-bottom: 4px solid transparent;
+        border-radius: 0;
+        padding: 15px 0 12px;
+        background: transparent;
+        color: var(--muted);
+        font-weight: 800;
+        white-space: nowrap;
+      }
+      .tab-btn.active {
+        color: var(--primary);
+        border-bottom-color: var(--accent);
+        box-shadow: none;
+      }
+      .tab-panel {
+        display: none;
+        border-radius: 0 0 14px 14px;
+        padding: 20px;
+      }
+      .tab-panel.active { display: block; }
+      .panel h3, .grade-card h3 {
+        margin: 0 0 6px;
+        color: var(--primary);
+      }
+      .panel p, .grade-card p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 14px;
+      }
+      .info-item {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: #fffdf9;
+        padding: 13px;
+      }
+      .info-item span {
+        display: block;
+        color: var(--muted);
+        font-size: 0.82rem;
+        margin-bottom: 6px;
+      }
+      .info-item strong {
+        color: var(--text);
+      }
+      .grade-layout {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+        align-items: start;
+      }
+      .grade-card {
+        padding: 16px;
+      }
+      .panel-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .add-quiz-btn {
+        border: 1px solid var(--primary);
+        background: var(--primary);
+        color: #fff;
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-weight: 900;
+      }
+      .table-wrap {
+        overflow-x: auto;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: #fff;
+        margin-top: 14px;
+      }
+      table {
+        width: 100%;
+        min-width: 760px;
+        border-collapse: collapse;
+      }
+      th, td {
+        border-bottom: 1px solid #eee2d2;
+        padding: 11px 12px;
+        text-align: left;
+        line-height: 1.35;
+      }
+      th {
+        background: #f7efe3;
+        color: var(--primary);
+        font-size: 0.86rem;
+      }
+      tr:last-child td { border-bottom: 0; }
+      .input-field, .computed-field, .constant-field {
+        width: 100%;
+        min-width: 78px;
+        border-radius: 8px;
+        padding: 9px 10px;
+        line-height: 1.2;
+      }
+      .input-field {
+        border: 1px solid var(--primary);
+        background: #fff;
+        color: var(--text);
+        cursor: text;
+      }
+      .text-edit {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        color: var(--text);
+        padding: 9px 10px;
+      }
+      .computed-field {
+        border: 1px solid #d9d9dd;
+        background: #f4f4f5;
+        color: #3f3f46;
+        cursor: not-allowed;
+      }
+      .constant-field {
+        border: 1px solid #dedede;
+        background: #fafafa;
+        color: #595959;
+        cursor: not-allowed;
+      }
+      .validation-hint {
+        min-height: 1.1rem;
+        margin-top: 5px;
+        color: var(--danger);
+        font-size: 0.78rem;
+        font-weight: 700;
+      }
+      .input-field.invalid {
+        border-color: var(--danger);
+        background: #fff5f3;
+      }
+      .mini-summary {
+        margin-top: 12px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: #fffdf9;
+        padding: 12px;
+      }
+      .mini-summary table { min-width: 0; }
+      .mini-summary .table-wrap { margin-top: 0; }
+      .mini-summary th, .mini-summary td { text-align: center; }
+      .summary-toolbar {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 12px;
+      }
+      .summary-cards {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 14px;
+      }
+      .summary-card {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: #fffdf9;
+        padding: 13px;
+      }
+      .summary-card span {
+        display: block;
+        color: var(--muted);
+        font-size: 0.82rem;
+        margin-bottom: 8px;
+      }
+      .summary-card strong {
+        color: var(--primary);
+        font-size: 1.25rem;
+      }
+      .tracker {
+        display: grid;
+        gap: 10px;
+      }
+      .tracker label {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 9px 10px;
+        background: #fffdf9;
+        color: var(--text);
+        font-weight: 700;
+      }
+      .status-pill {
+        display: inline-flex;
+        align-items: center;
+        border: 1px solid #b8d5b1;
+        background: #edf6ea;
+        color: var(--ok);
+        border-radius: 999px;
+        padding: 5px 10px;
+        font-weight: 900;
+      }
+      .status-pill.fail {
+        border-color: #e2b1a6;
+        background: #fff0eb;
+        color: var(--danger);
+      }
+      .status-pill.unrecorded {
+        border-color: #e2b1a6;
+        background: #fff0eb;
+        color: var(--danger);
+      }
+      .attendance-select {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        padding: 9px 10px;
+        min-width: 110px;
+      }
+      .modal {
+        position: fixed;
+        inset: 0;
+        display: none;
+        place-items: center;
+        z-index: 130;
+        padding: 20px;
+        background: rgba(21, 13, 13, 0.45);
+      }
+      .modal.open { display: grid; }
+      .modal-card {
+        width: min(430px, 100%);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--surface);
+        box-shadow: var(--shadow);
+        padding: 20px;
+      }
+      .modal-card h3 {
+        margin: 0 0 8px;
+        color: var(--primary);
+      }
+      .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 16px;
+      }
+      .btn {
+        border: 1px solid var(--line);
+        background: #fff;
+        color: var(--text);
+        border-radius: 10px;
+        padding: 10px 12px;
+        font-weight: 800;
+      }
+      .btn.primary {
+        border-color: var(--primary);
+        background: var(--primary);
+        color: #fff;
+      }
+      .toast-wrap {
+        position: fixed;
+        right: 14px;
+        bottom: 14px;
+        z-index: 150;
+        display: grid;
+        gap: 10px;
+      }
+      .toast {
+        min-width: 240px;
+        max-width: 340px;
+        border-radius: 14px;
+        padding: 12px 14px;
+        background: var(--primary);
+        color: #fff;
+        box-shadow: var(--shadow);
+      }
+      @media (max-width: 1100px) {
+        .student-banner { align-items: flex-start; }
+        .profile-meta { justify-content: flex-start; text-align: left; }
+        .grade-layout { grid-template-columns: 1fr; }
+        .summary-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      }
+      @media (max-width: 720px) {
+        header {
+          align-items: stretch;
+          flex-direction: column;
+        }
+        .header-actions {
+          justify-content: flex-end;
+        }
+        main { padding: 16px; }
+        .info-grid, .summary-cards { grid-template-columns: 1fr; }
+        .profile-main { align-items: flex-start; }
+        .profile-meta { display: grid; grid-template-columns: 1fr; width: 100%; }
+        .banner-item { border-left: 0; border-top: 1px solid var(--line); padding: 10px 0 0; }
+        .tab-nav {
+          border-radius: 14px 14px 0 0;
+        }
+        .tab-btn {
+          padding: 9px 12px;
+          font-size: 0.9rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#mainContent">Skip to main content</a>
+    <div class="page">
+      <header>
+        <div class="brand">
+          <div class="crest" aria-hidden="true">UP</div>
+          <div>
+            <h1>UPHSD CCS</h1>
+            <p>Faculty Student Detail</p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <a class="back-link" id="backToStudents" href="./students.html">Back to Students</a>
+          <button class="icon-btn" id="notifButton" type="button" aria-label="Open notifications" aria-expanded="false" aria-controls="notifPanel">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5"></path>
+              <path d="M9 17a3 3 0 0 0 6 0"></path>
+            </svg>
+            <span class="badge" aria-label="3 notifications">3</span>
+          </button>
+          <section class="notif-panel" id="notifPanel" aria-label="Faculty notifications">
+            <h2>Notifications</h2>
+            <p>Academic reminders remain visible for this prototype.</p>
+            <ul class="notif-list">
+              <li>Academic Year 2025-2026 Grading Guidelines Updated</li>
+              <li>Final Grade Submission Deadline: May 15, 2026</li>
+              <li>System Maintenance Scheduled: Week 6</li>
+            </ul>
+          </section>
+          <button class="avatar-btn" id="avatarButton" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="profileMenu">F</button>
+          <div class="dropdown" id="profileMenu" role="menu" aria-label="Profile options">
+            <button role="menuitem" type="button" id="profileAction">Profile</button>
+            <button role="menuitem" type="button" id="settingsAction">Settings</button>
+            <button role="menuitem" type="button" id="logoutAction">Logout</button>
+          </div>
+        </div>
+      </header>
+
+      <main id="mainContent" tabindex="-1">
+        <!-- LEADER UPDATE: Replace mock student data when available -->
+        <section class="student-banner" aria-label="Student academic summary">
+          <div class="profile-main">
+            <div class="photo-placeholder" id="studentPhoto" aria-label="Student picture placeholder">MS</div>
+            <div class="banner-primary">
+              <h2 id="studentName">Student Name</h2>
+              <p id="studentSubline">Student ID and section</p>
+              <div class="fallback-note" id="fallbackNote">Requested student was not found. Showing the first mock student record.</div>
+            </div>
+          </div>
+          <div class="profile-meta">
+            <div class="banner-item"><span>Student ID</span><strong id="studentId">-</strong></div>
+            <div class="banner-item"><span>Section</span><strong id="studentSection">-</strong></div>
+            <div class="banner-item"><span>Subject Code</span><strong id="subjectCode">-</strong></div>
+            <div class="banner-item"><span>Semester / Year</span><strong>2nd Semester, AY 2025-2026</strong></div>
+            <div class="banner-item"><span>Faculty Assigned</span><strong id="facultyName">Faculty</strong></div>
+          </div>
+        </section>
+
+        <section class="tabs-shell" aria-label="Student detail workspace">
+          <nav class="tab-nav" role="tablist" aria-label="Student detail tabs">
+            <button class="tab-btn active" id="tab-school" type="button" role="tab" aria-selected="true" aria-controls="panel-school" data-tab="school">School Informations</button>
+            <button class="tab-btn" id="tab-personal" type="button" role="tab" aria-selected="false" aria-controls="panel-personal" data-tab="personal">Personal</button>
+            <button class="tab-btn" id="tab-schedule" type="button" role="tab" aria-selected="false" aria-controls="panel-schedule" data-tab="schedule">Schedule</button>
+            <button class="tab-btn" id="tab-settings" type="button" role="tab" aria-selected="false" aria-controls="panel-settings" data-tab="settings">Settings</button>
+            <button class="tab-btn" id="tab-quizzes" type="button" role="tab" aria-selected="false" aria-controls="panel-quizzes" data-tab="quizzes">Quizzes</button>
+            <button class="tab-btn" id="tab-assignments" type="button" role="tab" aria-selected="false" aria-controls="panel-assignments" data-tab="assignments">Assignments</button>
+            <button class="tab-btn" id="tab-exam" type="button" role="tab" aria-selected="false" aria-controls="panel-exam" data-tab="exam">Major Exam</button>
+            <button class="tab-btn" id="tab-attendance" type="button" role="tab" aria-selected="false" aria-controls="panel-attendance" data-tab="attendance">Attendance</button>
+            <button class="tab-btn" id="tab-projects" type="button" role="tab" aria-selected="false" aria-controls="panel-projects" data-tab="projects">Projects</button>
+            <button class="tab-btn" id="tab-summary" type="button" role="tab" aria-selected="false" aria-controls="panel-summary" data-tab="summary">Summary of Grades</button>
+          </nav>
+
+          <section class="panel tab-panel active" id="panel-school" role="tabpanel" aria-labelledby="tab-school">
+            <h3>School Informations</h3>
+            <p>Academic placement and enrollment identifiers for this prototype record.</p>
+            <div class="info-grid">
+              <div class="info-item"><span>College</span><strong>College of Computer Studies</strong></div>
+              <div class="info-item"><span>Program</span><strong id="programName">BS Computer Science</strong></div>
+              <div class="info-item"><span>Campus</span><strong>UPHSD Las Pinas</strong></div>
+              <div class="info-item"><span>Year Level</span><strong>2nd Year</strong></div>
+              <div class="info-item"><span>Enrollment Status</span><strong id="studentStatus">Active</strong></div>
+              <div class="info-item"><span>Subject Assignment</span><strong id="schoolSubject">-</strong></div>
+            </div>
+            <!-- LEADER UPDATE: Replace with real data -->
+          </section>
+
+          <section class="panel tab-panel" id="panel-personal" role="tabpanel" aria-labelledby="tab-personal">
+            <h3>Personal</h3>
+            <p>Structured placeholder profile information for advising and faculty review.</p>
+            <div class="info-grid">
+              <div class="info-item"><span>Contact Number</span><strong>09XX-XXX-1234</strong></div>
+              <div class="info-item"><span>Email</span><strong id="studentEmail">student@uph.edu.ph</strong></div>
+              <div class="info-item"><span>Guardian</span><strong>Registered Guardian</strong></div>
+              <div class="info-item"><span>Address</span><strong>Las Pinas City</strong></div>
+              <div class="info-item"><span>Advising Notes</span><strong>Monitor class standing and attendance.</strong></div>
+              <div class="info-item"><span>Record Type</span><strong>Mock prototype data</strong></div>
+            </div>
+            <!-- LEADER UPDATE: Replace with real data -->
+          </section>
+
+          <section class="panel tab-panel" id="panel-schedule" role="tabpanel" aria-labelledby="tab-schedule">
+            <h3>Schedule</h3>
+            <p>Current enrolled schedule resolved from the class section.</p>
+            <div class="info-grid">
+              <div class="info-item"><span>Subject</span><strong id="scheduleSubject">-</strong></div>
+              <div class="info-item"><span>Schedule</span><strong id="scheduleTime">-</strong></div>
+              <div class="info-item"><span>Room</span><strong id="scheduleRoom">-</strong></div>
+              <div class="info-item"><span>Consultation</span><strong>Friday, 3:00-4:00 PM</strong></div>
+              <div class="info-item"><span>Class Mode</span><strong>Laboratory and lecture</strong></div>
+              <div class="info-item"><span>Faculty</span><strong id="scheduleFaculty">Faculty</strong></div>
+            </div>
+            <!-- LEADER UPDATE: Replace with real data -->
+          </section>
+
+          <section class="panel tab-panel" id="panel-settings" role="tabpanel" aria-labelledby="tab-settings">
+            <h3>Settings</h3>
+            <p>Static controls reserved for student-specific faculty preferences.</p>
+            <div class="info-grid">
+              <div class="info-item"><span>Grade Alerts</span><strong>Enabled for at-risk thresholds</strong></div>
+              <div class="info-item"><span>Computation Mode</span><strong>TOR-aligned weighted calculation</strong></div>
+              <div class="info-item"><span>Visibility</span><strong>Faculty-only prototype view</strong></div>
+              <div class="info-item"><span>Data Source</span><strong>Local mock roster</strong></div>
+              <div class="info-item"><span>Export Status</span><strong>Not configured</strong></div>
+              <div class="info-item"><span>Audit Trail</span><strong>Placeholder only</strong></div>
+            </div>
+            <!-- LEADER UPDATE: Replace with real data -->
+          </section>
+
+          <section class="panel tab-panel" id="panel-quizzes" role="tabpanel" aria-labelledby="tab-quizzes">
+            <div class="grade-layout">
+              <div class="grade-card">
+                <div class="panel-head">
+                  <div>
+                    <h3>Quizzes</h3>
+                    <p>Named quiz scores are averaged and weighted at 30%.</p>
+                  </div>
+                  <button class="add-quiz-btn" id="addQuizBtn" type="button">+ Add Quiz</button>
+                </div>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Quiz</th>
+                        <th>Coverage</th>
+                        <th>Score</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="week-col" data-week="1">
+                        <td><input class="text-edit" id="quizLabel1" type="text" value="Usability Principles Quiz" aria-label="Quiz 1 name" /></td>
+                        <td><input class="text-edit" id="quizCoverage1" type="text" value="Heuristics and affordances" aria-label="Quiz 1 coverage" /></td>
+                        <td><input class="input-field grade-input quiz-score" data-grade="q1" type="number" min="0" max="100" value="88" aria-label="Quiz 1 score" /><div class="validation-hint" id="hint-q1"></div></td>
+                        <td><span class="status-pill quiz-status">Graded</span></td>
+                      </tr>
+                      <tr class="week-col" data-week="2">
+                        <td><input class="text-edit" id="quizLabel2" type="text" value="Wireframing Concepts Quiz" aria-label="Quiz 2 name" /></td>
+                        <td><input class="text-edit" id="quizCoverage2" type="text" value="Information hierarchy" aria-label="Quiz 2 coverage" /></td>
+                        <td><input class="input-field grade-input quiz-score" data-grade="q2" type="number" min="0" max="100" value="91" aria-label="Quiz 2 score" /><div class="validation-hint" id="hint-q2"></div></td>
+                        <td><span class="status-pill quiz-status">Graded</span></td>
+                      </tr>
+                      <tr class="week-col" data-week="3">
+                        <td><input class="text-edit" id="quizLabel3" type="text" value="Prototype Evaluation Quiz" aria-label="Quiz 3 name" /></td>
+                        <td><input class="text-edit" id="quizCoverage3" type="text" value="Testing and feedback" aria-label="Quiz 3 coverage" /></td>
+                        <td><input class="input-field grade-input quiz-score" data-grade="q3" type="number" min="0" max="100" value="86" aria-label="Quiz 3 score" /><div class="validation-hint" id="hint-q3"></div></td>
+                        <td><span class="status-pill quiz-status">Graded</span></td>
+                      </tr>
+                      <tr class="week-col" data-week="4">
+                        <td><input class="text-edit" id="quizLabel4" type="text" value="Accessibility Review Quiz" aria-label="Quiz 4 name" /></td>
+                        <td><input class="text-edit" id="quizCoverage4" type="text" value="WCAG and readability" aria-label="Quiz 4 coverage" /></td>
+                        <td><input class="input-field grade-input quiz-score" data-grade="q4" type="number" min="0" max="100" value="93" aria-label="Quiz 4 score" /><div class="validation-hint" id="hint-q4"></div></td>
+                        <td><span class="status-pill quiz-status">Graded</span></td>
+                      </tr>
+                      <tr class="week-col" data-week="5">
+                        <td><input class="text-edit" id="quizLabel5" type="text" value="Final Interface Critique" aria-label="Quiz 5 name" /></td>
+                        <td><input class="text-edit" id="quizCoverage5" type="text" value="HCI rubric alignment" aria-label="Quiz 5 coverage" /></td>
+                        <td><input class="input-field grade-input quiz-score" data-grade="q5" type="number" min="0" max="100" value="90" aria-label="Quiz 5 score" /><div class="validation-hint" id="hint-q5"></div></td>
+                        <td><span class="status-pill quiz-status">Graded</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="mini-summary">
+                  <div class="table-wrap">
+                    <table>
+                      <thead><tr><th>Quiz Average</th><th>Weight</th><th>Weighted Grade</th></tr></thead>
+                      <tbody>
+                        <tr>
+                          <td><input class="computed-field" id="quizAverage" type="text" readonly disabled aria-label="Computed quizzes average" /></td>
+                          <td><input class="constant-field" type="text" value="30% Weight" readonly disabled aria-label="Quizzes weight" /></td>
+                          <td><input class="computed-field" id="quizzesGrade" type="text" readonly disabled aria-label="Computed quizzes weighted grade" /></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel tab-panel" id="panel-assignments" role="tabpanel" aria-labelledby="tab-assignments">
+            <div class="panel-head">
+              <div>
+                <h3>Assignments</h3>
+                <p>Recitation/activity average feeds the research project component.</p>
+              </div>
+              <button class="add-quiz-btn" id="addAssignmentBtn" type="button">+ Add Assignment</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Assignment</th><th>Description</th><th>Score</th><th>Formula Share</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td><input class="text-edit" id="assignmentLabel1" type="text" value="Persona Analysis" aria-label="Assignment 1 name" /></td>
+                    <td><input class="text-edit" id="assignmentDesc1" type="text" value="User profile and goal mapping" aria-label="Assignment 1 description" /></td>
+                    <td><input class="input-field grade-input assignment-score" data-grade="rec1" type="number" min="0" max="100" value="90" aria-label="Assignment 1 score" /><div class="validation-hint" id="hint-rec1"></div></td>
+                    <td><input class="constant-field" type="text" value="50%" readonly disabled aria-label="Recitation formula share" /></td>
+                  </tr>
+                  <tr>
+                    <td><input class="text-edit" id="assignmentLabel2" type="text" value="Task Flow Review" aria-label="Assignment 2 name" /></td>
+                    <td><input class="text-edit" id="assignmentDesc2" type="text" value="Workflow and error prevention" aria-label="Assignment 2 description" /></td>
+                    <td><input class="input-field grade-input assignment-score" data-grade="rec2" type="number" min="0" max="100" value="87" aria-label="Assignment 2 score" /><div class="validation-hint" id="hint-rec2"></div></td>
+                    <td><input class="constant-field" type="text" value="50%" readonly disabled /></td>
+                  </tr>
+                  <tr>
+                    <td><input class="text-edit" id="assignmentLabel3" type="text" value="Heuristic Evaluation" aria-label="Assignment 3 name" /></td>
+                    <td><input class="text-edit" id="assignmentDesc3" type="text" value="Nielsen-style review notes" aria-label="Assignment 3 description" /></td>
+                    <td><input class="input-field grade-input assignment-score" data-grade="rec3" type="number" min="0" max="100" value="92" aria-label="Assignment 3 score" /><div class="validation-hint" id="hint-rec3"></div></td>
+                    <td><input class="constant-field" type="text" value="50%" readonly disabled /></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="mini-summary">
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Assignment Average</th><th>Formula Share</th><th>Use in Research / Project</th></tr></thead>
+                  <tbody><tr><td><input class="computed-field" id="recitationAverage" type="text" readonly disabled aria-label="Computed assignment average" /></td><td><input class="constant-field" type="text" value="50%" readonly disabled /></td><td><input class="computed-field" id="assignmentFormulaUse" type="text" readonly disabled /></td></tr></tbody>
+                </table>
+              </div>
+            </div>
+            <!-- LEADER UPDATE: Replace with real data -->
+          </section>
+
+          <section class="panel tab-panel" id="panel-exam" role="tabpanel" aria-labelledby="tab-exam">
+            <h3>Major Exam</h3>
+            <p>Major examination contributes 30% to the final grade.</p>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Exam</th><th>Coverage</th><th>Score</th><th>Weight</th><th>Weighted Grade</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td>Prelim Exam</td>
+                    <td>Foundations and interface principles</td>
+                    <td><input class="input-field grade-input exam-score" data-grade="prelimExam" type="number" min="0" max="100" value="87" aria-label="Prelim exam score" /><div class="validation-hint" id="hint-prelimExam"></div></td>
+                    <td><input class="constant-field" type="text" value="Reference" readonly disabled /></td>
+                    <td><input class="computed-field" id="prelimExamGrade" type="text" readonly disabled aria-label="Computed prelim exam weighted reference" /></td>
+                  </tr>
+                  <tr>
+                    <td>Midterm Exam</td>
+                    <td>Prototype review and usability testing</td>
+                    <td><input class="input-field grade-input exam-score" data-grade="midtermExam" type="number" min="0" max="100" value="90" aria-label="Midterm exam score" /><div class="validation-hint" id="hint-midtermExam"></div></td>
+                    <td><input class="constant-field" type="text" value="Reference" readonly disabled /></td>
+                    <td><input class="computed-field" id="midtermExamGrade" type="text" readonly disabled aria-label="Computed midterm exam weighted reference" /></td>
+                  </tr>
+                  <tr>
+                    <td>Finals Exam</td>
+                    <td>Final interface assessment</td>
+                    <td><input class="input-field grade-input exam-score" data-grade="majorExam" type="number" min="0" max="100" value="89" aria-label="Finals major exam raw score" /><div class="validation-hint" id="hint-majorExam"></div></td>
+                    <td><input class="constant-field" type="text" value="30%" readonly disabled aria-label="Major exam weight" /></td>
+                    <td><input class="computed-field" id="majorExamGrade" type="text" readonly disabled aria-label="Computed major exam weighted grade" /></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Exam Average</strong></td>
+                    <td>Prelim, midterm, finals reference average</td>
+                    <td><input class="computed-field" id="examAverage" type="text" readonly disabled aria-label="Computed exam average" /></td>
+                    <td><input class="constant-field" type="text" value="Finals used for TOR" readonly disabled /></td>
+                    <td><input class="computed-field" id="examRuleNote" type="text" readonly disabled aria-label="Major exam rule note" /></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="panel tab-panel" id="panel-attendance" role="tabpanel" aria-labelledby="tab-attendance">
+            <h3>Attendance</h3>
+            <p>Attendance raw score contributes 10% to class performance.</p>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Component</th><th class="week-col" data-week="1">Week 1</th><th class="week-col" data-week="2">Week 2</th><th class="week-col" data-week="3">Week 3</th><th class="week-col" data-week="4">Week 4</th><th class="week-col" data-week="5">Week 5</th><th class="week-col" data-week="6">Week 6</th><th>Raw</th><th>Weight</th><th>Weighted Grade</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td>Attendance Standing</td>
+                    <td class="week-col" data-week="1"><select class="attendance-select" data-attendance aria-label="Week 1 attendance"><option selected>Present</option><option>Late</option><option>Absent</option><option>Excused</option></select></td>
+                    <td class="week-col" data-week="2"><select class="attendance-select" data-attendance aria-label="Week 2 attendance"><option selected>Present</option><option>Late</option><option>Absent</option><option>Excused</option></select></td>
+                    <td class="week-col" data-week="3"><select class="attendance-select" data-attendance aria-label="Week 3 attendance"><option selected>Present</option><option>Late</option><option>Absent</option><option>Excused</option></select></td>
+                    <td class="week-col" data-week="4"><select class="attendance-select" data-attendance aria-label="Week 4 attendance"><option>Present</option><option selected>Late</option><option>Absent</option><option>Excused</option></select></td>
+                    <td class="week-col" data-week="5"><select class="attendance-select" data-attendance aria-label="Week 5 attendance"><option selected>Present</option><option>Late</option><option>Absent</option><option>Excused</option></select></td>
+                    <td class="week-col" data-week="6"><select class="attendance-select" data-attendance aria-label="Week 6 attendance"><option selected>Present</option><option>Late</option><option>Absent</option><option>Excused</option></select></td>
+                    <td><input class="computed-field" id="attendanceRaw" type="text" readonly disabled aria-label="Computed attendance raw score" /></td>
+                    <td><input class="constant-field" type="text" value="10%" readonly disabled aria-label="Attendance weight" /></td>
+                    <td><input class="computed-field" id="attendanceGrade" type="text" readonly disabled aria-label="Computed attendance weighted grade" /></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="panel tab-panel" id="panel-projects" role="tabpanel" aria-labelledby="tab-projects">
+            <h3>Projects</h3>
+            <p>Project average contributes to the research project component in the TOR formula.</p>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Project</th><th>Deliverable</th><th>Score</th><th>Formula Share</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td><input class="text-edit" id="projectLabel1" type="text" value="Faculty Portal Wireframe" aria-label="Project 1 name" /></td>
+                    <td><input class="text-edit" id="projectDesc1" type="text" value="Low-fidelity layout and flow" aria-label="Project 1 deliverable" /></td>
+                    <td><input class="input-field grade-input project-score" data-grade="project1" type="number" min="0" max="100" value="89" aria-label="Project 1 score" /><div class="validation-hint" id="hint-project1"></div></td>
+                    <td><input class="constant-field" type="text" value="10%" readonly disabled aria-label="Project formula share" /></td>
+                  </tr>
+                  <tr>
+                    <td><input class="text-edit" id="projectLabel2" type="text" value="Interactive Prototype" aria-label="Project 2 name" /></td>
+                    <td><input class="text-edit" id="projectDesc2" type="text" value="Clickable workflow demonstration" aria-label="Project 2 deliverable" /></td>
+                    <td><input class="input-field grade-input project-score" data-grade="project2" type="number" min="0" max="100" value="94" aria-label="Project 2 score" /><div class="validation-hint" id="hint-project2"></div></td>
+                    <td><input class="constant-field" type="text" value="10%" readonly disabled /></td>
+                  </tr>
+                  <tr>
+                    <td><input class="text-edit" id="projectLabel3" type="text" value="Final Usability Report" aria-label="Project 3 name" /></td>
+                    <td><input class="text-edit" id="projectDesc3" type="text" value="Findings and design revisions" aria-label="Project 3 deliverable" /></td>
+                    <td><input class="input-field grade-input project-score" data-grade="project3" type="number" min="0" max="100" value="91" aria-label="Project 3 score" /><div class="validation-hint" id="hint-project3"></div></td>
+                    <td><input class="constant-field" type="text" value="10%" readonly disabled /></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Project Average</strong></td>
+                    <td>Computed from all project rows</td>
+                    <td><input class="computed-field" id="projectAverage" type="text" readonly disabled aria-label="Computed project average" /></td>
+                    <td><input class="computed-field" id="researchProjectGrade" type="text" readonly disabled aria-label="Computed research project weighted grade" /></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="panel tab-panel" id="panel-summary" role="tabpanel" aria-labelledby="tab-summary">
+            <h3>Summary of Grades</h3>
+            <p id="calculationStatus" aria-live="polite">Grade calculation is ready.</p>
+            <div class="summary-cards">
+              <div class="summary-card"><span>Class Performance</span><strong id="classPerformanceCard">0.00</strong></div>
+              <div class="summary-card"><span>Final Raw Grade</span><strong id="finalGradeCard">0.00</strong></div>
+              <div class="summary-card"><span>Transmuted Grade</span><strong id="transmutedCard">5.00</strong></div>
+              <div class="summary-card"><span>Remarks</span><strong id="remarksCard">Failed</strong></div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Grade Area</th><th>Raw / Average</th><th>Weight / Formula</th><th>Computed Grade</th></tr></thead>
+                <tbody>
+                  <tr><td>Attendance</td><td><input class="input-field summary-override" id="summaryAttendanceRaw" data-summary="attendance" type="number" min="0" max="100" /></td><td><input class="constant-field" type="text" value="10%" readonly disabled /></td><td><input class="computed-field" id="summaryAttendanceGrade" type="text" readonly disabled /></td></tr>
+                  <tr><td>Quizzes</td><td><input class="input-field summary-override" id="summaryQuizAverage" data-summary="quizzes" type="number" min="0" max="100" /></td><td><input class="constant-field" type="text" value="30%" readonly disabled /></td><td><input class="computed-field" id="summaryQuizGrade" type="text" readonly disabled /></td></tr>
+                  <tr><td>Assignments / Recitation</td><td><input class="input-field summary-override" id="summaryAssignmentAverage" data-summary="assignments" type="number" min="0" max="100" /></td><td><input class="constant-field" type="text" value="50% formula share" readonly disabled /></td><td><input class="computed-field" id="summaryAssignmentNote" type="text" readonly disabled /></td></tr>
+                  <tr><td>Projects</td><td><input class="input-field summary-override" id="summaryProjectAverage" data-summary="projects" type="number" min="0" max="100" /></td><td><input class="constant-field" type="text" value="10% formula share" readonly disabled /></td><td><input class="computed-field" id="summaryProjectNote" type="text" readonly disabled /></td></tr>
+                  <tr><td>Research / Project</td><td><input class="computed-field" id="summaryResearchRaw" type="text" readonly disabled /></td><td><input class="constant-field" type="text" value="(Recitation 50% + Project 10%) * 30%" readonly disabled /></td><td><input class="computed-field" id="summaryResearchGrade" type="text" readonly disabled /></td></tr>
+                  <tr><td>Class Performance</td><td><input class="computed-field" id="summaryClassPerformance" type="text" readonly disabled /></td><td><input class="constant-field" type="text" value="Subtotal" readonly disabled /></td><td><input class="computed-field" id="summaryClassPerformanceGrade" type="text" readonly disabled /></td></tr>
+                  <tr><td>Major Exam</td><td><input class="input-field summary-override" id="summaryMajorRaw" data-summary="major" type="number" min="0" max="100" /></td><td><input class="constant-field" type="text" value="30%" readonly disabled /></td><td><input class="computed-field" id="summaryMajorGrade" type="text" readonly disabled /></td></tr>
+                  <tr><td>Finale Grade</td><td><input class="computed-field" id="summaryFinalRaw" type="text" readonly disabled /></td><td><input class="constant-field" type="text" value="Class Performance + Major Exam" readonly disabled /></td><td><input class="computed-field" id="summaryFinalGrade" type="text" readonly disabled /></td></tr>
+                  <tr><td>Transmutation</td><td><input class="computed-field" id="summaryTransmuted" type="text" readonly disabled /></td><td><input class="constant-field" type="text" value="Institutional scale" readonly disabled /></td><td><span class="status-pill" id="summaryRemarks">Passed</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <section class="modal" id="logoutModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="logoutTitle">
+      <div class="modal-card">
+        <h3 id="logoutTitle">Confirm Logout</h3>
+        <p>Are you sure you want to logout from the faculty portal?</p>
+        <div class="modal-actions">
+          <button class="btn" type="button" id="cancelLogout">Cancel</button>
+          <button class="btn primary" type="button" id="confirmLogout">Confirm</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="toast-wrap" id="toastWrap" aria-live="polite" aria-atomic="true"></div>
+
+    <script>
+      (function () {
+        var DEFAULT_STUDENTS = [
+          { name: "Miguel Santos", id: "2026-FAC-244", section: "BSCS-2A", status: "Active" },
+          { name: "Angela Rivera", id: "2026-FAC-251", section: "BSCS-2A", status: "Active" },
+          { name: "Paolo Dela Cruz", id: "2026-FAC-252", section: "BSCS-2B", status: "At Risk" },
+          { name: "Lia Ramos", id: "2026-FAC-253", section: "BSCS-2B", status: "Active" },
+          { name: "John Gabriel Torres", id: "2026-FAC-254", section: "BSIT-2A", status: "At Risk" },
+          { name: "Marie Anne Flores", id: "2026-FAC-255", section: "BSIT-2A", status: "Active" }
+        ];
+        var DEFAULT_CLASSES = [
+          { subject: "HCI 402", section: "BSCS-2A", schedule: "Mon/Wed 9:00-10:30 AM", room: "Comp Lab 2", students: 42 },
+          { subject: "HCI 402", section: "BSCS-2B", schedule: "Tue/Fri 10:00-11:30 AM", room: "Room 405", students: 38 },
+          { subject: "Data Structures", section: "BSIT-2A", schedule: "Thu/Sat 1:00-2:30 PM", room: "Comp Lab 1", students: 35 }
+        ];
+        var facultyName = localStorage.getItem("userName") || "Faculty";
+        var activeModal = null;
+
+        var profileMenu = document.getElementById("profileMenu");
+        var avatarButton = document.getElementById("avatarButton");
+        var notifButton = document.getElementById("notifButton");
+        var notifPanel = document.getElementById("notifPanel");
+        var logoutModal = document.getElementById("logoutModal");
+        var cancelLogout = document.getElementById("cancelLogout");
+        var confirmLogout = document.getElementById("confirmLogout");
+        var toastWrap = document.getElementById("toastWrap");
+        var tabs = Array.prototype.slice.call(document.querySelectorAll(".tab-btn"));
+        var panels = Array.prototype.slice.call(document.querySelectorAll(".tab-panel"));
+        var summaryOverrides = {};
+
+        function getStoredStudents() {
+          try {
+            var parsed = JSON.parse(localStorage.getItem("mockStudents") || "[]");
+            return Array.isArray(parsed) ? parsed.filter(function (item) {
+              return item && item.name && item.id && item.section && item.status;
+            }) : [];
+          } catch (error) {
+            return [];
+          }
+        }
+        function getStoredClasses() {
+          try {
+            var parsed = JSON.parse(localStorage.getItem("mockClasses") || "[]");
+            return Array.isArray(parsed) ? parsed.filter(function (item) {
+              return item && item.subject && item.section;
+            }) : [];
+          } catch (error) {
+            return [];
+          }
+        }
+        function getClassBySection(section) {
+          return DEFAULT_CLASSES.concat(getStoredClasses()).filter(function (item) {
+            return item.section === section;
+          })[0] || { subject: "Unassigned Class", schedule: "Schedule pending", room: "Room pending" };
+        }
+        function getSelectedStudent() {
+          var students = DEFAULT_STUDENTS.concat(getStoredStudents());
+          var requestedId = new URLSearchParams(window.location.search).get("id");
+          var matched = students.filter(function (student) { return student.id === requestedId; })[0];
+          return { student: matched || students[0], fallback: Boolean(requestedId && !matched) };
+        }
+        function renderStudentBanner() {
+          var selected = getSelectedStudent();
+          var student = selected.student;
+          var classItem = getClassBySection(student.section);
+          var program = student.section.indexOf("BSIT") === 0 ? "BS Information Technology" : "BS Computer Science";
+          document.getElementById("studentName").textContent = student.name;
+          document.getElementById("studentSubline").textContent = student.id + " • " + student.section + " • " + classItem.subject;
+          document.getElementById("studentId").textContent = student.id;
+          document.getElementById("studentSection").textContent = student.section;
+          document.getElementById("subjectCode").textContent = classItem.subject;
+          document.getElementById("facultyName").textContent = facultyName;
+          document.getElementById("studentPhoto").textContent = student.name.split(" ").map(function (part) { return part.charAt(0); }).join("").slice(0, 2).toUpperCase();
+          document.getElementById("programName").textContent = program;
+          document.getElementById("studentStatus").textContent = student.status;
+          document.getElementById("schoolSubject").textContent = classItem.subject;
+          document.getElementById("studentEmail").textContent = student.id.toLowerCase().replace(/[^a-z0-9]/g, ".") + "@uph.edu.ph";
+          document.getElementById("scheduleSubject").textContent = classItem.subject;
+          document.getElementById("scheduleTime").textContent = classItem.schedule || "Schedule pending";
+          document.getElementById("scheduleRoom").textContent = classItem.room || "Room pending";
+          document.getElementById("scheduleFaculty").textContent = facultyName;
+          document.getElementById("fallbackNote").classList.toggle("active", selected.fallback);
+          avatarButton.textContent = facultyName.charAt(0).toUpperCase();
+          applySubjectAssessmentLabels(classItem.subject);
+        }
+        function applySubjectAssessmentLabels(subject) {
+          var isDataStructures = subject === "Data Structures";
+          var labels = isDataStructures ? {
+            quizLabel1: "Arrays and Lists Quiz", quizCoverage1: "Sequential structures",
+            quizLabel2: "Stacks and Queues Quiz", quizCoverage2: "Linear ADTs",
+            quizLabel3: "Trees Quiz", quizCoverage3: "Traversal logic",
+            quizLabel4: "Sorting Quiz", quizCoverage4: "Algorithm comparison",
+            quizLabel5: "Hashing Quiz", quizCoverage5: "Collision handling",
+            assignmentLabel1: "Array Operations Drill", assignmentDesc1: "Indexing and updates",
+            assignmentLabel2: "Stack Trace Activity", assignmentDesc2: "Push and pop workflow",
+            assignmentLabel3: "Tree Traversal Exercise", assignmentDesc3: "Preorder and inorder tracing",
+            projectLabel1: "Data Structure Visualizer", projectDesc1: "Model and UI plan",
+            projectLabel2: "Interactive ADT Demo", projectDesc2: "Working prototype",
+            projectLabel3: "Algorithm Analysis Report", projectDesc3: "Complexity and testing notes"
+          } : {
+            quizLabel1: "Usability Principles Quiz", quizCoverage1: "Heuristics and affordances",
+            quizLabel2: "Wireframing Concepts Quiz", quizCoverage2: "Information hierarchy",
+            quizLabel3: "Prototype Evaluation Quiz", quizCoverage3: "Testing and feedback",
+            quizLabel4: "Accessibility Review Quiz", quizCoverage4: "WCAG and readability",
+            quizLabel5: "Final Interface Critique", quizCoverage5: "HCI rubric alignment",
+            assignmentLabel1: "Persona Analysis", assignmentDesc1: "User profile and goal mapping",
+            assignmentLabel2: "Task Flow Review", assignmentDesc2: "Workflow and error prevention",
+            assignmentLabel3: "Heuristic Evaluation", assignmentDesc3: "Nielsen-style review notes",
+            projectLabel1: "Faculty Portal Wireframe", projectDesc1: "Low-fidelity layout and flow",
+            projectLabel2: "Interactive Prototype", projectDesc2: "Clickable workflow demonstration",
+            projectLabel3: "Final Usability Report", projectDesc3: "Findings and design revisions"
+          };
+          Object.keys(labels).forEach(function (id) {
+            var element = document.getElementById(id);
+            if (element && "value" in element) { element.value = labels[id]; }
+            else if (element) { element.textContent = labels[id]; }
+          });
+        }
+        function showToast(message) {
+          var toast = document.createElement("div");
+          toast.className = "toast";
+          toast.textContent = message;
+          toastWrap.appendChild(toast);
+          window.setTimeout(function () { toast.remove(); }, 2400);
+        }
+        function activateTab(tab, updateHash) {
+          tabs.forEach(function (item) {
+            var active = item === tab;
+            item.classList.toggle("active", active);
+            item.setAttribute("aria-selected", active ? "true" : "false");
+            item.setAttribute("tabindex", active ? "0" : "-1");
+          });
+          panels.forEach(function (panel) {
+            panel.classList.toggle("active", panel.id === tab.getAttribute("aria-controls"));
+          });
+          if (updateHash) {
+            history.replaceState(null, "", window.location.pathname + window.location.search + "#" + tab.getAttribute("data-tab"));
+          }
+        }
+        function handleTabKey(event) {
+          var current = tabs.indexOf(event.currentTarget);
+          var next = current;
+          if (event.key === "ArrowRight") { next = (current + 1) % tabs.length; }
+          else if (event.key === "ArrowLeft") { next = (current - 1 + tabs.length) % tabs.length; }
+          else if (event.key === "Home") { next = 0; }
+          else if (event.key === "End") { next = tabs.length - 1; }
+          else { return; }
+          event.preventDefault();
+          tabs[next].focus();
+          activateTab(tabs[next], true);
+        }
+        function closeMenu() {
+          profileMenu.classList.remove("open");
+          avatarButton.setAttribute("aria-expanded", "false");
+        }
+        function closeNotifications() {
+          notifPanel.classList.remove("open");
+          notifButton.setAttribute("aria-expanded", "false");
+        }
+        function openLogoutModal() {
+          activeModal = logoutModal;
+          logoutModal.classList.add("open");
+          logoutModal.setAttribute("aria-hidden", "false");
+          cancelLogout.focus();
+        }
+        function closeLogoutModal() {
+          activeModal = null;
+          logoutModal.classList.remove("open");
+          logoutModal.setAttribute("aria-hidden", "true");
+          avatarButton.focus();
+        }
+        function gradeValue(key) {
+          var input = document.querySelector('[data-grade="' + key + '"]');
+          var value = Number(input.value);
+          return Number.isFinite(value) ? value : 0;
+        }
+        function averageSelector(selector) {
+          var inputs = Array.prototype.slice.call(document.querySelectorAll(selector));
+          if (!inputs.length) { return 0; }
+          return inputs.reduce(function (sum, input) { return sum + gradeValue(input.getAttribute("data-grade")); }, 0) / inputs.length;
+        }
+        function setValue(id, value) {
+          var element = document.getElementById(id);
+          if (element) { element.value = value; }
+        }
+        function setText(id, value) {
+          var element = document.getElementById(id);
+          if (element) { element.textContent = value; }
+        }
+        function transmute(raw) {
+          if (raw >= 97) return 1.0;
+          if (raw >= 93) return 1.25;
+          if (raw >= 88) return 1.5;
+          if (raw >= 84) return 1.75;
+          if (raw >= 80) return 2.0;
+          if (raw >= 76) return 2.25;
+          if (raw >= 72) return 2.5;
+          if (raw >= 68) return 2.75;
+          if (raw >= 64) return 3.0;
+          if (raw >= 60) return 3.25;
+          if (raw >= 56) return 3.5;
+          if (raw >= 52) return 3.75;
+          return 5.0;
+        }
+        function format(value) {
+          return Number(value).toFixed(2);
+        }
+        function attendanceStatusScore(status) {
+          if (status === "Late") { return 85; }
+          if (status === "Absent") { return 0; }
+          return 100;
+        }
+        function calculateAttendanceRaw() {
+          var selects = Array.prototype.slice.call(document.querySelectorAll("[data-attendance]"));
+          if (!selects.length) { return 0; }
+          return selects.reduce(function (sum, select) { return sum + attendanceStatusScore(select.value); }, 0) / selects.length;
+        }
+        function clampNumberInput(input) {
+          var raw = input.value.trim();
+          if (raw === "" || !Number.isFinite(Number(raw))) { return null; }
+          var value = Number(raw);
+          if (value < 0) { value = 0; input.value = "0"; }
+          if (value > 100) { value = 100; input.value = "100"; }
+          return value;
+        }
+        function validateInput(input) {
+          var key = input.getAttribute("data-grade");
+          var hint = document.getElementById("hint-" + key);
+          var raw = input.value.trim();
+          input.classList.remove("invalid");
+          if (hint) { hint.textContent = ""; }
+          if (raw === "" || !Number.isFinite(Number(raw))) {
+            input.classList.add("invalid");
+            if (hint) { hint.textContent = "Enter a number from 0 to 100."; }
+            return;
+          }
+          var value = Number(raw);
+          if (value < 0) {
+            input.value = "0";
+            if (hint) { hint.textContent = "Minimum score is 0."; }
+          } else if (value > 100) {
+            input.value = "100";
+            if (hint) { hint.textContent = "Maximum score is 100."; }
+          }
+        }
+        function getSummaryValue(key, sourceValue) {
+          var input = document.querySelector('[data-summary="' + key + '"]');
+          if (!input) { return sourceValue; }
+          if (!summaryOverrides[key]) {
+            input.value = format(sourceValue);
+            return sourceValue;
+          }
+          var overrideValue = clampNumberInput(input);
+          return overrideValue === null ? sourceValue : overrideValue;
+        }
+        <!-- HCI: Error Prevention - Input range validation -->
+        function validateAllInputs() {
+          document.querySelectorAll(".grade-input").forEach(validateInput);
+        }
+        <!-- TOR: Automated Logic Mapping - Computed field auto-update -->
+        function calculateGrades() {
+          validateAllInputs();
+          var sourceAttendanceRaw = calculateAttendanceRaw();
+          var sourceQuizzesAverage = averageSelector(".quiz-score");
+          var sourceRecitationAvg = averageSelector(".assignment-score");
+          var sourceProjectAvg = averageSelector(".project-score");
+          var sourceMajorExamRaw = gradeValue("majorExam");
+          var attendanceRaw = getSummaryValue("attendance", sourceAttendanceRaw);
+          var quizzesAverage = getSummaryValue("quizzes", sourceQuizzesAverage);
+          var recitationAvg = getSummaryValue("assignments", sourceRecitationAvg);
+          var projectAvg = getSummaryValue("projects", sourceProjectAvg);
+          var majorExamRaw = getSummaryValue("major", sourceMajorExamRaw);
+          var attendanceGrade = attendanceRaw * 0.10;
+          var quizzesGrade = quizzesAverage * 0.30;
+          var researchProjectGrade = (recitationAvg * 0.50 + projectAvg * 0.10) * 0.30;
+          var classPerformance = attendanceGrade + quizzesGrade + researchProjectGrade;
+          var examAverage = averageSelector(".exam-score");
+          var majorExamGrade = majorExamRaw * 0.30;
+          var finaleGrade = classPerformance + majorExamGrade;
+          var transmuted = transmute(finaleGrade);
+          var remarks = transmuted === 5.0 ? "Failed" : "Passed";
+
+          setValue("quizAverage", format(sourceQuizzesAverage));
+          setValue("quizzesGrade", format(sourceQuizzesAverage * 0.30));
+          setValue("recitationAverage", format(sourceRecitationAvg));
+          setValue("projectAverage", format(sourceProjectAvg));
+          setValue("researchProjectGrade", format((sourceRecitationAvg * 0.50 + sourceProjectAvg * 0.10) * 0.30));
+          setValue("assignmentFormulaUse", format(sourceRecitationAvg * 0.50));
+          setValue("attendanceRaw", format(sourceAttendanceRaw));
+          setValue("attendanceGrade", format(sourceAttendanceRaw * 0.10));
+          setValue("prelimExamGrade", format(gradeValue("prelimExam") * 0.30));
+          setValue("midtermExamGrade", format(gradeValue("midtermExam") * 0.30));
+          setValue("examAverage", format(examAverage));
+          setValue("examRuleNote", "Finals used: " + format(sourceMajorExamRaw));
+          setValue("majorExamGrade", format(sourceMajorExamRaw * 0.30));
+          setValue("summaryAttendanceGrade", format(attendanceGrade));
+          setValue("summaryQuizGrade", format(quizzesGrade));
+          setValue("summaryAssignmentNote", format(recitationAvg * 0.50));
+          setValue("summaryProjectNote", format(projectAvg * 0.10));
+          setValue("summaryResearchRaw", "Rec " + format(recitationAvg) + " / Proj " + format(projectAvg));
+          setValue("summaryResearchGrade", format(researchProjectGrade));
+          setValue("summaryClassPerformance", format(classPerformance));
+          setValue("summaryClassPerformanceGrade", format(classPerformance));
+          setValue("summaryMajorGrade", format(majorExamGrade));
+          setValue("summaryFinalRaw", format(finaleGrade));
+          setValue("summaryFinalGrade", format(finaleGrade));
+          setValue("summaryTransmuted", transmuted.toFixed(2));
+          setText("classPerformanceCard", format(classPerformance));
+          setText("finalGradeCard", format(finaleGrade));
+          setText("transmutedCard", transmuted.toFixed(2));
+          setText("remarksCard", remarks);
+          setText("calculationStatus", "Live calculation updated. Final raw grade is " + format(finaleGrade) + " and transmuted grade is " + transmuted.toFixed(2) + ".");
+          var remarkBadge = document.getElementById("summaryRemarks");
+          remarkBadge.textContent = remarks;
+          remarkBadge.classList.toggle("fail", remarks === "Failed");
+        }
+        function updateQuizStatus(input) {
+          if (!input.classList.contains("quiz-score")) { return; }
+          var row = input.closest("tr");
+          var status = row ? row.querySelector(".quiz-status") : null;
+          if (!status) { return; }
+          var hasValue = input.value.trim() !== "" && Number.isFinite(Number(input.value));
+          status.textContent = hasValue ? "Graded" : "Unrecorded";
+          status.classList.toggle("unrecorded", !hasValue);
+        }
+        function bindGradeInput(input) {
+          input.addEventListener("input", function () {
+            updateQuizStatus(input);
+            calculateGrades();
+          });
+          input.addEventListener("blur", function () {
+            updateQuizStatus(input);
+            calculateGrades();
+          });
+        }
+        function addAssessmentRow(type) {
+          var isQuiz = type === "quiz";
+          var selector = isQuiz ? ".quiz-score" : ".assignment-score";
+          var tableBody = document.querySelector(isQuiz ? "#panel-quizzes tbody" : "#panel-assignments tbody");
+          var count = document.querySelectorAll(selector).length + 1;
+          var key = (isQuiz ? "q" : "rec") + count;
+          var row = document.createElement("tr");
+          if (isQuiz) {
+            row.innerHTML =
+              '<td><input class="text-edit" type="text" value="New Quiz ' + count + '" aria-label="Quiz ' + count + ' name" /></td>' +
+              '<td><input class="text-edit" type="text" value="Assessment coverage pending" aria-label="Quiz ' + count + ' coverage" /></td>' +
+              '<td><input class="input-field grade-input quiz-score" data-grade="' + key + '" type="number" min="0" max="100" value="0" aria-label="Quiz ' + count + ' score" /><div class="validation-hint" id="hint-' + key + '"></div></td>' +
+              '<td><span class="status-pill quiz-status unrecorded">Unrecorded</span></td>';
+          } else {
+            row.innerHTML =
+              '<td><input class="text-edit" type="text" value="New Assignment ' + count + '" aria-label="Assignment ' + count + ' name" /></td>' +
+              '<td><input class="text-edit" type="text" value="Activity details pending" aria-label="Assignment ' + count + ' description" /></td>' +
+              '<td><input class="input-field grade-input assignment-score" data-grade="' + key + '" type="number" min="0" max="100" value="0" aria-label="Assignment ' + count + ' score" /><div class="validation-hint" id="hint-' + key + '"></div></td>' +
+              '<td><input class="constant-field" type="text" value="50%" readonly disabled /></td>';
+          }
+          tableBody.appendChild(row);
+          var input = row.querySelector(".grade-input");
+          bindGradeInput(input);
+          input.focus();
+          calculateGrades();
+          showToast((isQuiz ? "Quiz" : "Assignment") + " row added.");
+        }
+
+        renderStudentBanner();
+        tabs.forEach(function (tab) {
+          tab.addEventListener("click", function () { activateTab(tab, true); });
+          tab.addEventListener("keydown", handleTabKey);
+        });
+        var initialHash = window.location.hash ? window.location.hash.slice(1) : "";
+        var initialTab = tabs.filter(function (tab) { return tab.getAttribute("data-tab") === initialHash; })[0];
+        if (initialTab) { activateTab(initialTab, false); }
+        document.querySelectorAll(".grade-input").forEach(bindGradeInput);
+        document.getElementById("addQuizBtn").addEventListener("click", function () { addAssessmentRow("quiz"); });
+        document.getElementById("addAssignmentBtn").addEventListener("click", function () { addAssessmentRow("assignment"); });
+        document.querySelectorAll("[data-attendance]").forEach(function (select) {
+          select.addEventListener("change", calculateGrades);
+        });
+        document.querySelectorAll(".summary-override").forEach(function (input) {
+          input.addEventListener("input", function () {
+            summaryOverrides[input.getAttribute("data-summary")] = input.value.trim() !== "";
+            calculateGrades();
+          });
+          input.addEventListener("blur", calculateGrades);
+        });
+        document.getElementById("backToStudents").addEventListener("click", function (event) {
+          event.preventDefault();
+          window.location.href = "students.html";
+        });
+        notifButton.addEventListener("click", function (event) {
+          event.stopPropagation();
+          closeMenu();
+          var open = !notifPanel.classList.contains("open");
+          notifPanel.classList.toggle("open", open);
+          notifButton.setAttribute("aria-expanded", open ? "true" : "false");
+        });
+        avatarButton.addEventListener("click", function (event) {
+          event.stopPropagation();
+          closeNotifications();
+          var open = !profileMenu.classList.contains("open");
+          profileMenu.classList.toggle("open", open);
+          avatarButton.setAttribute("aria-expanded", open ? "true" : "false");
+        });
+        notifPanel.addEventListener("click", function (event) { event.stopPropagation(); });
+        profileMenu.addEventListener("click", function (event) { event.stopPropagation(); });
+        document.getElementById("profileAction").addEventListener("click", function () { window.location.href = "profile.html"; });
+        document.getElementById("settingsAction").addEventListener("click", function () { window.location.href = "settings.html"; });
+        document.getElementById("logoutAction").addEventListener("click", function () { closeMenu(); openLogoutModal(); });
+        cancelLogout.addEventListener("click", closeLogoutModal);
+        logoutModal.addEventListener("click", function (event) { if (event.target === logoutModal) { closeLogoutModal(); } });
+        confirmLogout.addEventListener("click", function () {
+          localStorage.removeItem("userRole");
+          localStorage.removeItem("userName");
+          localStorage.removeItem("notifCount");
+          localStorage.removeItem("isUnlocked");
+          window.location.href = "index.html";
+        });
+        document.addEventListener("click", function () {
+          closeMenu();
+          closeNotifications();
+        });
+        document.addEventListener("keydown", function (event) {
+          if (event.key === "Escape") {
+            closeMenu();
+            closeNotifications();
+            if (activeModal) { closeLogoutModal(); }
+          }
+        });
+        calculateGrades();
+      })();
+    </script>
+  </body>
+</html>
