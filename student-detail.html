@@ -711,7 +711,7 @@
               <li>System Maintenance Scheduled: Week 6</li>
             </ul>
           </section>
-          <button class="avatar-btn" id="avatarButton" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="profileMenu">F</button>
+          <button class="avatar-btn" id="avatarButton" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="profileMenu">M</button>
           <div class="dropdown" id="profileMenu" role="menu" aria-label="Profile options">
             <button role="menuitem" type="button" id="profileAction">Profile</button>
             <button role="menuitem" type="button" id="settingsAction">Settings</button>
@@ -774,8 +774,14 @@
                   <div class="info-item"><span>Program</span><strong id="programName">BS Computer Science</strong></div>
                   <div class="info-item"><span>Campus</span><strong>UPHSD Las Pinas</strong></div>
                   <div class="info-item"><span>Year Level</span><strong>2nd Year</strong></div>
+                  <div class="info-item"><span>Academic Term</span><strong>2nd Semester, AY 2025-2026</strong></div>
+                  <div class="info-item"><span>Section</span><strong id="schoolSection">BSCS-2A</strong></div>
                   <div class="info-item"><span>Enrollment Status</span><strong id="studentStatus">Active</strong></div>
                   <div class="info-item"><span>Subject Assignment</span><strong id="schoolSubject">-</strong></div>
+                  <div class="info-item"><span>Room Assignment</span><strong id="schoolRoom">-</strong></div>
+                  <div class="info-item"><span>Class Adviser</span><strong id="schoolAdviser">Dr. Marian Rivera</strong></div>
+                  <div class="info-item"><span>Learning Mode</span><strong>Face-to-face with lab support</strong></div>
+                  <div class="info-item"><span>Record Source</span><strong>Faculty prototype roster</strong></div>
                 </div>
               </div>
             </div>
@@ -795,8 +801,14 @@
                   <div class="info-item"><span>Contact Number</span><strong id="studentContact">09XX-XXX-1234</strong></div>
                   <div class="info-item"><span>Email</span><strong id="studentEmail">student@uph.edu.ph</strong></div>
                   <div class="info-item"><span>Guardian</span><strong id="studentGuardian">Registered Guardian</strong></div>
+                  <div class="info-item"><span>Guardian Contact</span><strong id="studentGuardianContact">0917-555-2418</strong></div>
                   <div class="info-item"><span>Address</span><strong id="studentAddress">Las Pinas City</strong></div>
                   <div class="info-item"><span>Advising Notes</span><strong id="advisingNotes">Monitor class standing and attendance.</strong></div>
+                  <div class="info-item"><span>Emergency Contact</span><strong>Parent Hotline on file</strong></div>
+                  <div class="info-item"><span>Preferred Contact</span><strong>Email and SMS notice</strong></div>
+                  <div class="info-item"><span>Last Consultation</span><strong>Apr 22, 2026</strong></div>
+                  <div class="info-item"><span>Advising Flag</span><strong id="personalAdvisingFlag">Routine follow-up</strong></div>
+                  <div class="info-item"><span>Residence</span><strong>Las Pinas City</strong></div>
                   <div class="info-item"><span>Record Type</span><strong>Mock prototype data</strong></div>
                 </div>
               </div>
@@ -813,13 +825,47 @@
                     <p>Current enrolled schedule resolved from the class section.</p>
                   </div>
                 </div>
-                <div class="info-grid">
-                  <div class="info-item"><span>Subject</span><strong id="scheduleSubject">-</strong></div>
-                  <div class="info-item"><span>Schedule</span><strong id="scheduleTime">-</strong></div>
-                  <div class="info-item"><span>Room</span><strong id="scheduleRoom">-</strong></div>
-                  <div class="info-item"><span>Consultation</span><strong>Friday, 3:00-4:00 PM</strong></div>
-                  <div class="info-item"><span>Class Mode</span><strong>Laboratory and lecture</strong></div>
-                  <div class="info-item"><span>Faculty</span><strong id="scheduleFaculty">Faculty</strong></div>
+                <div class="table-wrap">
+                  <table>
+                    <thead><tr><th>Day</th><th>Time</th><th>Session</th><th>Room</th><th>Faculty</th></tr></thead>
+                    <tbody>
+                      <tr>
+                        <td id="scheduleDay">-</td>
+                        <td id="scheduleTime">-</td>
+                        <td id="scheduleSubject">Primary class session</td>
+                        <td id="scheduleRoom">-</td>
+                        <td id="scheduleFaculty">Dr. Marian Rivera</td>
+                      </tr>
+                      <tr>
+                        <td>Thursday</td>
+                        <td>1:00-2:30 PM</td>
+                        <td>Laboratory support and rubric check</td>
+                        <td>Prototype Studio</td>
+                        <td>Dr. Marian Rivera</td>
+                      </tr>
+                      <tr>
+                        <td>Friday</td>
+                        <td>3:00-4:00 PM</td>
+                        <td>Consultation hour</td>
+                        <td>CCS Faculty Room</td>
+                        <td id="consultationFaculty">Dr. Marian Rivera</td>
+                      </tr>
+                      <tr>
+                        <td>Friday</td>
+                        <td>4:00-4:30 PM</td>
+                        <td>Advising follow-up</td>
+                        <td>Advising Desk</td>
+                        <td>Dr. Marian Rivera</td>
+                      </tr>
+                      <tr>
+                        <td>Saturday</td>
+                        <td>9:00-10:00 AM</td>
+                        <td>Submission and report review</td>
+                        <td>Online review room</td>
+                        <td>Dr. Marian Rivera</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
@@ -835,13 +881,18 @@
                     <p>Static controls reserved for student-specific faculty preferences.</p>
                   </div>
                 </div>
-                <div class="info-grid">
-                  <div class="info-item"><span>Grade Alerts</span><strong>Enabled for at-risk thresholds</strong></div>
-                  <div class="info-item"><span>Computation Mode</span><strong>TOR-aligned weighted calculation</strong></div>
-                  <div class="info-item"><span>Visibility</span><strong>Faculty-only prototype view</strong></div>
-                  <div class="info-item"><span>Data Source</span><strong>Local mock roster</strong></div>
-                  <div class="info-item"><span>Export Status</span><strong>Not configured</strong></div>
-                  <div class="info-item"><span>Audit Trail</span><strong>Placeholder only</strong></div>
+                <div class="table-wrap">
+                  <table>
+                    <thead><tr><th>Preference</th><th>State</th><th>Scope</th></tr></thead>
+                    <tbody>
+                      <tr><td>Grade Alerts</td><td><span class="status-pill">Enabled</span></td><td>At-risk threshold</td></tr>
+                      <tr><td>Attendance Watch</td><td><span class="status-pill">Enabled</span></td><td>Weekly follow-up</td></tr>
+                      <tr><td>Summary Overrides</td><td><span class="status-pill">Allowed</span></td><td>Faculty review only</td></tr>
+                      <tr><td>Assessment Editing</td><td><span class="status-pill">Enabled</span></td><td>Inline table inputs</td></tr>
+                      <tr><td>Export Status</td><td><span class="status-pill unrecorded">Pending</span></td><td>Prototype only</td></tr>
+                      <tr><td>Audit Trail</td><td><span class="status-pill unrecorded">Mock</span></td><td>Local session</td></tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
@@ -952,6 +1003,18 @@
                         <td><input class="input-field grade-input assignment-score" data-grade="rec3" type="number" min="0" max="100" value="92" aria-label="Assignment 3 score" /><div class="validation-hint" id="hint-rec3"></div></td>
                         <td><input class="constant-field" type="text" value="50%" readonly disabled /></td>
                       </tr>
+                      <tr>
+                        <td><input class="text-edit" id="assignmentLabel4" type="text" value="Rubric Alignment Checklist" aria-label="Assignment 4 name" /></td>
+                        <td><input class="text-edit" id="assignmentDesc4" type="text" value="Criteria mapping and completeness check" aria-label="Assignment 4 description" /></td>
+                        <td><input class="input-field grade-input assignment-score" data-grade="rec4" type="number" min="0" max="100" value="88" aria-label="Assignment 4 score" /><div class="validation-hint" id="hint-rec4"></div></td>
+                        <td><input class="constant-field" type="text" value="50%" readonly disabled /></td>
+                      </tr>
+                      <tr>
+                        <td><input class="text-edit" id="assignmentLabel5" type="text" value="Accessibility Annotation" aria-label="Assignment 5 name" /></td>
+                        <td><input class="text-edit" id="assignmentDesc5" type="text" value="Contrast, labels, and keyboard notes" aria-label="Assignment 5 description" /></td>
+                        <td><input class="input-field grade-input assignment-score" data-grade="rec5" type="number" min="0" max="100" value="91" aria-label="Assignment 5 score" /><div class="validation-hint" id="hint-rec5"></div></td>
+                        <td><input class="constant-field" type="text" value="50%" readonly disabled /></td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
@@ -1012,6 +1075,20 @@
                     </tbody>
                   </table>
                 </div>
+                <div class="mini-summary">
+                  <div class="table-wrap">
+                    <table>
+                      <thead><tr><th>Exam Average</th><th>Finals Rule</th><th>Major Weighted</th></tr></thead>
+                      <tbody>
+                        <tr>
+                          <td><input class="computed-field" id="examAverageMirror" type="text" readonly disabled /></td>
+                          <td><input class="constant-field" type="text" value="Finals score drives TOR weight" readonly disabled /></td>
+                          <td><input class="computed-field" id="majorExamMirror" type="text" readonly disabled /></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
@@ -1043,6 +1120,21 @@
                       </tr>
                     </tbody>
                   </table>
+                </div>
+                <div class="mini-summary">
+                  <div class="table-wrap">
+                    <table>
+                      <thead><tr><th>Present / Excused</th><th>Late</th><th>Absent</th><th>Standing Note</th></tr></thead>
+                      <tbody>
+                        <tr>
+                          <td><input class="computed-field" id="attendancePresentCount" type="text" readonly disabled /></td>
+                          <td><input class="computed-field" id="attendanceLateCount" type="text" readonly disabled /></td>
+                          <td><input class="computed-field" id="attendanceAbsentCount" type="text" readonly disabled /></td>
+                          <td><input class="computed-field" id="attendanceStandingNote" type="text" readonly disabled /></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1077,6 +1169,18 @@
                         <td><input class="text-edit" id="projectLabel3" type="text" value="Final Usability Report" aria-label="Project 3 name" /></td>
                         <td><input class="text-edit" id="projectDesc3" type="text" value="Findings and design revisions" aria-label="Project 3 deliverable" /></td>
                         <td><input class="input-field grade-input project-score" data-grade="project3" type="number" min="0" max="100" value="91" aria-label="Project 3 score" /><div class="validation-hint" id="hint-project3"></div></td>
+                        <td><input class="constant-field" type="text" value="10%" readonly disabled /></td>
+                      </tr>
+                      <tr>
+                        <td><input class="text-edit" id="projectLabel4" type="text" value="Usability Test Deck" aria-label="Project 4 name" /></td>
+                        <td><input class="text-edit" id="projectDesc4" type="text" value="Moderator guide and scripted tasks" aria-label="Project 4 deliverable" /></td>
+                        <td><input class="input-field grade-input project-score" data-grade="project4" type="number" min="0" max="100" value="90" aria-label="Project 4 score" /><div class="validation-hint" id="hint-project4"></div></td>
+                        <td><input class="constant-field" type="text" value="10%" readonly disabled /></td>
+                      </tr>
+                      <tr>
+                        <td><input class="text-edit" id="projectLabel5" type="text" value="Revision Presentation" aria-label="Project 5 name" /></td>
+                        <td><input class="text-edit" id="projectDesc5" type="text" value="Final design changes and rationale" aria-label="Project 5 deliverable" /></td>
+                        <td><input class="input-field grade-input project-score" data-grade="project5" type="number" min="0" max="100" value="92" aria-label="Project 5 score" /><div class="validation-hint" id="hint-project5"></div></td>
                         <td><input class="constant-field" type="text" value="10%" readonly disabled /></td>
                       </tr>
                       <tr>
@@ -1427,6 +1531,16 @@
             return item.section === section;
           })[0] || { subject: "Unassigned Class", schedule: "Schedule pending", room: "Room pending" };
         }
+        function splitScheduleParts(scheduleText) {
+          if (!scheduleText || scheduleText === "Schedule pending") {
+            return { day: "TBA", time: "Pending" };
+          }
+          var match = scheduleText.match(/^([A-Za-z\/]+)\s+(.+)$/);
+          if (!match) {
+            return { day: "TBA", time: scheduleText };
+          }
+          return { day: match[1], time: match[2] };
+        }
         function getSelectedStudent() {
           var students = getAllStudents();
           var requestedId = new URLSearchParams(window.location.search).get("id");
@@ -1438,6 +1552,7 @@
           var student = selected.student;
           var classItem = getClassBySection(student.section);
           var program = student.section.indexOf("BSIT") === 0 ? "BS Information Technology" : "BS Computer Science";
+          var scheduleParts = splitScheduleParts(classItem.schedule);
           document.getElementById("studentName").textContent = student.name;
           document.getElementById("studentSubline").textContent = student.id + " • " + student.section + " • " + classItem.subject;
           document.getElementById("studentId").textContent = student.id;
@@ -1447,18 +1562,24 @@
           document.getElementById("studentPhoto").textContent = student.name.split(" ").map(function (part) { return part.charAt(0); }).join("").slice(0, 2).toUpperCase();
           document.getElementById("programName").textContent = program;
           document.getElementById("studentStatus").textContent = student.status;
+          document.getElementById("schoolSection").textContent = student.section;
           document.getElementById("schoolSubject").textContent = classItem.subject;
+          document.getElementById("schoolRoom").textContent = classItem.room || "Room pending";
+          document.getElementById("schoolAdviser").textContent = facultyName;
           document.getElementById("studentContact").textContent = student.contact;
           document.getElementById("studentEmail").textContent = student.email;
           document.getElementById("studentGuardian").textContent = student.guardian;
           document.getElementById("studentAddress").textContent = student.address;
           document.getElementById("advisingNotes").textContent = student.notes;
+          document.getElementById("personalAdvisingFlag").textContent = student.status === "At Risk" ? "Attendance and standing follow-up" : "Routine follow-up";
           document.getElementById("scheduleSubject").textContent = classItem.subject;
-          document.getElementById("scheduleTime").textContent = classItem.schedule || "Schedule pending";
+          document.getElementById("scheduleDay").textContent = scheduleParts.day;
+          document.getElementById("scheduleTime").textContent = scheduleParts.time;
           document.getElementById("scheduleRoom").textContent = classItem.room || "Room pending";
           document.getElementById("scheduleFaculty").textContent = facultyName;
+          document.getElementById("consultationFaculty").textContent = facultyName;
           document.getElementById("fallbackNote").classList.toggle("active", selected.fallback);
-          avatarButton.textContent = facultyName.charAt(0).toUpperCase();
+          avatarButton.textContent = "M";
           applySubjectAssessmentLabels(classItem.subject);
         }
         function applySubjectAssessmentLabels(subject) {
@@ -1472,9 +1593,13 @@
             assignmentLabel1: "Array Operations Drill", assignmentDesc1: "Indexing and updates",
             assignmentLabel2: "Stack Trace Activity", assignmentDesc2: "Push and pop workflow",
             assignmentLabel3: "Tree Traversal Exercise", assignmentDesc3: "Preorder and inorder tracing",
+            assignmentLabel4: "Sorting Analysis Sheet", assignmentDesc4: "Compare merge, quick, and bubble sort",
+            assignmentLabel5: "Hash Table Collision Log", assignmentDesc5: "Insert and search outcomes",
             projectLabel1: "Data Structure Visualizer", projectDesc1: "Model and UI plan",
             projectLabel2: "Interactive ADT Demo", projectDesc2: "Working prototype",
-            projectLabel3: "Algorithm Analysis Report", projectDesc3: "Complexity and testing notes"
+            projectLabel3: "Algorithm Analysis Report", projectDesc3: "Complexity and testing notes",
+            projectLabel4: "Traversal Demo Deck", projectDesc4: "Walkthrough of tree operations",
+            projectLabel5: "Optimization Presentation", projectDesc5: "Performance findings and refinements"
           } : {
             quizLabel1: "Usability Principles Quiz", quizCoverage1: "Heuristics and affordances",
             quizLabel2: "Wireframing Concepts Quiz", quizCoverage2: "Information hierarchy",
@@ -1484,9 +1609,13 @@
             assignmentLabel1: "Persona Analysis", assignmentDesc1: "User profile and goal mapping",
             assignmentLabel2: "Task Flow Review", assignmentDesc2: "Workflow and error prevention",
             assignmentLabel3: "Heuristic Evaluation", assignmentDesc3: "Nielsen-style review notes",
+            assignmentLabel4: "Rubric Alignment Checklist", assignmentDesc4: "Criteria mapping and completeness check",
+            assignmentLabel5: "Accessibility Annotation", assignmentDesc5: "Contrast, labels, and keyboard notes",
             projectLabel1: "Faculty Portal Wireframe", projectDesc1: "Low-fidelity layout and flow",
             projectLabel2: "Interactive Prototype", projectDesc2: "Clickable workflow demonstration",
-            projectLabel3: "Final Usability Report", projectDesc3: "Findings and design revisions"
+            projectLabel3: "Final Usability Report", projectDesc3: "Findings and design revisions",
+            projectLabel4: "Usability Test Deck", projectDesc4: "Moderator guide and scripted tasks",
+            projectLabel5: "Revision Presentation", projectDesc5: "Final design changes and rationale"
           };
           Object.keys(labels).forEach(function (id) {
             var element = document.getElementById(id);
@@ -1715,6 +1844,18 @@
           if (status === "Absent") { return 0; }
           return 100;
         }
+        function countAttendanceStatuses() {
+          return Array.prototype.slice.call(document.querySelectorAll("[data-attendance]")).reduce(function (counts, select) {
+            if (select.value === "Late") {
+              counts.late += 1;
+            } else if (select.value === "Absent") {
+              counts.absent += 1;
+            } else {
+              counts.present += 1;
+            }
+            return counts;
+          }, { present: 0, late: 0, absent: 0 });
+        }
         function calculateAttendanceRaw() {
           var selects = Array.prototype.slice.call(document.querySelectorAll("[data-attendance]"));
           if (!selects.length) { return 0; }
@@ -1784,6 +1925,8 @@
           var finaleGrade = classPerformance + majorExamGrade;
           var transmuted = transmute(finaleGrade);
           var remarks = transmuted === 5.0 ? "Failed" : "Passed";
+          var attendanceCounts = countAttendanceStatuses();
+          var attendanceNote = attendanceCounts.absent > 0 ? "Intervention needed" : (attendanceCounts.late > 1 ? "Monitor punctuality" : "Good standing");
 
           setValue("quizAverage", format(sourceQuizzesAverage));
           setValue("quizzesGrade", format(sourceQuizzesAverage * 0.30));
@@ -1796,8 +1939,10 @@
           setValue("prelimExamGrade", format(gradeValue("prelimExam") * 0.30));
           setValue("midtermExamGrade", format(gradeValue("midtermExam") * 0.30));
           setValue("examAverage", format(examAverage));
+          setValue("examAverageMirror", format(examAverage));
           setValue("examRuleNote", "Finals used: " + format(sourceMajorExamRaw));
           setValue("majorExamGrade", format(sourceMajorExamRaw * 0.30));
+          setValue("majorExamMirror", format(sourceMajorExamRaw * 0.30));
           setValue("summaryAttendanceGrade", format(attendanceGrade));
           setValue("summaryQuizGrade", format(quizzesGrade));
           setValue("summaryAssignmentNote", format(recitationAvg * 0.50));
@@ -1815,6 +1960,10 @@
           setText("transmutedCard", transmuted.toFixed(2));
           setText("remarksCard", remarks);
           setText("calculationStatus", "Live calculation updated. Final raw grade is " + format(finaleGrade) + " and transmuted grade is " + transmuted.toFixed(2) + ".");
+          setValue("attendancePresentCount", String(attendanceCounts.present));
+          setValue("attendanceLateCount", String(attendanceCounts.late));
+          setValue("attendanceAbsentCount", String(attendanceCounts.absent));
+          setValue("attendanceStandingNote", attendanceNote);
           var remarkBadge = document.getElementById("summaryRemarks");
           remarkBadge.textContent = remarks;
           remarkBadge.classList.toggle("fail", remarks === "Failed");

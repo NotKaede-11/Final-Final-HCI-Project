@@ -778,7 +778,7 @@
               </div>
             </section>
 
-            <button class="avatar-btn" id="avatarButton" aria-haspopup="true" aria-expanded="false" aria-controls="profileMenu">F</button>
+            <button class="avatar-btn" id="avatarButton" aria-haspopup="true" aria-expanded="false" aria-controls="profileMenu">M</button>
             <div class="dropdown" id="profileMenu" role="menu" aria-label="Profile options">
               <button role="menuitem" type="button" id="profileAction">Profile</button>
               <button role="menuitem" type="button" id="settingsAction">Settings</button>
@@ -1101,7 +1101,7 @@
         var name = facultyName;
         localStorage.setItem("userName", facultyName);
         welcomeName.textContent = name;
-        avatarButton.textContent = name.charAt(0).toUpperCase();
+        avatarButton.textContent = "M";
 
         buildDashboard();
         renderNotifications();

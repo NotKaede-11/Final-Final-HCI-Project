@@ -573,7 +573,7 @@
               <ul class="notif-list" id="notifList"></ul>
               <div class="notif-actions"><button type="button" id="seedNotifBtn">Reset feed</button><button type="button" id="closeNotifBtn">Close</button></div>
             </section>
-            <button class="avatar-btn" id="avatarButton" aria-haspopup="true" aria-expanded="false" aria-controls="profileMenu">F</button>
+            <button class="avatar-btn" id="avatarButton" aria-haspopup="true" aria-expanded="false" aria-controls="profileMenu">M</button>
             <div class="dropdown" id="profileMenu" role="menu" aria-label="Profile options">
               <button role="menuitem" type="button" id="profileAction">Profile</button>
               <button role="menuitem" type="button" id="settingsAction">Settings</button>
@@ -867,8 +867,8 @@
         }
 
         localStorage.setItem("userName", facultyName);
-        avatarButton.textContent = "F";
-        profileAvatar.textContent = "F";
+        avatarButton.textContent = "M";
+        profileAvatar.textContent = "M";
         renderNotifications();
 
         editProfileBtn.addEventListener("click", openEdit);

@@ -231,7 +231,7 @@
               <ul class="notif-list" id="notifList"></ul>
               <div class="notif-actions"><button type="button" id="seedNotifBtn">Reset feed</button><button type="button" id="closeNotifBtn">Close</button></div>
             </section>
-            <button class="avatar-btn" id="avatarButton" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="profileMenu">F</button>
+            <button class="avatar-btn" id="avatarButton" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="profileMenu">M</button>
             <div class="dropdown" id="profileMenu" role="menu" aria-label="Profile options">
               <button role="menuitem" type="button" id="profileAction">Profile</button>
               <button role="menuitem" type="button" id="settingsAction">Settings</button>
@@ -1163,7 +1163,7 @@
         function openLogoutModal() { logoutModal.classList.add("open"); logoutModal.setAttribute("aria-hidden", "false"); confirmLogout.focus(); }
         function closeLogoutModal() { logoutModal.classList.remove("open"); logoutModal.setAttribute("aria-hidden", "true"); avatarButton.focus(); }
 
-        avatarButton.textContent = (localStorage.getItem("userName") || "Faculty").charAt(0).toUpperCase();
+        avatarButton.textContent = "M";
         refreshClassData();
         renderNotifications();
         applyView(localStorage.getItem("classViewMode") || "list");
