@@ -143,24 +143,43 @@
         background: linear-gradient(180deg, var(--surface) 0%, var(--surface-alt) 100%);
         border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow);
       }
-      .toolbar { padding: 18px; display: grid; gap: 14px; }
+      .toolbar { padding: 18px; display: flex; flex-direction: column; gap: 16px; }
       .toolbar-row {
         display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;
       }
       .toolbar-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
       .toolbar h3, .panel h3 { margin: 0; color: var(--maroon); }
       .toolbar p, .panel p { margin: 0; color: var(--muted); }
-      .tools { display: flex; gap: 10px; flex-wrap: wrap; }
-      .tools input, .tools select {
-        border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; background: #fff; min-width: 220px;
+      .tools {
+        display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;
       }
+      .tools input {
+        border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; background: #fff; min-width: 260px;
+      }
+      .search-group {
+        display: grid; gap: 8px; min-width: 260px; flex: 1 1 320px;
+      }
+      .results-count { color: var(--muted); font-size: 0.88rem; min-height: 1.1em; }
       .view-toggle {
-        display: inline-flex; gap: 6px; padding: 6px; border-radius: 999px; background: #efe4d6; border: 1px solid var(--line);
+        display: inline-flex; align-items: center; gap: 6px; padding: 6px; border-radius: 999px; background: #efe4d6; border: 1px solid var(--line);
       }
-      .view-toggle button {
-        border: 0; background: transparent; padding: 9px 14px; border-radius: 999px; font-weight: 700; color: var(--muted);
+      .view-toggle input[type="radio"] {
+        position: absolute; opacity: 0; pointer-events: none;
       }
-      .view-toggle button.active { background: #fff; color: var(--maroon); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); }
+      .view-toggle label {
+        min-height: 44px; display: inline-flex; align-items: center; justify-content: center; padding: 0 16px;
+        border-radius: 999px; font-weight: 700; color: var(--muted); background: transparent; border: 1px solid transparent;
+        transition: background 0.16s ease, border-color 0.16s ease, color 0.16s ease, box-shadow 0.16s ease;
+      }
+      .view-toggle label[aria-selected="true"] {
+        background: var(--accent); border-color: var(--accent); color: #2b1f05; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      }
+      .view-toggle label[aria-selected="false"]:hover {
+        background: rgba(255,255,255,0.82); color: var(--maroon);
+      }
+      .view-toggle input[type="radio"]:focus-visible + label {
+        outline: 3px solid rgba(216, 173, 71, 0.5); outline-offset: 2px;
+      }
       .panel { padding: 18px; }
       .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 16px; background: #fff; }
       table { width: 100%; border-collapse: collapse; min-width: 760px; }
@@ -204,6 +223,9 @@
       }
       .chip.info {
         border-color: #b4caeb; background: #edf4ff; color: #275b9a;
+      }
+      .empty-results {
+        padding: 16px 18px; border: 1px dashed #ccb79a; border-radius: 14px; background: #fffaf0; color: var(--muted); line-height: 1.5;
       }
       .toast-wrap { position: fixed; right: 14px; bottom: 14px; display: grid; gap: 10px; z-index: 120; }
       .toast {
@@ -250,6 +272,11 @@
         .header-actions { justify-content: flex-end; }
         main { padding: 16px; }
         .form-grid, .kanban-board, .nav-list { grid-template-columns: 1fr; }
+        .toolbar-row, .tools { align-items: stretch; }
+        .toolbar-actions, .search-group, .tools input, .view-toggle, .add-btn { width: 100%; }
+        .toolbar-actions { justify-content: stretch; }
+        .view-toggle { justify-content: stretch; }
+        .view-toggle label { flex: 1 1 0; }
       }
     </style>
   </head>
@@ -308,32 +335,34 @@
         </header>
 
         <main id="mainContent" tabindex="-1">
+          <!-- HCI: Visual Hierarchy - Primary action separated from filter controls -->
           <section class="toolbar">
             <div class="toolbar-row">
               <div>
-                <h3>Student Roster</h3>
-                <p>Current enrolled learners across active handled sections.</p>
+                <h3>Students</h3>
+                <p>Based on the same students summarized on the dashboard.</p>
               </div>
               <div class="toolbar-actions">
                 <button class="add-btn" type="button" id="addStudentBtn">+ Add Student</button>
-                <div class="view-toggle" role="tablist" aria-label="Student views">
-                  <button type="button" class="active" id="listViewBtn" aria-pressed="true">List View</button>
-                  <button type="button" id="kanbanViewBtn" aria-pressed="false">Card View</button>
-                </div>
               </div>
             </div>
             <div class="tools">
-              <label class="visually-hidden" for="searchInput">Search students</label>
-              <input id="searchInput" type="search" placeholder="Search by name, ID, or section" />
-              <select id="sectionFilter" aria-label="Filter by section">
-                <option value="all">All Sections</option>
-                <option value="BSCS-2A">BSCS-2A</option>
-                <option value="BSCS-2B">BSCS-2B</option>
-                <option value="BSIT-2A">BSIT-2A</option>
-              </select>
+              <div class="search-group">
+                <label class="visually-hidden" for="searchInput">Search students</label>
+                <input id="searchInput" type="search" placeholder="Search by name, ID, section..." aria-label="Search students by name, ID, section, or enrolled class" />
+                <div class="results-count" id="resultsCount" aria-live="polite"></div>
+              </div>
+              <!-- HCI: User Control - View preference persisted via localStorage -->
+              <div class="view-toggle" role="tablist" aria-label="Student views">
+                <input type="radio" name="studentViewMode" id="listViewInput" value="list" checked />
+                <label for="listViewInput" id="listViewBtn" role="tab" aria-selected="true">List View</label>
+                <input type="radio" name="studentViewMode" id="kanbanViewInput" value="kanban" />
+                <label for="kanbanViewInput" id="kanbanViewBtn" role="tab" aria-selected="false">Card View</label>
+              </div>
             </div>
           </section>
 
+          <!-- LEADER UPDATE: Replace mock rows/cards with real data when available -->
           <section class="panel" id="listView">
             <div class="table-wrap">
               <table>
@@ -352,6 +381,7 @@
           </section>
 
           <section class="kanban-board" id="kanbanView" aria-label="Student card grid view"></section>
+          <div class="empty-results" id="emptyResults" hidden>No results found.</div>
         </main>
       </div>
     </div>
@@ -448,7 +478,10 @@
         var listView = document.getElementById("listView");
         var addStudentBtn = document.getElementById("addStudentBtn");
         var searchInput = document.getElementById("searchInput");
-        var sectionFilter = document.getElementById("sectionFilter");
+        var resultsCount = document.getElementById("resultsCount");
+        var emptyResults = document.getElementById("emptyResults");
+        var listViewInput = document.getElementById("listViewInput");
+        var kanbanViewInput = document.getElementById("kanbanViewInput");
         var listViewBtn = document.getElementById("listViewBtn");
         var kanbanViewBtn = document.getElementById("kanbanViewBtn");
         var avatarButton = document.getElementById("avatarButton");
@@ -520,15 +553,48 @@
                 section: item.section,
                 schedule: item.schedule || "",
                 room: item.room || "",
-                students: Number(item.students) || 0
+                students: Number(item.students) || 0,
+                sourceKey: item.sourceKey || item.originalKey || (item.subject + "|" + item.section)
               };
             }) : [];
           } catch (error) {
             return [];
           }
         }
+        function getClassOverrides() {
+          try {
+            var parsed = JSON.parse(localStorage.getItem("classDetailOverrides") || "{}");
+            return parsed && typeof parsed === "object" ? parsed : {};
+          } catch (error) {
+            return {};
+          }
+        }
+        function getClassSourceKey(item) {
+          return item && (item.sourceKey || item.originalKey || (item.subject + "|" + item.section));
+        }
+        function applyClassOverrides(item) {
+          var sourceKey = getClassSourceKey(item);
+          var override = getClassOverrides()[sourceKey] || {};
+          return {
+            subject: override.subject || item.subject,
+            section: override.section || item.section,
+            schedule: override.schedule || item.schedule || "",
+            room: override.room || item.room || "",
+            students: override.students != null ? Number(override.students) || 0 : Number(item.students) || 0,
+            sourceKey: sourceKey
+          };
+        }
         function getClassCatalog() {
-          return DEFAULT_CLASSES.concat(getStoredClasses());
+          return DEFAULT_CLASSES.map(function (item) {
+            return applyClassOverrides({
+              subject: item.subject,
+              section: item.section,
+              schedule: item.schedule,
+              room: item.room,
+              students: item.students,
+              sourceKey: item.subject + "|" + item.section
+            });
+          }).concat(getStoredClasses().map(applyClassOverrides));
         }
         function getEnrolledClassLabel(section) {
           if (!section) { return "Unassigned Class"; }
@@ -536,14 +602,26 @@
           return match ? match.subject : "Unassigned Class";
         }
         function enrichStudent(student, fromStorage) {
+          var sourceKey = student.sourceKey || student.recordKey || student.originalId || student.id;
+          var overrides = getStudentOverrides()[sourceKey] || {};
+          var section = overrides.section || student.section;
           return {
-            name: student.name,
-            id: student.id,
-            section: student.section,
-            status: student.status,
-            enrolledClass: getEnrolledClassLabel(student.section),
-            fromStorage: Boolean(fromStorage)
+            name: overrides.name || student.name,
+            id: overrides.id || student.id,
+            section: section,
+            status: overrides.status || student.status,
+            enrolledClass: getEnrolledClassLabel(section),
+            fromStorage: Boolean(fromStorage),
+            sourceKey: sourceKey
           };
+        }
+        function getStudentOverrides() {
+          try {
+            var parsed = JSON.parse(localStorage.getItem("studentDetailOverrides") || "{}");
+            return parsed && typeof parsed === "object" ? parsed : {};
+          } catch (error) {
+            return {};
+          }
         }
         function getStoredStudents() {
           try {
@@ -555,7 +633,8 @@
                 name: student.name,
                 id: student.id,
                 section: student.section,
-                status: student.status
+                status: student.status,
+                sourceKey: student.sourceKey || student.recordKey || student.originalId || student.id
               };
             }) : [];
           } catch (error) {
@@ -745,7 +824,6 @@
         }
         function getFilteredStudents() {
           var search = searchInput.value.trim().toLowerCase();
-          var section = sectionFilter.value;
           return STUDENTS.filter(function (student) {
             var matchesSearch =
               !search ||
@@ -753,13 +831,17 @@
               student.id.toLowerCase().indexOf(search) >= 0 ||
               student.section.toLowerCase().indexOf(search) >= 0 ||
               student.enrolledClass.toLowerCase().indexOf(search) >= 0;
-            var matchesSection = section === "all" || student.section === section;
-            return matchesSearch && matchesSection;
+            return matchesSearch;
           });
         }
+        function updateResultsFeedback(count) {
+          resultsCount.textContent = count ? count + (count === 1 ? " result found." : " results found.") : "No results found.";
+          emptyResults.hidden = count > 0;
+        }
         function renderList() {
+          var filteredStudents = getFilteredStudents();
           studentBody.innerHTML = "";
-          getFilteredStudents().forEach(function (student) {
+          filteredStudents.forEach(function (student) {
             var row = document.createElement("tr");
             row.setAttribute("tabindex", "0");
             row.setAttribute("role", "button");
@@ -773,18 +855,11 @@
               '<td><span class="status-chip' + (student.status === "At Risk" ? " inactive" : "") + '">' + student.status + "</span></td>";
             studentBody.appendChild(row);
           });
+          updateResultsFeedback(filteredStudents.length);
         }
         function renderKanban() {
           var filtered = getFilteredStudents();
           kanbanView.innerHTML = "";
-          if (!filtered.length) {
-            var empty = document.createElement("p");
-            empty.textContent = "No matching students.";
-            empty.style.color = "var(--muted)";
-            empty.style.margin = "0";
-            kanbanView.appendChild(empty);
-            return;
-          }
           filtered.forEach(function (student) {
             var card = document.createElement("article");
             card.className = "student-card";
@@ -811,17 +886,17 @@
           if (view === "kanban") {
             listView.style.display = "none";
             kanbanView.classList.add("active");
-            listViewBtn.classList.remove("active");
-            kanbanViewBtn.classList.add("active");
-            listViewBtn.setAttribute("aria-pressed", "false");
-            kanbanViewBtn.setAttribute("aria-pressed", "true");
+            listViewInput.checked = false;
+            kanbanViewInput.checked = true;
+            listViewBtn.setAttribute("aria-selected", "false");
+            kanbanViewBtn.setAttribute("aria-selected", "true");
           } else {
             listView.style.display = "block";
             kanbanView.classList.remove("active");
-            listViewBtn.classList.add("active");
-            kanbanViewBtn.classList.remove("active");
-            listViewBtn.setAttribute("aria-pressed", "true");
-            kanbanViewBtn.setAttribute("aria-pressed", "false");
+            listViewInput.checked = true;
+            kanbanViewInput.checked = false;
+            listViewBtn.setAttribute("aria-selected", "true");
+            kanbanViewBtn.setAttribute("aria-selected", "false");
           }
         }
 
@@ -849,6 +924,7 @@
             studentIdInput.focus();
             return;
           }
+          student.sourceKey = student.id;
           addedStudents.push(student);
           saveStoredStudents();
           refreshStudentData();
@@ -860,7 +936,6 @@
         cancelAddStudent.addEventListener("click", closeAddStudentModal);
         addStudentModal.addEventListener("click", function (event) { if (event.target === addStudentModal) { closeAddStudentModal(); } });
         searchInput.addEventListener("input", function () { renderList(); renderKanban(); });
-        sectionFilter.addEventListener("change", function () { renderList(); renderKanban(); });
         studentBody.addEventListener("click", function (event) {
           var row = event.target.closest("[data-student-id]");
           if (row) { openStudentDetail(findStudent(row.getAttribute("data-student-id"))); }
@@ -879,10 +954,12 @@
           var card = event.target.closest("[data-student-id]");
           if (card) { event.preventDefault(); openStudentDetail(findStudent(card.getAttribute("data-student-id"))); }
         });
-        listViewBtn.addEventListener("click", function () {
+        listViewInput.addEventListener("change", function () {
+          if (!listViewInput.checked) { return; }
           applyView("list");
         });
-        kanbanViewBtn.addEventListener("click", function () {
+        kanbanViewInput.addEventListener("change", function () {
+          if (!kanbanViewInput.checked) { return; }
           applyView("kanban");
           addNotification("Students", "Student roster switched to kanban view.");
         });

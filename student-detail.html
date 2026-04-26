@@ -222,6 +222,10 @@
         flex-wrap: wrap;
       }
       .profile-main { display: flex; align-items: center; gap: 16px; min-width: 260px; }
+      .profile-copy {
+        display: grid;
+        gap: 10px;
+      }
       .photo-placeholder {
         width: 88px; height: 88px; border-radius: 50%; flex: 0 0 auto; display: grid; place-items: center;
         background: linear-gradient(180deg, #fff7d7 0%, #f0c95e 100%);
@@ -276,6 +280,20 @@
         font-weight: 700;
       }
       .fallback-note.active { display: block; }
+      .banner-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .edit-trigger {
+        border: 1px solid var(--primary);
+        background: #fff7f7;
+        color: var(--primary);
+        border-radius: 10px;
+        padding: 10px 12px;
+        font-weight: 800;
+      }
       .tabs-shell {
         display: grid;
         gap: 0;
@@ -554,6 +572,56 @@
         background: var(--primary);
         color: #fff;
       }
+      .modal-copy {
+        margin: 0 0 14px;
+        color: var(--muted);
+        line-height: 1.45;
+      }
+      .modal-form {
+        display: grid;
+        gap: 14px;
+      }
+      .field-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+      .field {
+        display: grid;
+        gap: 6px;
+      }
+      .field.full {
+        grid-column: 1 / -1;
+      }
+      .field label {
+        color: var(--primary);
+        font-size: 0.84rem;
+        font-weight: 800;
+      }
+      .field input,
+      .field select,
+      .field textarea {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: #fff;
+        color: var(--text);
+        padding: 10px 12px;
+      }
+      .field textarea {
+        min-height: 88px;
+        resize: vertical;
+      }
+      .field-hint {
+        color: var(--muted);
+        font-size: 0.8rem;
+      }
+      .field-error {
+        min-height: 1rem;
+        color: var(--danger);
+        font-size: 0.78rem;
+        font-weight: 700;
+      }
       .toast-wrap {
         position: fixed;
         right: 14px;
@@ -588,6 +656,7 @@
         main { padding: 16px; }
         .info-grid, .summary-cards { grid-template-columns: 1fr; }
         .profile-main { align-items: flex-start; }
+        .field-grid { grid-template-columns: 1fr; }
         .profile-meta { display: grid; grid-template-columns: 1fr; width: 100%; }
         .banner-item { border-left: 0; border-top: 1px solid var(--line); padding: 10px 0 0; }
         .tab-nav {
@@ -643,10 +712,15 @@
         <section class="student-banner" aria-label="Student academic summary">
           <div class="profile-main">
             <div class="photo-placeholder" id="studentPhoto" aria-label="Student picture placeholder">MS</div>
-            <div class="banner-primary">
-              <h2 id="studentName">Student Name</h2>
-              <p id="studentSubline">Student ID and section</p>
-              <div class="fallback-note" id="fallbackNote">Requested student was not found. Showing the first mock student record.</div>
+            <div class="profile-copy">
+              <div class="banner-primary">
+                <h2 id="studentName">Student Name</h2>
+                <p id="studentSubline">Student ID and section</p>
+                <div class="fallback-note" id="fallbackNote">Requested student was not found. Showing the first mock student record.</div>
+              </div>
+              <div class="banner-actions">
+                <button class="edit-trigger" id="editStudentBtn" type="button">Edit Student Details</button>
+              </div>
             </div>
           </div>
           <div class="profile-meta">
@@ -690,11 +764,11 @@
             <h3>Personal</h3>
             <p>Structured placeholder profile information for advising and faculty review.</p>
             <div class="info-grid">
-              <div class="info-item"><span>Contact Number</span><strong>09XX-XXX-1234</strong></div>
+              <div class="info-item"><span>Contact Number</span><strong id="studentContact">09XX-XXX-1234</strong></div>
               <div class="info-item"><span>Email</span><strong id="studentEmail">student@uph.edu.ph</strong></div>
-              <div class="info-item"><span>Guardian</span><strong>Registered Guardian</strong></div>
-              <div class="info-item"><span>Address</span><strong>Las Pinas City</strong></div>
-              <div class="info-item"><span>Advising Notes</span><strong>Monitor class standing and attendance.</strong></div>
+              <div class="info-item"><span>Guardian</span><strong id="studentGuardian">Registered Guardian</strong></div>
+              <div class="info-item"><span>Address</span><strong id="studentAddress">Las Pinas City</strong></div>
+              <div class="info-item"><span>Advising Notes</span><strong id="advisingNotes">Monitor class standing and attendance.</strong></div>
               <div class="info-item"><span>Record Type</span><strong>Mock prototype data</strong></div>
             </div>
             <!-- LEADER UPDATE: Replace with real data -->
@@ -985,6 +1059,74 @@
       </div>
     </section>
 
+    <section class="modal" id="editStudentModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="editStudentTitle">
+      <div class="modal-card">
+        <h3 id="editStudentTitle">Edit Student Details</h3>
+        <p class="modal-copy">Update the active student record from this screen. Changes persist in local storage for this prototype.</p>
+        <form class="modal-form" id="editStudentForm" novalidate>
+          <div class="field-grid">
+            <div class="field full">
+              <label for="editStudentNameInput">Full Name</label>
+              <input id="editStudentNameInput" type="text" required />
+              <div class="field-error" id="editStudentNameError"></div>
+            </div>
+            <div class="field">
+              <label for="editStudentIdInput">Student ID</label>
+              <input id="editStudentIdInput" type="text" required />
+              <div class="field-error" id="editStudentIdError"></div>
+            </div>
+            <div class="field">
+              <label for="editStudentStatusInput">Status</label>
+              <select id="editStudentStatusInput" required>
+                <option value="Active">Active</option>
+                <option value="At Risk">At Risk</option>
+              </select>
+              <div class="field-error" id="editStudentStatusError"></div>
+            </div>
+            <div class="field">
+              <label for="editStudentSectionInput">Section</label>
+              <select id="editStudentSectionInput" required>
+                <option value="BSCS-2A">BSCS-2A</option>
+                <option value="BSCS-2B">BSCS-2B</option>
+                <option value="BSIT-2A">BSIT-2A</option>
+              </select>
+              <div class="field-hint">Assigned subject: <strong id="editStudentClassPreview">-</strong></div>
+              <div class="field-error" id="editStudentSectionError"></div>
+            </div>
+            <div class="field">
+              <label for="editStudentContactInput">Contact Number</label>
+              <input id="editStudentContactInput" type="text" />
+              <div class="field-error" id="editStudentContactError"></div>
+            </div>
+            <div class="field full">
+              <label for="editStudentEmailInput">Email</label>
+              <input id="editStudentEmailInput" type="email" required />
+              <div class="field-error" id="editStudentEmailError"></div>
+            </div>
+            <div class="field">
+              <label for="editStudentGuardianInput">Guardian</label>
+              <input id="editStudentGuardianInput" type="text" />
+              <div class="field-error" id="editStudentGuardianError"></div>
+            </div>
+            <div class="field">
+              <label for="editStudentAddressInput">Address</label>
+              <input id="editStudentAddressInput" type="text" />
+              <div class="field-error" id="editStudentAddressError"></div>
+            </div>
+            <div class="field full">
+              <label for="editStudentNotesInput">Advising Notes</label>
+              <textarea id="editStudentNotesInput"></textarea>
+              <div class="field-error" id="editStudentNotesError"></div>
+            </div>
+          </div>
+          <div class="modal-actions">
+            <button class="btn" type="button" id="cancelEditStudent">Cancel</button>
+            <button class="btn primary" type="submit" id="saveEditStudentBtn">Save changes</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
     <div class="toast-wrap" id="toastWrap" aria-live="polite" aria-atomic="true"></div>
 
     <script>
@@ -1012,19 +1154,74 @@
         var logoutModal = document.getElementById("logoutModal");
         var cancelLogout = document.getElementById("cancelLogout");
         var confirmLogout = document.getElementById("confirmLogout");
+        var editStudentBtn = document.getElementById("editStudentBtn");
+        var editStudentModal = document.getElementById("editStudentModal");
+        var editStudentForm = document.getElementById("editStudentForm");
+        var cancelEditStudent = document.getElementById("cancelEditStudent");
+        var editStudentNameInput = document.getElementById("editStudentNameInput");
+        var editStudentIdInput = document.getElementById("editStudentIdInput");
+        var editStudentStatusInput = document.getElementById("editStudentStatusInput");
+        var editStudentSectionInput = document.getElementById("editStudentSectionInput");
+        var editStudentContactInput = document.getElementById("editStudentContactInput");
+        var editStudentEmailInput = document.getElementById("editStudentEmailInput");
+        var editStudentGuardianInput = document.getElementById("editStudentGuardianInput");
+        var editStudentAddressInput = document.getElementById("editStudentAddressInput");
+        var editStudentNotesInput = document.getElementById("editStudentNotesInput");
+        var editStudentClassPreview = document.getElementById("editStudentClassPreview");
         var toastWrap = document.getElementById("toastWrap");
         var tabs = Array.prototype.slice.call(document.querySelectorAll(".tab-btn"));
         var panels = Array.prototype.slice.call(document.querySelectorAll(".tab-panel"));
         var summaryOverrides = {};
 
+        function buildDefaultStudentMeta(student) {
+          return {
+            contact: "09XX-XXX-1234",
+            email: student.id.toLowerCase().replace(/[^a-z0-9]/g, ".") + "@uph.edu.ph",
+            guardian: "Registered Guardian",
+            address: "Las Pinas City",
+            notes: student.status === "At Risk" ? "Monitor class standing and attendance." : "Maintain current class standing and submission pace."
+          };
+        }
+        function getStudentOverrides() {
+          try {
+            var parsed = JSON.parse(localStorage.getItem("studentDetailOverrides") || "{}");
+            return parsed && typeof parsed === "object" ? parsed : {};
+          } catch (error) {
+            return {};
+          }
+        }
+        function saveStudentOverrides(overrides) {
+          localStorage.setItem("studentDetailOverrides", JSON.stringify(overrides));
+        }
         function getStoredStudents() {
           try {
             var parsed = JSON.parse(localStorage.getItem("mockStudents") || "[]");
             return Array.isArray(parsed) ? parsed.filter(function (item) {
               return item && item.name && item.id && item.section && item.status;
+            }).map(function (item) {
+              return {
+                name: item.name,
+                id: item.id,
+                section: item.section,
+                status: item.status,
+                contact: item.contact || "",
+                email: item.email || "",
+                guardian: item.guardian || "",
+                address: item.address || "",
+                notes: item.notes || "",
+                sourceKey: item.sourceKey || item.recordKey || item.originalId || item.id
+              };
             }) : [];
           } catch (error) {
             return [];
+          }
+        }
+        function getClassOverrides() {
+          try {
+            var parsed = JSON.parse(localStorage.getItem("classDetailOverrides") || "{}");
+            return parsed && typeof parsed === "object" ? parsed : {};
+          } catch (error) {
+            return {};
           }
         }
         function getStoredClasses() {
@@ -1032,18 +1229,78 @@
             var parsed = JSON.parse(localStorage.getItem("mockClasses") || "[]");
             return Array.isArray(parsed) ? parsed.filter(function (item) {
               return item && item.subject && item.section;
+            }).map(function (item) {
+              return {
+                subject: item.subject,
+                section: item.section,
+                schedule: item.schedule,
+                room: item.room,
+                students: item.students,
+                sourceKey: item.sourceKey || item.originalKey || (item.subject + "|" + item.section)
+              };
             }) : [];
           } catch (error) {
             return [];
           }
         }
+        function getClassSourceKey(item) {
+          return item && (item.sourceKey || item.originalKey || (item.subject + "|" + item.section));
+        }
+        function applyClassOverrides(item) {
+          var sourceKey = getClassSourceKey(item);
+          var override = getClassOverrides()[sourceKey] || {};
+          return {
+            subject: override.subject || item.subject,
+            section: override.section || item.section,
+            schedule: override.schedule || item.schedule,
+            room: override.room || item.room,
+            students: override.students != null ? Number(override.students) || 0 : Number(item.students) || 0,
+            sourceKey: sourceKey
+          };
+        }
+        function enrichStudent(item) {
+          var sourceKey = item.sourceKey || item.recordKey || item.originalId || item.id;
+          var defaults = buildDefaultStudentMeta(item);
+          var override = getStudentOverrides()[sourceKey] || {};
+          return {
+            name: override.name || item.name,
+            id: override.id || item.id,
+            section: override.section || item.section,
+            status: override.status || item.status,
+            contact: override.contact || item.contact || defaults.contact,
+            email: override.email || item.email || defaults.email,
+            guardian: override.guardian || item.guardian || defaults.guardian,
+            address: override.address || item.address || defaults.address,
+            notes: override.notes || item.notes || defaults.notes,
+            sourceKey: sourceKey
+          };
+        }
+        function getAllStudents() {
+          return DEFAULT_STUDENTS.map(function (item) {
+            return enrichStudent(item);
+          }).concat(getStoredStudents().map(function (item) {
+            return enrichStudent(item);
+          }));
+        }
+        function getClassCatalog() {
+          return DEFAULT_CLASSES.map(function (item) {
+            return applyClassOverrides({
+              subject: item.subject,
+              section: item.section,
+              schedule: item.schedule,
+              room: item.room,
+              students: item.students,
+              sourceKey: item.subject + "|" + item.section
+            });
+          }).concat(getStoredClasses().map(applyClassOverrides));
+        }
         function getClassBySection(section) {
-          return DEFAULT_CLASSES.concat(getStoredClasses()).filter(function (item) {
+          return getClassCatalog().filter(function (item) {
             return item.section === section;
           })[0] || { subject: "Unassigned Class", schedule: "Schedule pending", room: "Room pending" };
         }
         function getSelectedStudent() {
-          var students = DEFAULT_STUDENTS.concat(getStoredStudents());
+          var students = getAllStudents();
           var requestedId = new URLSearchParams(window.location.search).get("id");
           var matched = students.filter(function (student) { return student.id === requestedId; })[0];
           return { student: matched || students[0], fallback: Boolean(requestedId && !matched) };
@@ -1063,7 +1320,11 @@
           document.getElementById("programName").textContent = program;
           document.getElementById("studentStatus").textContent = student.status;
           document.getElementById("schoolSubject").textContent = classItem.subject;
-          document.getElementById("studentEmail").textContent = student.id.toLowerCase().replace(/[^a-z0-9]/g, ".") + "@uph.edu.ph";
+          document.getElementById("studentContact").textContent = student.contact;
+          document.getElementById("studentEmail").textContent = student.email;
+          document.getElementById("studentGuardian").textContent = student.guardian;
+          document.getElementById("studentAddress").textContent = student.address;
+          document.getElementById("advisingNotes").textContent = student.notes;
           document.getElementById("scheduleSubject").textContent = classItem.subject;
           document.getElementById("scheduleTime").textContent = classItem.schedule || "Schedule pending";
           document.getElementById("scheduleRoom").textContent = classItem.room || "Room pending";
@@ -1146,17 +1407,109 @@
           notifPanel.classList.remove("open");
           notifButton.setAttribute("aria-expanded", "false");
         }
+        function openModal(modal, focusTarget) {
+          activeModal = modal;
+          modal.classList.add("open");
+          modal.setAttribute("aria-hidden", "false");
+          if (focusTarget) { focusTarget.focus(); }
+        }
+        function closeModal(modal, returnFocusTarget) {
+          if (activeModal === modal) { activeModal = null; }
+          modal.classList.remove("open");
+          modal.setAttribute("aria-hidden", "true");
+          if (returnFocusTarget) { returnFocusTarget.focus(); }
+        }
         function openLogoutModal() {
-          activeModal = logoutModal;
-          logoutModal.classList.add("open");
-          logoutModal.setAttribute("aria-hidden", "false");
-          cancelLogout.focus();
+          openModal(logoutModal, cancelLogout);
         }
         function closeLogoutModal() {
-          activeModal = null;
-          logoutModal.classList.remove("open");
-          logoutModal.setAttribute("aria-hidden", "true");
-          avatarButton.focus();
+          closeModal(logoutModal, avatarButton);
+        }
+        function updateEditStudentClassPreview() {
+          var classItem = getClassBySection(editStudentSectionInput.value);
+          editStudentClassPreview.textContent = classItem.subject || "Unassigned Class";
+        }
+        function setEditStudentError(id, message) {
+          var target = document.getElementById(id);
+          if (target) { target.textContent = message || ""; }
+        }
+        function clearEditStudentErrors() {
+          [
+            "editStudentNameError",
+            "editStudentIdError",
+            "editStudentStatusError",
+            "editStudentSectionError",
+            "editStudentContactError",
+            "editStudentGuardianError",
+            "editStudentAddressError",
+            "editStudentNotesError",
+            "editStudentEmailError"
+          ].forEach(function (id) {
+            setEditStudentError(id, "");
+          });
+        }
+        function hasDuplicateStudentId(id, sourceKey) {
+          return getAllStudents().some(function (student) {
+            return student.sourceKey !== sourceKey && student.id.toLowerCase() === id.toLowerCase();
+          });
+        }
+        function getEditStudentFormData() {
+          return {
+            name: editStudentNameInput.value.trim(),
+            id: editStudentIdInput.value.trim(),
+            status: editStudentStatusInput.value,
+            section: editStudentSectionInput.value,
+            contact: editStudentContactInput.value.trim() || "09XX-XXX-1234",
+            email: editStudentEmailInput.value.trim(),
+            guardian: editStudentGuardianInput.value.trim() || "Registered Guardian",
+            address: editStudentAddressInput.value.trim() || "Las Pinas City",
+            notes: editStudentNotesInput.value.trim() || "Maintain current class standing and submission pace."
+          };
+        }
+        function validateEditStudentForm(showErrors) {
+          clearEditStudentErrors();
+          var data = getEditStudentFormData();
+          var valid = true;
+          if (!data.name) {
+            valid = false;
+            if (showErrors) { setEditStudentError("editStudentNameError", "Student name is required."); }
+          }
+          if (!data.id) {
+            valid = false;
+            if (showErrors) { setEditStudentError("editStudentIdError", "Student ID is required."); }
+          }
+          if (!data.section) {
+            valid = false;
+            if (showErrors) { setEditStudentError("editStudentSectionError", "Select the assigned section."); }
+          }
+          if (!data.status) {
+            valid = false;
+            if (showErrors) { setEditStudentError("editStudentStatusError", "Select the current status."); }
+          }
+          if (!data.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+            valid = false;
+            if (showErrors) { setEditStudentError("editStudentEmailError", "Enter a valid email address."); }
+          }
+          return valid;
+        }
+        function openEditStudentModal() {
+          var student = getSelectedStudent().student;
+          editStudentNameInput.value = student.name;
+          editStudentIdInput.value = student.id;
+          editStudentStatusInput.value = student.status;
+          editStudentSectionInput.value = student.section;
+          editStudentContactInput.value = student.contact;
+          editStudentEmailInput.value = student.email;
+          editStudentGuardianInput.value = student.guardian;
+          editStudentAddressInput.value = student.address;
+          editStudentNotesInput.value = student.notes;
+          clearEditStudentErrors();
+          updateEditStudentClassPreview();
+          openModal(editStudentModal, editStudentNameInput);
+        }
+        function closeEditStudentModal() {
+          clearEditStudentErrors();
+          closeModal(editStudentModal, editStudentBtn);
         }
         function gradeValue(key) {
           var input = document.querySelector('[data-grade="' + key + '"]');
@@ -1371,6 +1724,36 @@
           });
           input.addEventListener("blur", calculateGrades);
         });
+        editStudentBtn.addEventListener("click", openEditStudentModal);
+        editStudentSectionInput.addEventListener("change", updateEditStudentClassPreview);
+        [editStudentNameInput, editStudentIdInput, editStudentEmailInput].forEach(function (input) {
+          input.addEventListener("input", function () { validateEditStudentForm(false); });
+        });
+        [editStudentStatusInput, editStudentSectionInput].forEach(function (input) {
+          input.addEventListener("change", function () { validateEditStudentForm(false); });
+        });
+        cancelEditStudent.addEventListener("click", closeEditStudentModal);
+        editStudentForm.addEventListener("submit", function (event) {
+          event.preventDefault();
+          var selected = getSelectedStudent().student;
+          var data = getEditStudentFormData();
+          if (!validateEditStudentForm(true)) { return; }
+          if (hasDuplicateStudentId(data.id, selected.sourceKey)) {
+            setEditStudentError("editStudentIdError", "This student ID already exists.");
+            showToast("Student ID already exists.");
+            return;
+          }
+          var overrides = getStudentOverrides();
+          overrides[selected.sourceKey] = data;
+          saveStudentOverrides(overrides);
+          history.replaceState(null, "", window.location.pathname + "?id=" + encodeURIComponent(data.id) + window.location.hash);
+          renderStudentBanner();
+          closeEditStudentModal();
+          showToast("Student details updated.");
+        });
+        editStudentModal.addEventListener("click", function (event) {
+          if (event.target === editStudentModal) { closeEditStudentModal(); }
+        });
         document.getElementById("backToStudents").addEventListener("click", function (event) {
           event.preventDefault();
           window.location.href = "students.html";
@@ -1411,7 +1794,8 @@
           if (event.key === "Escape") {
             closeMenu();
             closeNotifications();
-            if (activeModal) { closeLogoutModal(); }
+            if (activeModal === editStudentModal) { closeEditStudentModal(); }
+            else if (activeModal === logoutModal) { closeLogoutModal(); }
           }
         });
         calculateGrades();

@@ -37,6 +37,10 @@
       .skip-link { position: absolute; left: 10px; top: -40px; background: #000; color: #fff; padding: 8px 12px; border-radius: 8px; z-index: 200; }
       .skip-link:focus { top: 10px; }
       :focus-visible { outline: 3px solid rgba(216,173,71,0.5); outline-offset: 2px; }
+      .visually-hidden {
+        position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+        overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+      }
       .layout { min-height: 100vh; display: grid; grid-template-columns: 292px minmax(0,1fr); }
       aside {
         background:
@@ -89,16 +93,25 @@
       .notif-actions button { border:1px solid var(--line); background:#fff; border-radius:10px; padding:8px 10px; font-weight:700; color:var(--text); }
       main { padding:24px; display:grid; gap:18px; align-content:start; }
       .toolbar,.panel,.kanban-board,.modal-card,.detail-hero,.detail-summary-card,.detail-students-card { background:linear-gradient(180deg,var(--surface) 0%,var(--surface-alt) 100%); border:1px solid var(--line); border-radius:18px; box-shadow:var(--shadow); }
-      .toolbar { padding:18px; display:grid; gap:14px; }
+      .toolbar { padding:18px; display:flex; flex-direction:column; gap:16px; }
       .toolbar-row { display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
       .toolbar-actions { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
       .toolbar h3,.panel h3 { margin:0; color:var(--maroon); }
       .toolbar p,.panel p { margin:0; color:var(--muted); }
-      .view-toggle { display:inline-flex; gap:6px; padding:6px; border-radius:999px; background:#efe4d6; border:1px solid var(--line); }
-      .view-toggle button { border:0; background:transparent; padding:9px 14px; border-radius:999px; font-weight:700; color:var(--muted); }
-      .view-toggle button.active { background:#fff; color:var(--maroon); box-shadow:0 4px 10px rgba(0,0,0,0.08); }
-      .tools { display:flex; gap:10px; flex-wrap:wrap; }
-      .tools input,.tools select { border:1px solid var(--line); border-radius:12px; padding:10px 12px; background:#fff; min-width:220px; }
+      .tools { display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
+      .search-group { display:grid; gap:8px; min-width:260px; flex:1 1 320px; }
+      .tools input,.tools select { border:1px solid var(--line); border-radius:12px; padding:10px 14px; background:#fff; min-width:260px; }
+      .results-count { color:var(--muted); font-size:0.88rem; min-height:1.1em; }
+      .view-toggle { display:inline-flex; align-items:center; gap:6px; padding:6px; border-radius:999px; background:#efe4d6; border:1px solid var(--line); }
+      .view-toggle input[type="radio"] { position:absolute; opacity:0; pointer-events:none; }
+      .view-toggle label {
+        min-height:44px; display:inline-flex; align-items:center; justify-content:center; padding:0 16px; border-radius:999px;
+        font-weight:700; color:var(--muted); background:transparent; border:1px solid transparent;
+        transition:background 0.16s ease, border-color 0.16s ease, color 0.16s ease, box-shadow 0.16s ease;
+      }
+      .view-toggle label[aria-selected="true"] { background:var(--accent); border-color:var(--accent); color:#2b1f05; box-shadow:0 4px 10px rgba(0,0,0,0.08); }
+      .view-toggle label[aria-selected="false"]:hover { background:rgba(255,255,255,0.82); color:var(--maroon); }
+      .view-toggle input[type="radio"]:focus-visible + label { outline:3px solid rgba(216,173,71,0.5); outline-offset:2px; }
       .panel { padding:18px; }
       .table-wrap { overflow-x:auto; border:1px solid var(--line); border-radius:16px; background:#fff; }
       table { width:100%; border-collapse:collapse; min-width:760px; }
@@ -135,12 +148,14 @@
       .detail-card-head { display:flex; justify-content:space-between; align-items:flex-start; gap:14px; flex-wrap:wrap; }
       .detail-card-head h4 { margin:0; color:var(--maroon); font-size:1.08rem; }
       .detail-card-head p { margin:6px 0 0; color:var(--muted); }
+      .detail-actions { display:flex; gap:10px; flex-wrap:wrap; }
       .detail-students-grid { display:grid; gap:12px; }
       .detail-student-card { border:1px solid var(--line); border-radius:14px; background:#fffdf9; padding:14px; }
       .detail-student-card strong { display:block; margin-bottom:6px; color:var(--text); }
       .detail-student-card p { margin:0 0 10px; color:var(--muted); }
       .detail-student-meta { display:flex; flex-wrap:wrap; gap:8px; }
       .empty-state { border:1px dashed #ccb79a; border-radius:14px; background:#fffaf0; padding:16px; color:var(--muted); line-height:1.5; }
+      .empty-results { padding:16px 18px; border:1px dashed #ccb79a; border-radius:14px; background:#fffaf0; color:var(--muted); line-height:1.5; }
       .toast-wrap { position:fixed; right:14px; bottom:14px; display:grid; gap:10px; z-index:120; }
       .toast { min-width:240px; max-width:320px; padding:12px 14px; border-radius:14px; color:#fff; box-shadow:var(--shadow); }
       .toast.success { background:#1f6a3b; }
@@ -160,6 +175,7 @@
       .field-error { min-height:1.1em; color:var(--danger); font-size:0.82rem; }
       .btn.accent { background:var(--accent); border-color:var(--accent); color:#2b1f05; }
       .btn:disabled { opacity:0.55; cursor:not-allowed; }
+      .btn.ghost-primary { border-color:rgba(123,17,19,0.16); color:var(--maroon); }
       .modal-actions { display:flex; justify-content:flex-end; gap:10px; margin-top:16px; }
       .btn { border:1px solid var(--line); background:#fff; border-radius:10px; padding:10px 12px; font-weight:700; }
       .btn.primary { background:var(--maroon); border-color:var(--maroon); color:#fff; }
@@ -174,6 +190,11 @@
         .header-actions { justify-content:flex-end; }
         main { padding:16px; }
         .form-grid,.kanban-board,.nav-list { grid-template-columns:1fr; }
+        .toolbar-row,.tools { align-items:stretch; }
+        .toolbar-actions,.search-group,.tools input,.view-toggle,.add-btn { width:100%; }
+        .toolbar-actions { justify-content:stretch; }
+        .view-toggle { justify-content:stretch; }
+        .view-toggle label { flex:1 1 0; }
       }
     </style>
   </head>
@@ -219,23 +240,32 @@
         </header>
 
         <main id="mainContent" tabindex="-1">
+          <!-- HCI: Visual Hierarchy - Primary action separated from filter controls -->
           <section class="toolbar">
             <div class="toolbar-row">
-              <div><h3>Teaching Load</h3><p>Based on the same classes summarized on the dashboard.</p></div>
+              <div><h3>Classes</h3><p>Based on the same classes summarized on the dashboard.</p></div>
               <div class="toolbar-actions">
                 <button class="add-btn" type="button" id="addClassBtn">+ Add Class</button>
-                <div class="view-toggle" role="tablist" aria-label="Class views">
-                  <button type="button" class="active" id="listViewBtn" aria-pressed="true">List View</button>
-                  <button type="button" id="kanbanViewBtn" aria-pressed="false">Card View</button>
-                </div>
               </div>
             </div>
             <div class="tools">
-              <input id="searchInput" type="search" placeholder="Search by subject, section, or room" />
+              <div class="search-group">
+                <label class="visually-hidden" for="searchInput">Search classes</label>
+                <input id="searchInput" type="search" placeholder="Search by subject, section, room..." aria-label="Search classes by subject, section, or room" />
+                <div class="results-count" id="resultsCount" aria-live="polite"></div>
+              </div>
+              <!-- HCI: User Control - View preference persisted via localStorage -->
+              <div class="view-toggle" role="tablist" aria-label="Class views">
+                <input type="radio" name="classViewMode" id="listViewInput" value="list" checked />
+                <label for="listViewInput" id="listViewBtn" role="tab" aria-selected="true">List View</label>
+                <input type="radio" name="classViewMode" id="kanbanViewInput" value="kanban" />
+                <label for="kanbanViewInput" id="kanbanViewBtn" role="tab" aria-selected="false">Card View</label>
+              </div>
             </div>
           </section>
 
           <section id="overviewView">
+            <!-- LEADER UPDATE: Replace mock rows/cards with real data when available -->
             <section class="panel" id="listView">
               <div class="table-wrap">
                 <table>
@@ -248,6 +278,7 @@
             </section>
 
             <section class="kanban-board" id="kanbanView" aria-label="Classes card grid view"></section>
+            <div class="empty-results" id="emptyResults" hidden>No results found.</div>
           </section>
 
           <section class="detail-view" id="classDetailView" aria-label="Class detail view">
@@ -258,9 +289,12 @@
                   <h3 id="detailClassTitle">Class Details</h3>
                   <p id="detailClassSubtitle">Select a class from the teaching load list to review enrolled students.</p>
                 </div>
-                <div class="detail-count">
-                  <span>Enrolled Students</span>
-                  <strong id="detailStudentCount">0</strong>
+                <div class="detail-actions">
+                  <button class="btn ghost-primary" type="button" id="editClassBtn">Edit Class Details</button>
+                  <div class="detail-count">
+                    <span>Enrolled Students</span>
+                    <strong id="detailStudentCount">0</strong>
+                  </div>
                 </div>
               </div>
               <div class="detail-summary-grid">
@@ -351,6 +385,50 @@
         </form>
       </div>
     </section>
+    <section class="modal" id="editClassModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="editClassTitle">
+      <div class="modal-card form-card">
+        <h3 id="editClassTitle">Edit Class Details</h3>
+        <p>Update the selected class information directly from its detail screen.</p>
+        <form id="editClassForm" novalidate>
+          <div class="form-grid">
+            <div class="field">
+              <label for="editClassSubjectInput">Subject Code</label>
+              <input id="editClassSubjectInput" type="text" aria-label="Edit subject code" required />
+              <div class="field-error" id="editClassSubjectError" role="alert"></div>
+            </div>
+            <div class="field">
+              <label for="editClassSectionInput">Section</label>
+              <select id="editClassSectionInput" aria-label="Edit class section" required>
+                <option value="">Select section</option>
+                <option value="BSCS-2A">BSCS-2A</option>
+                <option value="BSCS-2B">BSCS-2B</option>
+                <option value="BSIT-2A">BSIT-2A</option>
+              </select>
+              <div class="field-error" id="editClassSectionError" role="alert"></div>
+            </div>
+            <div class="field">
+              <label for="editClassScheduleInput">Schedule</label>
+              <input id="editClassScheduleInput" type="text" aria-label="Edit class schedule" required />
+              <div class="field-error" id="editClassScheduleError" role="alert"></div>
+            </div>
+            <div class="field">
+              <label for="editClassRoomInput">Room</label>
+              <input id="editClassRoomInput" type="text" aria-label="Edit class room" required />
+              <div class="field-error" id="editClassRoomError" role="alert"></div>
+            </div>
+            <div class="field">
+              <label for="editClassStudentsInput">Students</label>
+              <input id="editClassStudentsInput" type="number" min="1" step="1" aria-label="Edit class student count" required />
+              <div class="field-error" id="editClassStudentsError" role="alert"></div>
+            </div>
+          </div>
+          <div class="modal-actions">
+            <button class="btn" type="button" id="cancelEditClass">Cancel</button>
+            <button class="btn accent" type="submit" id="saveEditClassBtn">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </section>
     <div class="toast-wrap" id="toastWrap" aria-live="polite" aria-atomic="true"></div>
 
     <script>
@@ -396,8 +474,13 @@
         var detailStudentsCards = document.getElementById("detailStudentsCards");
         var detailStudentsTableWrap = document.getElementById("detailStudentsTableWrap");
         var detailStudentsEmpty = document.getElementById("detailStudentsEmpty");
+        var editClassBtn = document.getElementById("editClassBtn");
         var addClassBtn = document.getElementById("addClassBtn");
         var searchInput = document.getElementById("searchInput");
+        var resultsCount = document.getElementById("resultsCount");
+        var emptyResults = document.getElementById("emptyResults");
+        var listViewInput = document.getElementById("listViewInput");
+        var kanbanViewInput = document.getElementById("kanbanViewInput");
         var listViewBtn = document.getElementById("listViewBtn");
         var kanbanViewBtn = document.getElementById("kanbanViewBtn");
         var avatarButton = document.getElementById("avatarButton");
@@ -412,16 +495,30 @@
         var addClassForm = document.getElementById("addClassForm");
         var cancelAddClass = document.getElementById("cancelAddClass");
         var saveClassBtn = document.getElementById("saveClassBtn");
+        var editClassModal = document.getElementById("editClassModal");
+        var editClassForm = document.getElementById("editClassForm");
+        var cancelEditClass = document.getElementById("cancelEditClass");
+        var saveEditClassBtn = document.getElementById("saveEditClassBtn");
         var classSubjectInput = document.getElementById("classSubjectInput");
         var classSectionInput = document.getElementById("classSectionInput");
         var classScheduleInput = document.getElementById("classScheduleInput");
         var classRoomInput = document.getElementById("classRoomInput");
         var classStudentsInput = document.getElementById("classStudentsInput");
+        var editClassSubjectInput = document.getElementById("editClassSubjectInput");
+        var editClassSectionInput = document.getElementById("editClassSectionInput");
+        var editClassScheduleInput = document.getElementById("editClassScheduleInput");
+        var editClassRoomInput = document.getElementById("editClassRoomInput");
+        var editClassStudentsInput = document.getElementById("editClassStudentsInput");
         var classSubjectError = document.getElementById("classSubjectError");
         var classSectionError = document.getElementById("classSectionError");
         var classScheduleError = document.getElementById("classScheduleError");
         var classRoomError = document.getElementById("classRoomError");
         var classStudentsError = document.getElementById("classStudentsError");
+        var editClassSubjectError = document.getElementById("editClassSubjectError");
+        var editClassSectionError = document.getElementById("editClassSectionError");
+        var editClassScheduleError = document.getElementById("editClassScheduleError");
+        var editClassRoomError = document.getElementById("editClassRoomError");
+        var editClassStudentsError = document.getElementById("editClassStudentsError");
         var notifButton = document.getElementById("notifButton");
         var notifBadge = document.getElementById("notifBadge");
         var notifPanel = document.getElementById("notifPanel");
@@ -432,6 +529,7 @@
         var activeModal = null;
         var lastFocusedElement = null;
         var addedClasses = [];
+        var activeClassSourceKey = null;
 
         function guardFacultyRole() {
           var role = localStorage.getItem("userRole");
@@ -458,32 +556,110 @@
             var parsed = JSON.parse(localStorage.getItem("mockClasses") || "[]");
             return Array.isArray(parsed) ? parsed.filter(function (item) {
               return item && item.subject && item.section && item.schedule && item.room && item.students;
+            }).map(function (item) {
+              return {
+                subject: item.subject,
+                section: item.section,
+                schedule: item.schedule,
+                room: item.room,
+                students: Number(item.students),
+                sourceKey: item.sourceKey || item.originalKey || (item.subject + "|" + item.section),
+                fromStorage: true
+              };
             }) : [];
           } catch (error) {
             return [];
           }
+        }
+        function getClassOverrides() {
+          try {
+            var parsed = JSON.parse(localStorage.getItem("classDetailOverrides") || "{}");
+            return parsed && typeof parsed === "object" ? parsed : {};
+          } catch (error) {
+            return {};
+          }
+        }
+        function saveClassOverrides(overrides) {
+          localStorage.setItem("classDetailOverrides", JSON.stringify(overrides));
+        }
+        function getClassSourceKey(item) {
+          return item && (item.sourceKey || item.originalKey || (item.subject + "|" + item.section));
+        }
+        function applyClassOverrides(item) {
+          var sourceKey = getClassSourceKey(item);
+          var override = getClassOverrides()[sourceKey] || {};
+          return {
+            subject: override.subject || item.subject,
+            section: override.section || item.section,
+            schedule: override.schedule || item.schedule,
+            room: override.room || item.room,
+            students: override.students != null ? Number(override.students) || 0 : Number(item.students) || 0,
+            sourceKey: sourceKey,
+            fromStorage: Boolean(item.fromStorage)
+          };
         }
         function saveStoredClasses() {
           localStorage.setItem("mockClasses", JSON.stringify(addedClasses));
         }
         function refreshClassData() {
           addedClasses = getStoredClasses();
-          CLASSES = CLASSES.filter(function (item) { return !item.fromStorage; }).concat(addedClasses.map(function (item) {
-            return { subject: item.subject, section: item.section, schedule: item.schedule, room: item.room, students: Number(item.students), fromStorage: true };
-          }));
+          CLASSES = DEFAULT_STUDENTS && CLASSES ? [
+            applyClassOverrides({ subject: "HCI 402", section: "BSCS-2A", schedule: "Mon/Wed 9:00-10:30 AM", room: "Comp Lab 2", students: 42, sourceKey: "HCI 402|BSCS-2A", fromStorage: false }),
+            applyClassOverrides({ subject: "HCI 402", section: "BSCS-2B", schedule: "Tue/Fri 10:00-11:30 AM", room: "Room 405", students: 38, sourceKey: "HCI 402|BSCS-2B", fromStorage: false }),
+            applyClassOverrides({ subject: "Data Structures", section: "BSIT-2A", schedule: "Thu/Sat 1:00-2:30 PM", room: "Comp Lab 1", students: 35, sourceKey: "Data Structures|BSIT-2A", fromStorage: false })
+          ].concat(addedClasses.map(applyClassOverrides)) : [];
         }
         function getStoredStudents() {
           try {
             var parsed = JSON.parse(localStorage.getItem("mockStudents") || "[]");
             return Array.isArray(parsed) ? parsed.filter(function (student) {
-              return student && student.name && student.id && student.section && student.status && student.flag;
+              return student && student.name && student.id && student.section && student.status;
+            }).map(function (student) {
+              return {
+                name: student.name,
+                id: student.id,
+                section: student.section,
+                status: student.status,
+                flag: student.flag || "Clear",
+                sourceKey: student.sourceKey || student.recordKey || student.originalId || student.id
+              };
             }) : [];
           } catch (error) {
             return [];
           }
         }
+        function getStudentOverrides() {
+          try {
+            var parsed = JSON.parse(localStorage.getItem("studentDetailOverrides") || "{}");
+            return parsed && typeof parsed === "object" ? parsed : {};
+          } catch (error) {
+            return {};
+          }
+        }
         function getAllStudents() {
-          return DEFAULT_STUDENTS.concat(getStoredStudents());
+          var overrides = getStudentOverrides();
+          return DEFAULT_STUDENTS.map(function (student) {
+            var sourceKey = student.sourceKey || student.id;
+            var override = overrides[sourceKey] || {};
+            return {
+              name: override.name || student.name,
+              id: override.id || student.id,
+              section: override.section || student.section,
+              status: override.status || student.status,
+              flag: student.flag || "Clear",
+              sourceKey: sourceKey
+            };
+          }).concat(getStoredStudents().map(function (student) {
+            var override = overrides[student.sourceKey] || {};
+            return {
+              name: override.name || student.name,
+              id: override.id || student.id,
+              section: override.section || student.section,
+              status: override.status || student.status,
+              flag: student.flag || "Clear",
+              sourceKey: student.sourceKey
+            };
+          }));
         }
         function getFocusableElements(container) {
           return Array.prototype.slice.call(container.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')).filter(function (element) {
@@ -644,6 +820,9 @@
         function findClass(id) {
           return CLASSES.filter(function (item) { return getClassId(item) === id; })[0];
         }
+        function findClassBySourceKey(sourceKey) {
+          return CLASSES.filter(function (item) { return getClassSourceKey(item) === sourceKey; })[0];
+        }
         function getAdvisoryChipClass(flag) {
           if (flag === "Needs Advising" || flag === "Attendance") {
             return "chip alert";
@@ -663,6 +842,7 @@
         }
         function openClassDetail(item) {
           if (!item) { return; }
+          activeClassSourceKey = getClassSourceKey(item);
           var enrolledStudents = getStudentsForClass(item);
           detailClassTitle.textContent = item.section + " • " + item.subject;
           detailClassSubtitle.textContent = item.schedule + " • " + item.room;
@@ -708,6 +888,7 @@
           detailBackButton.focus();
         }
         function closeClassDetailView() {
+          activeClassSourceKey = null;
           classDetailView.classList.remove("active");
           overviewView.style.display = "block";
           addClassBtn.focus();
@@ -751,6 +932,15 @@
             return item.subject.toLowerCase() === normalizedSubject && item.section.toLowerCase() === normalizedSection;
           });
         }
+        function hasDuplicateEditedClass(subject, section, sourceKey) {
+          var normalizedSubject = subject.toLowerCase();
+          var normalizedSection = section.toLowerCase();
+          return CLASSES.some(function (item) {
+            return getClassSourceKey(item) !== sourceKey &&
+              item.subject.toLowerCase() === normalizedSubject &&
+              item.section.toLowerCase() === normalizedSection;
+          });
+        }
         function resetClassForm() {
           addClassForm.reset();
           clearClassErrors();
@@ -764,6 +954,54 @@
           resetClassForm();
           closeModal(addClassModal);
         }
+        function getEditClassFormData() {
+          return {
+            subject: editClassSubjectInput.value.trim(),
+            section: editClassSectionInput.value,
+            schedule: editClassScheduleInput.value.trim(),
+            room: editClassRoomInput.value.trim(),
+            students: Number(editClassStudentsInput.value)
+          };
+        }
+        function setEditClassError(input, errorElement, message) {
+          errorElement.textContent = message;
+          input.setAttribute("aria-invalid", message ? "true" : "false");
+        }
+        function clearEditClassErrors() {
+          setEditClassError(editClassSubjectInput, editClassSubjectError, "");
+          setEditClassError(editClassSectionInput, editClassSectionError, "");
+          setEditClassError(editClassScheduleInput, editClassScheduleError, "");
+          setEditClassError(editClassRoomInput, editClassRoomError, "");
+          setEditClassError(editClassStudentsInput, editClassStudentsError, "");
+        }
+        function validateEditClassForm(showErrors) {
+          var item = getEditClassFormData();
+          var valid = true;
+          if (showErrors) { clearEditClassErrors(); }
+          if (!item.subject) { valid = false; if (showErrors) { setEditClassError(editClassSubjectInput, editClassSubjectError, "Subject code is required."); } }
+          if (!item.section) { valid = false; if (showErrors) { setEditClassError(editClassSectionInput, editClassSectionError, "Section is required."); } }
+          if (!item.schedule) { valid = false; if (showErrors) { setEditClassError(editClassScheduleInput, editClassScheduleError, "Schedule is required."); } }
+          if (!item.room) { valid = false; if (showErrors) { setEditClassError(editClassRoomInput, editClassRoomError, "Room is required."); } }
+          if (!item.students || item.students < 1) { valid = false; if (showErrors) { setEditClassError(editClassStudentsInput, editClassStudentsError, "Student count must be at least 1."); } }
+          saveEditClassBtn.disabled = !valid;
+          return valid;
+        }
+        function openEditClassModal() {
+          var item = findClassBySourceKey(activeClassSourceKey);
+          if (!item) { return; }
+          clearEditClassErrors();
+          editClassSubjectInput.value = item.subject;
+          editClassSectionInput.value = item.section;
+          editClassScheduleInput.value = item.schedule;
+          editClassRoomInput.value = item.room;
+          editClassStudentsInput.value = item.students;
+          saveEditClassBtn.disabled = false;
+          openModal(editClassModal, editClassSubjectInput);
+        }
+        function closeEditClassModal() {
+          clearEditClassErrors();
+          closeModal(editClassModal);
+        }
         function getFilteredClasses() {
           var search = searchInput.value.trim().toLowerCase();
           return CLASSES.filter(function (item) {
@@ -773,15 +1011,13 @@
               item.room.toLowerCase().indexOf(search) >= 0;
           });
         }
+        function updateResultsFeedback(count) {
+          resultsCount.textContent = count ? count + (count === 1 ? " result found." : " results found.") : "No results found.";
+          emptyResults.hidden = count > 0;
+        }
         function renderList() {
           classBody.innerHTML = "";
           var filtered = getFilteredClasses();
-          if (!filtered.length) {
-            var emptyRow = document.createElement("tr");
-            emptyRow.innerHTML = '<td colspan="5">No matching classes.</td>';
-            classBody.appendChild(emptyRow);
-            return;
-          }
           filtered.forEach(function (item) {
             var row = document.createElement("tr");
             row.setAttribute("tabindex", "0");
@@ -796,18 +1032,11 @@
               "<td>" + item.students + "</td>";
             classBody.appendChild(row);
           });
+          updateResultsFeedback(filtered.length);
         }
         function renderKanban() {
           var filtered = getFilteredClasses();
           kanbanView.innerHTML = "";
-          if (!filtered.length) {
-            var empty = document.createElement("p");
-            empty.textContent = "No matching classes.";
-            empty.style.margin = "0";
-            empty.style.color = "var(--muted)";
-            kanbanView.appendChild(empty);
-            return;
-          }
           filtered.forEach(function (item) {
             var card = document.createElement("article");
             card.className = "class-card";
@@ -835,18 +1064,18 @@
             listView.style.display = "none";
             kanbanView.style.display = "grid";
             kanbanView.classList.add("active");
-            listViewBtn.classList.remove("active");
-            kanbanViewBtn.classList.add("active");
-            listViewBtn.setAttribute("aria-pressed", "false");
-            kanbanViewBtn.setAttribute("aria-pressed", "true");
+            listViewInput.checked = false;
+            kanbanViewInput.checked = true;
+            listViewBtn.setAttribute("aria-selected", "false");
+            kanbanViewBtn.setAttribute("aria-selected", "true");
           } else {
             listView.style.display = "block";
             kanbanView.style.display = "none";
             kanbanView.classList.remove("active");
-            listViewBtn.classList.add("active");
-            kanbanViewBtn.classList.remove("active");
-            listViewBtn.setAttribute("aria-pressed", "true");
-            kanbanViewBtn.setAttribute("aria-pressed", "false");
+            listViewInput.checked = true;
+            kanbanViewInput.checked = false;
+            listViewBtn.setAttribute("aria-selected", "true");
+            kanbanViewBtn.setAttribute("aria-selected", "false");
           }
         }
         function closeMenu() { profileMenu.classList.remove("open"); avatarButton.setAttribute("aria-expanded", "false"); }
@@ -876,6 +1105,7 @@
             classSubjectInput.focus();
             return;
           }
+          item.sourceKey = item.subject + "|" + item.section;
           addedClasses.push(item);
           saveStoredClasses();
           refreshClassData();
@@ -885,6 +1115,34 @@
         });
         cancelAddClass.addEventListener("click", closeAddClassModal);
         addClassModal.addEventListener("click", function (event) { if (event.target === addClassModal) { closeAddClassModal(); } });
+        editClassBtn.addEventListener("click", openEditClassModal);
+        [editClassSubjectInput, editClassSectionInput, editClassScheduleInput, editClassRoomInput, editClassStudentsInput].forEach(function (input) {
+          input.addEventListener("input", function () { validateEditClassForm(false); });
+          input.addEventListener("change", function () { validateEditClassForm(false); });
+          input.addEventListener("blur", function () { validateEditClassForm(true); });
+        });
+        editClassForm.addEventListener("submit", function (event) {
+          event.preventDefault();
+          if (!validateEditClassForm(true)) { return; }
+          var item = getEditClassFormData();
+          if (hasDuplicateEditedClass(item.subject, item.section, activeClassSourceKey)) {
+            setEditClassError(editClassSubjectInput, editClassSubjectError, "Subject and section already exist.");
+            setEditClassError(editClassSectionInput, editClassSectionError, "Choose a different section or subject.");
+            showToast("warning", "Duplicate class section.");
+            editClassSubjectInput.focus();
+            return;
+          }
+          var overrides = getClassOverrides();
+          overrides[activeClassSourceKey] = item;
+          saveClassOverrides(overrides);
+          refreshClassData();
+          applyView(localStorage.getItem("classViewMode") || "list");
+          closeEditClassModal();
+          openClassDetail(findClassBySourceKey(activeClassSourceKey));
+          showToast("success", "Class details updated.");
+        });
+        cancelEditClass.addEventListener("click", closeEditClassModal);
+        editClassModal.addEventListener("click", function (event) { if (event.target === editClassModal) { closeEditClassModal(); } });
         searchInput.addEventListener("input", function () { applyView(localStorage.getItem("classViewMode") || "list"); });
         classBody.addEventListener("click", function (event) {
           var row = event.target.closest("[data-class-id]");
@@ -904,8 +1162,12 @@
           var card = event.target.closest("[data-class-id]");
           if (card) { event.preventDefault(); openClassDetail(findClass(card.getAttribute("data-class-id"))); }
         });
-        listViewBtn.addEventListener("click", function () { applyView("list"); });
-        kanbanViewBtn.addEventListener("click", function () {
+        listViewInput.addEventListener("change", function () {
+          if (!listViewInput.checked) { return; }
+          applyView("list");
+        });
+        kanbanViewInput.addEventListener("change", function () {
+          if (!kanbanViewInput.checked) { return; }
           applyView("kanban");
           addNotification("Classes", "Classes module switched to card view.");
         });
@@ -968,6 +1230,7 @@
             if (logoutModal.classList.contains("open")) { closeLogoutModal(); }
             if (classDetailView.classList.contains("active")) { closeClassDetailView(); }
             if (addClassModal.classList.contains("open")) { closeAddClassModal(); }
+            if (editClassModal.classList.contains("open")) { closeEditClassModal(); }
           } else {
             trapFocus(event);
           }
